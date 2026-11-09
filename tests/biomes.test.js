@@ -77,6 +77,13 @@ for(const sub of desert.subbiomes){
  assert(!Object.hasOwn(sub.spawn.required,"absoluteLatitudeDegrees"),"la latitud del desierto no debe ser obligatoria");
  assert(sub.spawn.preferred.meanAnnualTemperatureC,"temperatura como preferencia sin excluir desiertos fríos");
 }
+const sandy=desert.subbiomes.find(s=>s.id==="desert_sandy");
+for(const region of ["Sahara","Rub al-Jali","Namib","Taklamakán"])
+  assert(sandy.description.es.includes(region),"falta la referencia visual española: "+region);
+for(const region of ["Sahara","Rub' al Khali","Namib","Taklamakan"])
+  assert(sandy.description.en.includes(region),"falta la referencia visual inglesa: "+region);
+assert.deepEqual(sandy.spawn.required,{terrain:"land",elevationLevel:{min:1,max:64},annualPrecipitationMm:{max:250},dominantSurfaceMaterial:"sand",aeolianDuneField:true},"no alterar las reglas requeridas del desierto arenoso");
+assert.deepEqual(sandy.spawn.preferred,{annualPrecipitationMm:{min:0,max:150},meanAnnualTemperatureC:{min:10,max:35},absoluteLatitudeDegrees:{min:10,max:40}},"no alterar las preferencias del desierto arenoso");
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");

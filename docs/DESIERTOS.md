@@ -50,6 +50,18 @@ Referencia visual: **Salar de Uyuni** (Bolivia), sin limitar el subbioma a ese p
 - `preferred`: lluvia 0–150 mm/año; temperatura media anual −5 a 30 °C; pendiente 0–2°; latitud absoluta 15–45°.
 - Se forma en cuencas sin salida al mar; el agua puede llegar estacionalmente y evaporarse, acumulando sal. La planitud y la costra evaporítica diferencian el salar del desierto arenoso y rocoso.
 
+## Identidad visual aprobada: Desierto arenoso (2026-11-09)
+
+`desert_sandy` mantiene su nombre, ID, `spawn.required` y `spawn.preferred` sin cambios. La descripción bilingüe de la Wiki ya refleja estas referencias:
+
+- **Apariencia principal — Sahara y Rub al-Jali:** extensos mares de arena (*ergs*), horizontes abiertos, dunas doradas de crestas onduladas y patrones eólicos variados.
+- **Variación rojiza — Namib:** grandes dunas con arenas rojas o anaranjadas y sombras pronunciadas.
+- **Variación continental — Taklamakán:** tonos beige o amarillos, clima continental y posibilidad de inviernos fríos.
+
+No se crean nuevos subbiomas para estas variantes. Las formas de duna (barjanes, lineales, estrelladas, etc.) y los colores de arena dependerán en el futuro del viento, la geología y el transporte de sedimentos; **no se inventan todavía campos ejecutables de color, forma, estación o clima**. El criterio esencial sigue siendo el dominio de arena y la existencia de campos de dunas eólicas. Se conservan temperatura y latitud como preferencias, y altura y aridez como condiciones requeridas.
+
+Esta es una definición visual de diseño; no representa que todas las variantes deban aparecer simultáneamente en una misma celda.
+
 ## Contrato conceptual del terreno
 
 Los nuevos campos geológicos son declarativos y **no están implementados** en el nuevo generador de Evolve:

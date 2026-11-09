@@ -14,8 +14,8 @@
             "en": "Sandy (dunes)"
           },
           "description": {
-            "es": "Desierto árido con grandes superficies de arena y campos de dunas modelados por el viento. Las crestas y laderas arenosas cambian con el transporte de sedimentos, y la vegetación es muy dispersa. Su referencia visual son los ergs del Sahara, aunque las dunas también pueden formarse en desiertos fríos.",
-            "en": "An arid desert with broad sandy expanses and dune fields shaped by the wind. Sandy ridges and slopes shift as sediment is transported, and vegetation is sparse. Its visual reference is the Sahara's ergs, although dunes can also form in cold deserts."
+            "es": "Desierto de grandes mares de arena (ergs), con dunas modeladas por el viento, horizontes abiertos y vegetación muy escasa. Su apariencia principal se inspira en el Sahara y el Rub al-Jali, con dunas doradas y formas onduladas, lineales o estrelladas. También incluye variantes de arena rojiza y dunas monumentales como el Namib, y variantes continentales de tonos beige con inviernos fríos como el Taklamakán.",
+            "en": "A desert of vast sand seas (ergs), with wind-shaped dunes, open horizons, and very sparse vegetation. Its main appearance is inspired by the Sahara and Rub' al Khali, with golden dunes and rolling, linear, or star-shaped forms. It also includes reddish sand and monumental dunes like those of the Namib, and beige-toned continental variants with cold winters like the Taklamakan."
           },
           "spawn": {
             "required": {
