@@ -44,6 +44,12 @@
                 "max": 40
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 3.9,
+            "percentBasis": "earthProxy",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {
@@ -86,6 +92,12 @@
                 "max": 50
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 9.8,
+            "percentBasis": "earthLowerBoundProxy",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {
@@ -132,6 +144,12 @@
                 "max": 45
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 0.008,
+            "percentBasis": "singleSiteProxy",
+            "minRegions": 1,
+            "maxRegions": 1
           }
         }
       ]

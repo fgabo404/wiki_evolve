@@ -122,3 +122,19 @@ Los solapamientos indican posibles regiones comunes de latitud y altura; el clim
 - [USGS — Desert Features](https://pubs.usgs.gov/gip/deserts/features/): dunas, rocas, gravas, salares y demás formas.
 - [Utah Geological Survey — Bonneville Salt Flats](https://geology.utah.gov/map-pub/survey-notes/geosights/bonneville-salt-flats/): costras salinas, evaporación y cuencas cerradas.
 - [National Geographic — Deserts Explained](https://education.nationalgeographic.org/resource/deserts-explained/): desiertos fríos, calientes y diversidad de superficies.
+
+## Distribución territorial porcentual y número de masas (2026-11-09)
+
+**Aprobado:** tres cuotas preliminares respecto de los **hexágonos terrestres** de cualquier tamaño de mapa, y límites de **masas conectadas** del mismo subbioma. Una masa está formada por celdas hexagonales adyacentes de ese subbioma, no es un número fijo de celdas. Los porcentajes son **referencias terrestres aproximadas, no una partición científica completa de las tierras áridas de la Tierra**. Los parámetros se añaden en `distribution`, separados de las reglas `spawn`. La generación real aún no está implementada.
+
+| Subbioma | `targetLandPercent` | Mínimo masas | Máximo masas | Origen y cautela |
+|---|---:|---:|---:|---|
+| Arenoso (dunas) | **3,9 %** | **2** | **4** | Aproximación: 19,6 % de regiones áridas/hiperáridas (estimación no equivalente a todas las tierras mundiales) × 20 % de superficie de arena en desiertos según USGS. `percentBasis: "earthProxy"`. |
+| Rocoso (cañones y mesetas) | **9,8 %** | **2** | **4** | **Referencia inferior**, basada en 19,6 % × ~50 % de llanuras de grava desérticas. Nuestro subbioma incluye también roca expuesta, cuya superficie adicional no se ha cuantificado; **9,8 % NO es una medición exclusiva del desierto rocoso mundial**. `percentBasis: "earthLowerBoundProxy"`. |
+| Salar (Uyuni) | **0,008 %** | **1** | **1** | Equivalencia de superficie de un **solo Salar de Uyuni** (~10 582 km²) respecto de la tierra global (~129,76 millones de km²), **no es un porcentaje de todos los salares de la Tierra**. `percentBasis: "singleSiteProxy"`. |
+
+**Escala y topología:** en mapas Pangea con 55 % de tierra o en otros tipos de mundo, el porcentaje se evalúa siempre contra la cantidad **real** de hexágonos terrestres, no contra el número total de celdas ni contra kilómetros cuadrados. **Arenoso 2–4 masas, Rocoso 2–4 masas, Salar exactamente 1 masa conectada**, independientemente de las dimensiones del grid; las superficies en hexágonos escalan. La única masa Salar debe estar en una cuenca endorreica con costra salina y pendiente compatible con su `spawn.required`, que permanece sin cambios. Nunca colocar un Salar artificial en terreno incompatible para completar una cuota.
+
+**Precisión y cobertura:** estas aproximaciones usan categorías no exactamente equivalentes, bases terrestres/periodos distintos y redondeos. No sumarlas mecánicamente para reclamar un porcentaje global científico del desierto: hay otros tipos de superficie desértica. En la fase de implementación se deberá definir una taxonomía exclusiva y reconciliar el presupuesto global, sin alterar los registros históricos de procedencia. Ninguna cuota es hoy un algoritmo funcional del generador.
+
+**Referencias:** [USGS, What Is a Desert?](https://pubs.usgs.gov/gip/deserts/what/); [USGS, Desert Features](https://pubs.usgs.gov/gip/deserts/features/); [Salar de Uyuni, superficie aproximada (Britannica)](https://www.britannica.com/place/Salar-de-Uyuni); [Banco Mundial, superficie terrestre mundial](https://data.worldbank.org/indicator/AG.LND.TOTL.K2?locations=1W).

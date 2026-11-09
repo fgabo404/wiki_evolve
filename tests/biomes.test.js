@@ -68,7 +68,23 @@ function getMountainPlacement(id){return forest.subbiomes.find(s=>s.id===id).reg
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.maxRegions},{min:2,max:4},"templado debe tener 2–4 masas");
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.maxRegions},{min:1,max:2},"pantano arbolado debe tener 1–2 masas");
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
-assert(catalog.biomes.filter(b=>b.id!=="forest").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a otros biomas aún");
+assert(catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a biomas pendientes");
+const desertDistributionById={
+ desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
+ desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
+ desert_salt_flat:{targetLandPercent:0.008,percentBasis:"singleSiteProxy",minRegions:1,maxRegions:1}
+};
+const desertForDistribution=catalog.biomes.find(b=>b.id==="desert");
+assert.equal(desertForDistribution.subbiomes.length,3,"deben mantenerse tres subbiomas de Desierto");
+for(const sub of desertForDistribution.subbiomes){
+ assert.deepEqual(sub.distribution,desertDistributionById[sub.id],"distribución desértica incorrecta: "+sub.id);
+ assert(sub.distribution.minRegions>=1&&Number.isInteger(sub.distribution.minRegions),"mínimo inválido: "+sub.id);
+ assert(sub.distribution.maxRegions>=sub.distribution.minRegions&&Number.isInteger(sub.distribution.maxRegions),"máximo inválido: "+sub.id);
+ assert(sub.distribution.targetLandPercent>0&&sub.distribution.targetLandPercent<=100,"porcentaje inválido: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"regionCount"),"las masas no se deben guardar dentro de spawn: "+sub.id);
+}
+assert.equal(desertForDistribution.subbiomes.find(s=>s.id==="desert_salt_flat").distribution.maxRegions,1,"salar único");
+assert.deepEqual([desertForDistribution.subbiomes.find(s=>s.id==="desert_rocky").distribution.minRegions,desertForDistribution.subbiomes.find(s=>s.id==="desert_rocky").distribution.maxRegions],[2,4],"desierto rocoso: 2–4 masas");
 const expectedHeights={"forest_tropical":{"min":1,"max":50},"forest_cloud":{"min":25,"max":74},"forest_temperate":{"min":1,"max":64},"forest_boreal":{"min":1,"max":55},"forest_subalpine":{"min":65,"max":84},"forest_redwood":{"min":1,"max":35},"forest_wooded_swamp":{"min":1,"max":20}};
 for(const sub of forest.subbiomes){
   assert.deepEqual(sub.spawn.required.elevationLevel,expectedHeights[sub.id],"altura obligatoria distinta a la aprobada: "+sub.id);
@@ -242,6 +258,7 @@ assert(detail.includes("sub.distribution"),"la ficha debe mostrar distribución 
 assert(detail.includes("targetLandPercent"),"la ficha debe mostrar porcentaje terrestre");
 assert(detail.includes("minRegions")&&detail.includes("maxRegions"),"la ficha debe mostrar límites de masas");
 assert(detail.includes("sub.regionPlacement"),"la ficha debe mostrar la política de emplazamiento");
+assert(detail.includes("earthLowerBoundProxy")&&detail.includes("singleSiteProxy"),"la ficha debe distinguir referencias de grava y Uyuni");
 assert(detail.includes("Bosque montano húmedo"),"falta traducción de la franja nubosa");
 assert(detail.includes("Bajo el límite local de árboles"),"falta traducción de la franja subalpina");
 assert(detail.includes("No comparable global reference"),"la ficha debe indicar ausencia de referencia real");
