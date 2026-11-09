@@ -32,7 +32,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques** y los **3 desiertos** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **13 subbiomas restantes** siguen sin `spawn` ni `description` hasta su revisión. Bosque subtropical permanece retirado.
+**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos** y **Sabana** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **12 subbiomas restantes** siguen sin `spawn` ni `description` hasta su revisión. Bosque subtropical permanece retirado.
 
 **Criterio visual de Bosque templado (2026-11-09):** se representa como bosque europeo caducifolio o mixto, con hayas, robles y cambios estacionales; esto no restringe la aparición del subbioma a Europa. Su `spawn` no cambió. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
