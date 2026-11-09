@@ -36,3 +36,11 @@ Se usa **Bosque subalpino**, y no «bosque alpino», porque la franja alpina est
 - Los otros 16 subbiomas siguen sin `spawn`.
 
 **Gestión:** los futuros cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. La copia antigua de `Evolve/definitions` no se modifica por esta migración; ambos repositorios son independientes.
+
+## Referencia visual aprobada: Bosque templado de estilo europeo (2026-11-09)
+
+`forest_temperate` conserva su identificador, su nombre bilingüe y todas las reglas de `spawn`. Su descripción bilingüe se ha enfocado en **bosques caducifolios y mixtos de Europa central y occidental**, con hayas, robles y cambios visibles entre estaciones. **Es una referencia estética y de vegetación, no una restricción geográfica a Europa**: el mismo paisaje podrá darse en otras regiones con clima y vegetación similares.
+
+Se distinguen de esta referencia los bosques de secuoyas de América del Norte: las secuoyas costeras (`Sequoia sempervirens`) se asocian a bosques templados lluviosos marítimos con niebla, mientras que las secuoyas gigantes (`Sequoiadendron giganteum`) crecen en bosques montanos de coníferas mixtas de Sierra Nevada. **No se ha creado un nuevo subbioma de secuoyas**; se deja su clasificación futura pendiente de revisión de flora o biomas.
+
+Referencias: [European Forests JRC](https://forest.jrc.ec.europa.eu/media/atlas/European_forests_an_ecological_overview.pdf), [NPS Coast Redwood](https://www.nps.gov/articles/000/coast-redwood.htm) y [NPS Giant Sequoia Groves](https://www.nps.gov/seki/planyourvisit/sequoiagroves.htm).

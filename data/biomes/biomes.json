@@ -89,8 +89,8 @@
             "en": "Temperate"
           },
           "description": {
-            "es": "Bosque de regiones con estaciones diferenciadas y temperaturas moderadas o frescas. Puede estar formado por árboles de hoja caduca, coníferas o una mezcla de ambos, y cambia su aspecto según las estaciones.",
-            "en": "A forest in regions with distinct seasons and moderate or cool temperatures. It may contain deciduous trees, conifers, or a mixture of both, and its appearance changes with the seasons."
+            "es": "Bosque de clima templado inspirado en los paisajes forestales de Europa central y occidental. Predominan las hayas, los robles y otros árboles de hoja caduca, a veces mezclados con coníferas. Presenta estaciones marcadas: follaje verde en primavera y verano, colores cálidos en otoño y muchos árboles sin hojas en invierno.",
+            "en": "A temperate forest inspired by the woodland landscapes of Central and Western Europe. Beeches, oaks, and other deciduous trees predominate, sometimes mixed with conifers. It has distinct seasons: green foliage in spring and summer, warm autumn colors, and many leafless trees in winter."
           },
           "spawn": {
             "required": {

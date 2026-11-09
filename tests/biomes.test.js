@@ -19,6 +19,9 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
 assert.equal(allSubbiomes.filter(x=>x.description).length,5,"solo los 5 bosques revisados tienen descripción");
+const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
+assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
+assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
 assert.equal(allSubbiomes.filter(x=>x.spawn).length,5);
 assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
 const subalpine=forest.subbiomes.find(x=>x.id==="forest_subalpine");
