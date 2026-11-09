@@ -237,6 +237,10 @@
             "percentBasis": "earthProxy",
             "minRegions": 1,
             "maxRegions": null
+          },
+          "regionPlacement": {
+            "mode": "mountainDependent",
+            "belt": "humidMontane"
           }
         },
         {
@@ -330,7 +334,7 @@
             "targetLandPercent": 8.9,
             "percentBasis": "earthProxy",
             "minRegions": 1,
-            "maxRegions": null
+            "maxRegions": 3
           }
         },
         {
@@ -389,6 +393,10 @@
             "percentBasis": "unavailable",
             "minRegions": 1,
             "maxRegions": null
+          },
+          "regionPlacement": {
+            "mode": "mountainDependent",
+            "belt": "belowLocalTreeline"
           }
         },
         {

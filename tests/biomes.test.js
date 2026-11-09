@@ -36,7 +36,7 @@ const expectedForestDistribution={
  forest_tropical:{targetLandPercent:8.8,percentBasis:"earthProxy",minRegions:2,maxRegions:3},
  forest_cloud:{targetLandPercent:0.165,percentBasis:"earthProxy",minRegions:1,maxRegions:null},
  forest_temperate:{targetLandPercent:5.4,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
- forest_boreal:{targetLandPercent:8.9,percentBasis:"earthProxy",minRegions:1,maxRegions:null},
+ forest_boreal:{targetLandPercent:8.9,percentBasis:"earthProxy",minRegions:1,maxRegions:3},
  forest_subalpine:{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:null},
  forest_redwood:{targetLandPercent:0.006,percentBasis:"historicalEarthProxy",minRegions:1,maxRegions:1},
  forest_wooded_swamp:{targetLandPercent:0.9,percentBasis:"earthProxy",minRegions:1,maxRegions:2}
@@ -52,6 +52,19 @@ for(const sub of forest.subbiomes){
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_tropical").distribution.minRegions,2);
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_tropical").distribution.maxRegions,3);
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_redwood").distribution.maxRegions,1);
+assert.deepEqual(getMountainPlacement("forest_cloud"),{mode:"mountainDependent",belt:"humidMontane"},"bosque nuboso depende de montaña húmeda");
+assert.deepEqual(getMountainPlacement("forest_subalpine"),{mode:"mountainDependent",belt:"belowLocalTreeline"},"bosque subalpino depende de línea de árboles montañosa");
+assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_boreal").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_boreal").distribution.maxRegions},{min:1,max:3},"taiga debe tener 1–3 masas");
+for(const sub of forest.subbiomes){
+  const placement=sub.regionPlacement;
+  if(["forest_cloud","forest_subalpine"].includes(sub.id)){
+    assert(placement,"falta política de emplazamiento dependiente de montaña: "+sub.id);
+    assert.equal(placement.mode,"mountainDependent");
+    assert(Object.hasOwn(sub.spawn.preferred,"absoluteLatitudeDegrees"),"la política montañosa debe conservar la latitud preferida: "+sub.id);
+  }else assert(!placement,"no crear emplazamientos montañosos para bosques que no lo requieren: "+sub.id);
+}
+function getMountainPlacement(id){return forest.subbiomes.find(s=>s.id===id).regionPlacement}
+
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.maxRegions},{min:2,max:4},"templado debe tener 2–4 masas");
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.maxRegions},{min:1,max:2},"pantano arbolado debe tener 1–2 masas");
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
@@ -228,6 +241,9 @@ assert(detail.includes("treeCanopyCoverPercent"),"la ficha debe mostrar cobertur
 assert(detail.includes("sub.distribution"),"la ficha debe mostrar distribución si está definida");
 assert(detail.includes("targetLandPercent"),"la ficha debe mostrar porcentaje terrestre");
 assert(detail.includes("minRegions")&&detail.includes("maxRegions"),"la ficha debe mostrar límites de masas");
+assert(detail.includes("sub.regionPlacement"),"la ficha debe mostrar la política de emplazamiento");
+assert(detail.includes("Bosque montano húmedo"),"falta traducción de la franja nubosa");
+assert(detail.includes("Bajo el límite local de árboles"),"falta traducción de la franja subalpina");
 assert(detail.includes("No comparable global reference"),"la ficha debe indicar ausencia de referencia real");
 assert(detail.includes('treeCanopyCoverPercent:"%"'),"la cobertura arbórea debe aparecer en %");
 assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
