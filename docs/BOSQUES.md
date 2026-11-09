@@ -88,3 +88,15 @@ Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia semper
 **Manglar:** ya existe como `marine_mangrove` dentro del bioma `marine` (Marino). **No se crea ningún manglar forestal ni se modifica la definición marítima existente**.
 
 **Fuentes:** [USGS — Do mountain clouds exist because of upwind forests?](https://www.usgs.gov/news/do-mountain-clouds-exist-because-upwind-forests), [The climate of cloud forests — GOV.UK](https://www.gov.uk/research-for-development-outputs/the-climate-of-cloud-forests), [Hydroclimatic and ecophysiological basis of cloud forest distributions](https://pmc.ncbi.nlm.nih.gov/articles/PMC3997648/) y [Fog precipitation in a cloud forest of Guatemala](https://www.sciencedirect.com/science/article/pii/S0378112703005139).
+
+## Referencia visual aprobada: Bosque boreal / Taiga (2026-11-09)
+
+`forest_boreal` conserva `id`, nombre bilingüe, estructura y **todas** las condiciones `spawn.required` y `spawn.preferred`; se actualizan únicamente las descripciones `es` y `en`.
+
+**Referencia principal:** taiga de Finlandia y Canadá, con pinos, abetos y píceas altos y oscuros, suelo de musgos y líquenes, claros naturales, lagos dispersos, nieve invernal y veranos cortos. Se busca una silueta de coníferas y paisaje frío septentrional. Esta es una referencia estética, no una limitación a esos países.
+
+**Variación estacional:** en regiones de taiga de Siberia oriental, como Yakutia, destacan alerces que se vuelven dorados en otoño y pierden sus agujas. Esto constituye una variación del mismo subbioma, **sin crear un nuevo ID** ni imponer alerces en toda la taiga.
+
+**Diferencia frente a Bosque subalpino:** la taiga se determina por el clima boreal de las regiones frías del norte; el bosque subalpino aparece cerca del límite local de árboles en las montañas. Son paisajes que pueden compartir coníferas, pero tienen criterios ambientales distintos.
+
+**Pendiente para la fase de flora y estaciones:** asociar especies de pinos, abetos, píceas, musgos y alerces a la vegetación regional y sus colores de otoño. No se añaden mecánicas estacionales ni se modifica Engine.

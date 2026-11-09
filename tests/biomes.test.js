@@ -22,6 +22,16 @@ assert.equal(allSubbiomes.filter(x=>x.description).length,7,"solo los 7 bosques 
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
+const boreal=forest.subbiomes.find(x=>x.id==="forest_boreal");
+assert(boreal,"debe existir Bosque boreal");
+assert(boreal.description.es.includes("Finlandia y Canadá"),"la descripción boreal debe reflejar la referencia visual aprobada");
+assert(boreal.description.en.includes("Finland and Canada"),"falta referencia boreal en inglés");
+assert(boreal.description.es.includes("musgos y líquenes"),"falta vegetación característica de taiga");
+assert(boreal.description.en.includes("moss- and lichen-covered"),"falta vegetación característica de taiga en inglés");
+assert(boreal.description.es.includes("Yakutia")&&boreal.description.en.includes("Yakutia"),"faltan los alerces de Yakutia");
+assert.deepEqual(boreal.spawn.required.monthsMeanTemperatureAbove10C,{min:1,max:3},"debe conservarse el spawn boreal");
+assert.equal(boreal.spawn.required.annualPrecipitationMm.min,200);
+
 assert.equal(allSubbiomes.filter(x=>x.spawn).length,7);
 assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");

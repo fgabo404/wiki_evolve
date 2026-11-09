@@ -165,8 +165,8 @@
             "en": "Boreal (taiga)"
           },
           "description": {
-            "es": "Bosque de regiones frías, conocido también como taiga, con inviernos largos y veranos cortos. Suele estar dominado por coníferas resistentes al frío, aunque también puede incluir árboles de hoja caduca.",
-            "en": "A forest of cold regions, also known as taiga, with long winters and short summers. It is commonly dominated by cold-adapted conifers, although deciduous trees may also occur."
+            "es": "Bosque frío del norte, también llamado taiga, inspirado visualmente en los paisajes de Finlandia y Canadá. Predominan coníferas altas y oscuras, como pinos, abetos y píceas, sobre suelos cubiertos de musgos y líquenes, con lagos y claros entre los árboles. Sus inviernos son largos y nevados y sus veranos cortos. En algunas regiones, como Yakutia, los alerces aportan tonos dorados en otoño antes de perder sus agujas.",
+            "en": "A cold northern forest, also called taiga, visually inspired by the landscapes of Finland and Canada. Tall, dark conifers, such as pines, firs, and spruces, dominate above moss- and lichen-covered ground, with lakes and natural clearings among the trees. Winters are long and snowy, and summers are short. In some regions, such as Yakutia, larches turn golden in autumn before shedding their needles."
           },
           "spawn": {
             "required": {

@@ -39,3 +39,5 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 **Bosque de secuoyas:** define los bosques de secuoyas costeras y añade la condición teórica `coastalFogFrequent` y la distancia costera preferida `distanceToCoastKm`. Estos nuevos factores aún no están implementados en el motor y solo se muestran en la Wiki. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
 **Bosque nuboso:** se distingue por `cloudImmersionFrequent` y prefiere condiciones de montaña húmeda. Esta métrica es teórica y no se calcula todavía en Engine. El Manglar (`marine_mangrove`) sigue exclusivamente bajo el bioma Marino. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
+
+**Criterio visual de Bosque boreal (2026-11-09):** taiga de estilo finlandés y canadiense, con coníferas oscuras, musgos, líquenes, lagos, claros y nieve en invierno. Los alerces dorados de Yakutia son una variación estacional. Se actualizó únicamente su descripción bilingüe, sin alterar `spawn`. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
