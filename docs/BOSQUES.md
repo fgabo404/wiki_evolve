@@ -35,7 +35,7 @@ Se usa **Bosque subalpino**, y no «bosque alpino», porque la franja alpina est
 - Sigue pendiente resolver los solapamientos y la prioridad frente a Templado, Boreal y Montaña rocosa.
 - Las preferencias no deben usarse como condiciones excluyentes.
 - `forest_subtropical` se retiró expresamente; su ID no se recicla.
-- Los otros 16 subbiomas siguen sin `spawn`.
+- Después de completar también los tres desiertos, quedan 13 subbiomas del catálogo sin `spawn`. (En la fase inicial de Bosque eran 16).
 
 **Gestión:** los futuros cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. La copia antigua de `Evolve/definitions` no se modifica por esta migración; ambos repositorios son independientes.
 
