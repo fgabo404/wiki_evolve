@@ -308,7 +308,7 @@ for(const sub of desert.subbiomes){
  assert.equal(plotted.elevation.min,sub.spawn.required.elevationLevel.min);
  assert.equal(plotted.elevation.max,sub.spawn.required.elevationLevel.max);
 }
-const savanna=plains.subbiomes.find(s=>s.id==="plains_savanna");
+
 assert.deepEqual(savanna.distribution,{targetLandPercent:13.8,percentBasis:"earthProxy",minRegions:2,maxRegions:4},"Sabana debe ocupar referencia terrestre 13,8 % y formar 2–4 masas");
 assert.deepEqual(savanna.spawn.preferred.absoluteLatitudeDegrees,{min:0,max:30},"Sabana debe mantener su latitud preferida 0–30°");
 assert.deepEqual(savanna.spawn.required.elevationLevel,{min:1,max:64},"Sabana debe mantener elevación requerida 1–64");
