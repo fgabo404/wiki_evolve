@@ -68,7 +68,7 @@ function getMountainPlacement(id){return forest.subbiomes.find(s=>s.id===id).reg
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.maxRegions},{min:2,max:4},"templado debe tener 2–4 masas");
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.maxRegions},{min:1,max:2},"pantano arbolado debe tener 1–2 masas");
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
-assert(catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a biomas pendientes");
+assert(catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a biomas pendientes");
 const desertDistributionById={
  desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
  desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
