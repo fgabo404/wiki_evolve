@@ -13,9 +13,10 @@
 | Bosque templado | `forest_temperate` | Tierra, 4–8 meses con temperatura media mensual >10 °C y lluvia anual ≥450 mm |
 | Bosque boreal (taiga) | `forest_boreal` | Tierra, 1–3 meses con temperatura media mensual >10 °C y lluvia anual ≥200 mm |
 | Bosque subalpino | `forest_subalpine` | Tierra, 0–700 m por debajo del límite local de árboles, lluvia ≥350 mm/año y pendiente ≤40° |
+| Bosque de secuoyas | `forest_redwood` | Tierra, temperatura media anual 8–18 °C, lluvia ≥750 mm/año y niebla costera frecuente | 
 | Pantano arbolado (Everglades) | `forest_wooded_swamp` | Tierra, suelo saturado durante temporada de crecimiento y agua dulce |
 
-Los cinco conservan `spawn.required` y `spawn.preferred`, y ahora incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
+Los seis conservan `spawn.required` y `spawn.preferred`, e incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
 
 ## Referencia visual de la cordillera
 
@@ -41,6 +42,27 @@ Se usa **Bosque subalpino**, y no «bosque alpino», porque la franja alpina est
 
 `forest_temperate` conserva su identificador, su nombre bilingüe y todas las reglas de `spawn`. Su descripción bilingüe se ha enfocado en **bosques caducifolios y mixtos de Europa central y occidental**, con hayas, robles y cambios visibles entre estaciones. **Es una referencia estética y de vegetación, no una restricción geográfica a Europa**: el mismo paisaje podrá darse en otras regiones con clima y vegetación similares.
 
-Se distinguen de esta referencia los bosques de secuoyas de América del Norte: las secuoyas costeras (`Sequoia sempervirens`) se asocian a bosques templados lluviosos marítimos con niebla, mientras que las secuoyas gigantes (`Sequoiadendron giganteum`) crecen en bosques montanos de coníferas mixtas de Sierra Nevada. **No se ha creado un nuevo subbioma de secuoyas**; se deja su clasificación futura pendiente de revisión de flora o biomas.
+Se distinguen de esta referencia los bosques de secuoyas de América del Norte: las secuoyas costeras (`Sequoia sempervirens`) se asocian a bosques templados lluviosos marítimos con niebla, mientras que las secuoyas gigantes (`Sequoiadendron giganteum`) crecen en bosques montanos de coníferas mixtas de Sierra Nevada. **Se creó posteriormente `forest_redwood` para las secuoyas costeras**, sin modificar `forest_temperate`; la clasificación específica de secuoyas gigantes se deja pendiente.
 
 Referencias: [European Forests JRC](https://forest.jrc.ec.europa.eu/media/atlas/European_forests_an_ecological_overview.pdf), [NPS Coast Redwood](https://www.nps.gov/articles/000/coast-redwood.htm) y [NPS Giant Sequoia Groves](https://www.nps.gov/seki/planyourvisit/sequoiagroves.htm).
+
+## Nuevo subbioma: Bosque de secuoyas / Redwood Forest (2026-11-09)
+
+**ID:** `forest_redwood`. Forma parte de **Bosque (`forest`)**, no constituye un noveno bioma principal. Se mantiene la misma estructura `id`, `name` (es/en), `description` (es/en) y `spawn.required` / `spawn.preferred`.
+
+Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia sempervirens`) del litoral del Pacífico, cuya humedad depende de lluvia invernal y niebla estival. No es sinónimo de todos los bosques de coníferas ni incluye automáticamente los rodales de secuoyas gigantes de Sierra Nevada.
+
+| Campo | Tipo | Valor |
+|---|---|---|
+| `terrain` | `required` | `land` |
+| `meanAnnualTemperatureC` | `required` | 8–18 °C |
+| `annualPrecipitationMm` | `required` | ≥750 mm/año |
+| `coastalFogFrequent` | `required` | `true` |
+| `elevationMeters` | `preferred` | 0–900 m |
+| `annualPrecipitationMm` | `preferred` | 1200–2500 mm/año |
+| `meanAnnualRelativeHumidityPercent` | `preferred` | 75–95 % |
+| `distanceToCoastKm` | `preferred` | 0–80 km |
+
+**Nota de diseño:** los valores numéricos son intervalos iniciales para Evolve, no límites universales; la precipitación sola no explica estos bosques. `coastalFogFrequent` es un indicador booleano conceptual de niebla marítima frecuente durante la estación seca. Su cálculo, así como la distancia costera en una costa compleja y la distinción frente a `forest_temperate`, **no están implementados**. No se añaden nuevas especies a la flora por ahora.
+
+**Fuentes:** [California State Parks — About Coast Redwoods](https://www.parks.ca.gov/?page_id=22257), [UC ANR — Coast Redwood](https://ucanr.edu/site/forest-research-and-outreach/coast-redwood-sequoia-sempervirens), [USFS — Coast Redwood](https://research.fs.usda.gov/feis/species-reviews/seqsem) y [NPS — Redwood Weather](https://www.nps.gov/redw/planyourvisit/weather.htm).

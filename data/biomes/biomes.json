@@ -213,6 +213,48 @@
           }
         },
         {
+          "id": "forest_redwood",
+          "name": {
+            "es": "Bosque de secuoyas",
+            "en": "Redwood Forest"
+          },
+          "description": {
+            "es": "Bosque templado costero dominado por secuoyas rojas (Sequoia sempervirens), árboles gigantes de corteza rojiza que crecen en un ambiente oceánico húmedo. La niebla frecuente durante los veranos secos, las lluvias de invierno y la vegetación de helechos y musgos favorecen un paisaje de árboles muy altos y densos.",
+            "en": "A coastal temperate forest dominated by coast redwoods (Sequoia sempervirens), towering trees with reddish bark that thrive in a humid oceanic climate. Frequent fog during dry summers, winter rainfall, and an understory of ferns and mosses create a landscape of exceptionally tall, dense trees."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "meanAnnualTemperatureC": {
+                "min": 8,
+                "max": 18
+              },
+              "annualPrecipitationMm": {
+                "min": 750
+              },
+              "coastalFogFrequent": true
+            },
+            "preferred": {
+              "elevationMeters": {
+                "min": 0,
+                "max": 900
+              },
+              "annualPrecipitationMm": {
+                "min": 1200,
+                "max": 2500
+              },
+              "meanAnnualRelativeHumidityPercent": {
+                "min": 75,
+                "max": 95
+              },
+              "distanceToCoastKm": {
+                "min": 0,
+                "max": 80
+              }
+            }
+          }
+        },
+        {
           "id": "forest_wooded_swamp",
           "name": {
             "es": "Pantano arbolado (Everglades)",
