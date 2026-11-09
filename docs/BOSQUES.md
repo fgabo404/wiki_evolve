@@ -122,3 +122,23 @@ El director aprobó sustituir los rangos **preferidos en metros** por un **rango
 **Nota sobre línea de árboles:** `forest_subalpine` conserva la restricción distinta `distanceBelowLocalTreelineMeters: { min: 0, max: 700 }` hasta diseñar cómo representar esa distancia física respecto al límite arbóreo local en un generador que solo usa altura normalizada. No es una segunda altitud absoluta y sigue pendiente de implementación. En ningún caso puede anular `elevationLevel: 65–84`: un bosque subalpino en altura 10 está prohibido.
 
 **Conservación:** temperatura, lluvia, humedad, pendientes, latitud, niebla, agua dulce, y descripciones bilingües permanecen sin cambios. Los restantes 16 subbiomas siguen sin `spawn` y el manglar continúa en Marino. El motor de `Evolve` no se modifica durante esta fase teórica.
+
+## Latitud preferida de todos los bosques (2026-11-09)
+
+El director aprobó completar `spawn.preferred.absoluteLatitudeDegrees` para los cuatro bosques que aún no tenían latitud. La latitud **sigue siendo preferida, no obligatoria**; `spawn.required.elevationLevel` (0–100) continúa siendo obligatorio y no se modifica.
+
+| Subbioma | Latitud absoluta preferida (0–90°) | Estado |
+|---|---:|---|
+| Selva (`forest_tropical`) | 0–23,5° | Existente, sin cambios |
+| Bosque nuboso (`forest_cloud`) | 0–30° | Añadida |
+| Bosque templado (`forest_temperate`) | 30–60° | Existente, sin cambios |
+| Bosque boreal (`forest_boreal`) | 50–75° | Existente, sin cambios |
+| Bosque subalpino (`forest_subalpine`) | 30–70° | Añadida |
+| Bosque de secuoyas (`forest_redwood`) | 35–43° | Añadida |
+| Pantano arbolado (`forest_wooded_swamp`) | 20–35° | Añadida |
+
+**Criterio:** estos intervalos orientan la selección cuando coinciden varios biomas. No constituyen filtros duros; el motor futuro deberá valorar también relieve, humedad, clima y condiciones obligatorias. `absoluteLatitudeDegrees` usa la distancia angular al ecuador, idéntica para latitudes N/S; una preferencia de 35–43° no significa que la secuoya costera sea nativa de ambos hemisferios. La distribución biogeográfica de flora y hemisferios se modelará aparte.
+
+**Referencias:** para `forest_cloud` se priorizan montañas tropicales y subtropicales (0–30°) con niebla frecuente: [NatureServe, Tropical Montane Rainforest](https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1298972/Tropical_Montane_Rainforest_Ecobiome). Para `forest_subalpine` (30–70°), se prioriza estéticamente la taiga montana templada/fría tipo Banff; la línea de árboles también existe en montañas tropicales, que no quedan excluidas por una preferencia: [Nature Education, Global Treeline Position](https://www.nature.com/scitable/knowledge/library/global-treeline-position-15897370/). Para `forest_redwood`, la franja preferida de 35–43° engloba su área nativa costera de aproximadamente 35,7–42,2°N: [USFS, Silvics of North America: Redwood](https://research.fs.usda.gov/silvics/redwood). `forest_wooded_swamp` prefiere 20–35° como generalización subtropical del ejemplo Everglades: [USDA NRCS, Subtropical Freshwater Forested Wetlands of Everglades](https://edit.sc.egov.usda.gov/catalogs/esd/156A/F156AY210FL). Estos cuatro intervalos son **decisiones de diseño para Evolve**, no límites científicos.
+
+No se modificaron las condiciones de altura, temperatura, niebla, precipitación, pendiente, humedad ni la clasificación del manglar marino.

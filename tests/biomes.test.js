@@ -40,6 +40,24 @@ for(const sub of forest.subbiomes){
   assert(Number.isInteger(sub.spawn.required.elevationLevel.min)&&Number.isInteger(sub.spawn.required.elevationLevel.max),"altura debe usar niveles enteros");
   assert(sub.spawn.required.elevationLevel.min>=1&&sub.spawn.required.elevationLevel.max<=100,"altura fuera de la escala 0–100: "+sub.id);
 }
+const expectedForestLatitudes={
+  forest_tropical:{min:0,max:23.5},
+  forest_cloud:{min:0,max:30},
+  forest_temperate:{min:30,max:60},
+  forest_boreal:{min:50,max:75},
+  forest_subalpine:{min:30,max:70},
+  forest_redwood:{min:35,max:43},
+  forest_wooded_swamp:{min:20,max:35}
+};
+for(const sub of forest.subbiomes){
+  assert.deepEqual(sub.spawn.preferred.absoluteLatitudeDegrees,expectedForestLatitudes[sub.id],"latitud preferida incorrecta: "+sub.id);
+  assert(!Object.hasOwn(sub.spawn.required,"absoluteLatitudeDegrees"),"la latitud no debe ser obligatoria: "+sub.id);
+  assert.deepEqual(sub.spawn.required.elevationLevel,{
+    forest_tropical:{min:1,max:50},forest_cloud:{min:25,max:74},forest_temperate:{min:1,max:64},
+    forest_boreal:{min:1,max:55},forest_subalpine:{min:65,max:84},
+    forest_redwood:{min:1,max:35},forest_wooded_swamp:{min:1,max:20}
+  }[sub.id],"la altura requerida debe conservarse: "+sub.id);
+}
 assert.equal(allSubbiomes.filter(x=>x.spawn).length,7);
 assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");
@@ -115,4 +133,4 @@ assert(nav.includes("wiki-biome-tree"));
 assert(!nav.includes("wiki-subbiome-tree"),"Los subbiomas deben mostrarse en el contenido");
 assert(nav.includes("router.go(biome.id)"));
 assert(nav.includes("router.go(b.id,sub.id)"));
-console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con altura 0–100 requerida; manglar sigue marino; Wiki JSON directo");
+console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con latitud preferida y altura 0–100 requerida; manglar sigue marino; Wiki JSON directo");

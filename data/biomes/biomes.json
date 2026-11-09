@@ -113,6 +113,10 @@
               "meanAnnualRelativeHumidityPercent": {
                 "min": 80,
                 "max": 100
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 30
               }
             }
           }
@@ -243,6 +247,10 @@
               "slopeDegrees": {
                 "min": 0,
                 "max": 25
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 30,
+                "max": 70
               }
             }
           }
@@ -285,6 +293,10 @@
               "distanceToCoastKm": {
                 "min": 0,
                 "max": 80
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 35,
+                "max": 43
               }
             }
           }
@@ -321,6 +333,10 @@
               "slopeDegrees": {
                 "min": 0,
                 "max": 5
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 20,
+                "max": 35
               }
             }
           }
