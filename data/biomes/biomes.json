@@ -461,6 +461,53 @@
           "name": {
             "es": "Sabana",
             "en": "Savanna"
+          },
+          "description": {
+            "es": "Llanura tropical o subtropical cálida dominada por pastizales, con árboles y arbustos dispersos, horizontes abiertos y estaciones lluviosa y seca bien diferenciadas. Se inspira principalmente en el Serengeti (Tanzania) y Masái Mara (Kenia): hierbas verdes durante las lluvias y doradas en la estación seca, con acacias aisladas y colinas suaves. Incluye variantes regionales del Cerrado brasileño, con árboles bajos y retorcidos, y del norte de Australia, con eucaliptos espaciados. El pasto domina el paisaje, aunque pueden existir sabanas casi sin árboles; el fuego natural y el pastoreo influyen en su vegetación.",
+            "en": "A warm tropical or subtropical plain dominated by grasslands, with scattered trees and shrubs, open horizons, and distinct wet and dry seasons. Primarily inspired by the Serengeti (Tanzania) and Maasai Mara (Kenya): green grasses during rains and golden grasses in the dry season, with isolated acacias and gently rolling hills. Regional variants include Brazil's Cerrado, with short, twisted trees, and northern Australia's widely spaced eucalyptus trees. Grasses dominate the landscape, although some savannas have very few trees; natural fire and grazing influence their vegetation."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 64
+              },
+              "meanAnnualTemperatureC": {
+                "min": 18
+              },
+              "annualPrecipitationMm": {
+                "min": 400,
+                "max": 1800
+              },
+              "dryMonthsPerYear": {
+                "min": 3,
+                "max": 8,
+                "dryMonthThresholdMm": 60
+              },
+              "herbaceousVegetationDominant": true,
+              "treeCanopyCoverPercent": {
+                "max": 40
+              }
+            },
+            "preferred": {
+              "meanAnnualTemperatureC": {
+                "min": 20,
+                "max": 30
+              },
+              "annualPrecipitationMm": {
+                "min": 650,
+                "max": 1300
+              },
+              "treeCanopyCoverPercent": {
+                "min": 5,
+                "max": 30
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 30
+              }
+            }
           }
         },
         {

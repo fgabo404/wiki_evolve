@@ -58,4 +58,10 @@ La gráfica es una referencia ambiental, no una predicción exacta de aparición
 
 Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
 
-**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques y 3 desiertos con definiciones completas, 13 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques y 3 desiertos con definiciones completas, 12 subbiomas pendientes (Sabana de Llanuras ya definida). **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+
+## Llanuras — revisión gradual (2026-11-09)
+
+El catálogo conserva los cuatro subbiomas: Sabana, Pradera, Estepa y Humedal abierto (Pantanal). **Sabana** (`plains_savanna`) es el primer subbioma aprobado, inspirado en Serengeti y Masái Mara como paisaje principal, y con variantes de Cerrado y Australia. Cuenta con descripción bilingüe, clima cálido, estación seca y lluviosa, cobertura de árboles abierta, `elevationLevel` obligatorio 1–64 y latitud preferida 0–30°. La gráfica de distribución SVG muestra su área y marca los otros tres subbiomas como pendientes. Los rangos son decisiones de diseño, no implementación en Engine.
+
+Ver [docs/LLANURAS.md](docs/LLANURAS.md).

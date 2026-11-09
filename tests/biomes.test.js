@@ -18,7 +18,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,7,"solo los 7 bosques revisados tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,11,"solo los 7 bosques, 3 desiertos y Sabana revisados tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -103,9 +103,31 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,10,"solo los 7 bosques y 3 desiertos revisados tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,10);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,13);
+assert.equal(allSubbiomes.filter(x=>x.description).length,11,"solo los 7 bosques, 3 desiertos y Sabana revisados tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,11);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,12);
+const plains=catalog.biomes.find(x=>x.id==="plains");
+assert(plains,"debe existir Llanuras");
+assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
+const savanna=plains.subbiomes.find(s=>s.id==="plains_savanna");
+for(const ref of ["Serengeti","Masái Mara","Cerrado","Australia"])
+  assert(savanna.description.es.includes(ref),"falta referencia visual española de Sabana: "+ref);
+for(const ref of ["Serengeti","Maasai Mara","Cerrado","Australia"])
+  assert(savanna.description.en.includes(ref),"falta referencia visual inglesa de Sabana: "+ref);
+assert.deepEqual(savanna.spawn.required,{
+ terrain:"land",elevationLevel:{min:1,max:64},meanAnnualTemperatureC:{min:18},
+ annualPrecipitationMm:{min:400,max:1800},
+ dryMonthsPerYear:{min:3,max:8,dryMonthThresholdMm:60},
+ herbaceousVegetationDominant:true,treeCanopyCoverPercent:{max:40}
+},"las condiciones obligatorias de sabana deben conservarse");
+assert.deepEqual(savanna.spawn.preferred,{
+ meanAnnualTemperatureC:{min:20,max:30},annualPrecipitationMm:{min:650,max:1300},
+ treeCanopyCoverPercent:{min:5,max:30},absoluteLatitudeDegrees:{min:0,max:30}
+},"las preferencias de sabana deben conservarse");
+assert(!Object.hasOwn(savanna.spawn.required,"absoluteLatitudeDegrees"),"latitud de sabana no debe ser obligatoria");
+for(const pending of plains.subbiomes.filter(s=>s.id!=="plains_savanna"))
+  assert(!pending.description&&!pending.spawn,"otros subbiomas de Llanuras pendientes de revisión: "+pending.id);
+assert(catalog.biomes.find(x=>x.id==="tundra"),"Tundra sigue como bioma independiente");
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");
 assert.equal(cloud.name.es,"Bosque nuboso");
 assert.equal(cloud.name.en,"Cloud Forest");
@@ -177,6 +199,9 @@ assert(detail.includes('dominantSurfaceMaterial'),"falta campo de material super
 assert(detail.includes('aeolianDuneField'),"falta campo de dunas");
 assert(detail.includes('endorheicBasin'),"falta cuenca endorreica");
 assert(detail.includes('materialLabels'),"los materiales desérticos deben localizarse");
+assert(detail.includes("herbaceousVegetationDominant"),"la ficha debe mostrar dominancia herbácea de sabana");
+assert(detail.includes("treeCanopyCoverPercent"),"la ficha debe mostrar cobertura arbórea de sabana");
+assert(detail.includes('treeCanopyCoverPercent:"%"'),"la cobertura arbórea debe aparecer en %");
 assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
 const nav=read("js/modules/biomes/biomes.js");
 assert(nav.includes("wiki-nav-heading"));
@@ -222,7 +247,15 @@ for(const sub of desert.subbiomes){
  assert.equal(plotted.elevation.min,sub.spawn.required.elevationLevel.min);
  assert.equal(plotted.elevation.max,sub.spawn.required.elevationLevel.max);
 }
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert")){
+const savannaChart=chartAPI.getData(plains);
+assert.equal(savannaChart.defined.length,1,"la gráfica de Llanuras debe dibujar Sabana");
+assert.equal(savannaChart.pending.length,3,"los otros tres subbiomas de Llanuras siguen pendientes");
+assert.equal(savannaChart.defined[0].id,"plains_savanna");
+assert.equal(savannaChart.defined[0].latitude.min,0);
+assert.equal(savannaChart.defined[0].latitude.max,30);
+assert.equal(savannaChart.defined[0].elevation.min,1);
+assert.equal(savannaChart.defined[0].elevation.max,64);
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
   assert.equal(result.pending.length,biome.subbiomes.length);
@@ -234,4 +267,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques + 3 desiertos con descripción y spawn; gráfica reutilizable para ambos biomas; manglar sigue marino");
+console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques + 3 desiertos + Sabana con descripción y spawn; gráfica reutilizable para Llanuras; 12 subbiomas pendientes");
