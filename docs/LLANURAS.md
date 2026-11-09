@@ -60,3 +60,20 @@ La Wiki usa automáticamente el componente existente `js/modules/biomes/biome-di
 ## Restricciones de la fase teórica
 
 Esta entrega solo modifica datos declarativos, las etiquetas de la ficha y pruebas de la Wiki. **No modifica `fgabo404/Evolve`, su generador ni la definición ya aprobada de Bosque o Desierto.** La implementación de vegetación, clima, fuego y pastoreo forma parte de un trabajo posterior. Llanuras **no está cerrado** hasta revisar Pradera, Estepa y Humedal abierto.
+
+## Distribución territorial de Sabana (2026-11-09)
+
+**Aprobado:** se conserva `spawn.preferred.absoluteLatitudeDegrees: 0–30°` como **preferencia**, no requisito; `spawn.required.elevationLevel: 1–64` continúa obligatorio. El bioma ocupa preliminarmente `targetLandPercent: 13.8`, calculado respecto de **todos los hexágonos terrestres** de cualquier tamaño de mapa; debe formar **entre 2 y 4 masas conectadas** del mismo subbioma.
+
+```json
+"distribution": {
+  "targetLandPercent": 13.8,
+  "percentBasis": "earthProxy",
+  "minRegions": 2,
+  "maxRegions": 4
+}
+```
+
+**Procedencia y cautela:** 13,8 % es una **aproximación** inspirada en una estimación amplia de *sabanas y sabanas arboladas* de la Tierra. No es una superficie mundial exclusiva y exactamente idéntica al subbioma Sabana de Evolve; puede solaparse con ciertas formaciones forestales o abiertos de otras taxonomías. Debe reconciliarse más adelante con las cuotas de Bosque, Desierto y otras Llanuras antes de usarse como suma mundial obligatoria. El número de masas es un **límite de diseño**, no una cifra global observada. Los 2–4 componentes conectados de hexágonos pueden variar en tamaño y deben respetar clima, estación seca, vegetación y altura ya aprobados.
+
+**Pradera, Estepa y Humedal abierto** no reciben porcentajes ni conteos por defecto mientras estén pendientes de revisión. El motor nuevo de Evolve no se modifica.

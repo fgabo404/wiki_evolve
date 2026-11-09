@@ -576,6 +576,12 @@
                 "max": 30
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 13.8,
+            "percentBasis": "earthProxy",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {

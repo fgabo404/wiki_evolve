@@ -73,3 +73,7 @@ Los siete bosques incorporan `distribution` sin alterar sus reglas `spawn`: `tar
 ## Distribución porcentual de Desiertos (2026-11-09)
 
 Los tres subbiomas de Desierto incorporan `distribution` (porcentaje preliminar de hexágonos terrestres y mínimos/máximos de masas conectadas): **Arenoso 3,9 %, 2–4 masas**; **Rocoso 9,8 % como referencia inferior de grava desértica, 2–4 masas**; **Salar 0,008 % como equivalente a un solo Uyuni, una única masa**. Estos porcentajes son referencias de distinto alcance y no una cobertura mundial exclusiva. Las condiciones `spawn` permanecen idénticas y el Engine no las ejecuta todavía. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md).
+
+## Llanuras — Sabana, cuota terrestre y masas (2026-11-09)
+
+Sabana tiene aprobado `distribution.targetLandPercent: 13.8` como referencia provisional de superficie **terrestre** (no cuota del mapa total), y `minRegions: 2`, `maxRegions: 4` para contar masas hexagonales conectadas. Se conserva la latitud absoluta **preferida 0–30°** y altura **obligatoria 1–64**. Los otros tres subbiomas de Llanuras siguen pendientes de definición, y no se ejecutan estas cuotas en el Engine. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
