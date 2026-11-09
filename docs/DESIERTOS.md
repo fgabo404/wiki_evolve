@@ -62,6 +62,17 @@ No se crean nuevos subbiomas para estas variantes. Las formas de duna (barjanes,
 
 Esta es una definición visual de diseño; no representa que todas las variantes deban aparecer simultáneamente en una misma celda.
 
+## Identidad visual aprobada: Desierto rocoso (2026-11-09)
+
+`desert_rocky` mantiene su nombre, ID y valores de `spawn.required` / `spawn.preferred` sin cambios. La descripción bilingüe documenta los siguientes paisajes dentro de un único subbioma:
+
+- **Apariencia principal — Atacama (Chile):** crestas erosionadas, formaciones rocosas irregulares y suelos expuestos, con colores grises, ocres y rojizos.
+- **Apariencia principal — Canyonlands (Utah, Estados Unidos):** cañones profundos, acantilados, mesetas y paredes de roca; su aparición depende del relieve y de la erosión.
+- **Variante continental fría — Gobi (Mongolia y China):** extensiones pedregosas y de grava, colinas áridas y vegetación escasa; posibles inviernos fríos.
+- **Variante de llanuras rocosas — hamadas del Sahara:** grandes superficies relativamente planas de roca expuesta y grava, con mesetas y elevaciones ocasionales.
+
+**No todos los desiertos rocosos deben tener cañones, mesetas o acantilados.** La condición esencial del subbioma es una superficie árida dominada por roca o grava. El relieve local, los materiales geológicos y los procesos erosivos determinarán visualmente la variante en el futuro. No se crean nuevos subbiomas ni campos ejecutables para estas formas y colores. Se mantienen la temperatura y la pendiente como preferencias, permitiendo terrenos planos y ambientes fríos.
+
 ## Contrato conceptual del terreno
 
 Los nuevos campos geológicos son declarativos y **no están implementados** en el nuevo generador de Evolve:

@@ -53,8 +53,8 @@
             "en": "Rocky (canyons and plateaus)"
           },
           "description": {
-            "es": "Desierto árido de roca expuesta, grava y suelos pedregosos, con laderas erosionadas, mesetas y cañones donde el relieve lo permite. La lluvia escasa y la erosión dejan al descubierto las formaciones geológicas. Su referencia visual es el desierto de Atacama, con variantes frías como las del Gobi.",
-            "en": "An arid desert of exposed bedrock, gravel, and stony ground, with eroded slopes, plateaus, and canyons where the terrain allows. Sparse rainfall and erosion expose geological formations. Its visual reference is the Atacama Desert, with cold variants such as those of the Gobi."
+            "es": "Desierto árido dominado por roca expuesta, grava y suelos pedregosos, con escasa vegetación y paisajes modelados por la erosión. Sus referencias visuales principales son Atacama, con crestas irregulares y formaciones erosionadas, y Canyonlands, con cañones profundos, acantilados y mesetas rocosas. También comprende variantes frías y pedregosas como el Gobi, y grandes llanuras de grava y roca expuesta como las hamadas del Sahara. Los cañones y mesetas son variantes posibles, no requisitos de todo desierto rocoso.",
+            "en": "An arid desert dominated by exposed rock, gravel, and stony ground, with sparse vegetation and landscapes shaped by erosion. Its main visual references are the Atacama Desert, with irregular ridges and eroded formations, and Canyonlands, with deep canyons, cliffs, and rocky plateaus. It also includes cold, stony variants like the Gobi and vast plains of gravel and exposed rock like the Sahara's hamadas. Canyons and plateaus are possible variants, not requirements for every rocky desert."
           },
           "spawn": {
             "required": {

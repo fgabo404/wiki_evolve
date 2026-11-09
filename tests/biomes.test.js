@@ -84,6 +84,15 @@ for(const region of ["Sahara","Rub' al Khali","Namib","Taklamakan"])
   assert(sandy.description.en.includes(region),"falta la referencia visual inglesa: "+region);
 assert.deepEqual(sandy.spawn.required,{terrain:"land",elevationLevel:{min:1,max:64},annualPrecipitationMm:{max:250},dominantSurfaceMaterial:"sand",aeolianDuneField:true},"no alterar las reglas requeridas del desierto arenoso");
 assert.deepEqual(sandy.spawn.preferred,{annualPrecipitationMm:{min:0,max:150},meanAnnualTemperatureC:{min:10,max:35},absoluteLatitudeDegrees:{min:10,max:40}},"no alterar las preferencias del desierto arenoso");
+const rocky=desert.subbiomes.find(s=>s.id==="desert_rocky");
+for(const region of ["Atacama","Canyonlands","Gobi","Sahara"])
+  assert(rocky.description.es.includes(region),"falta la referencia visual española del desierto rocoso: "+region);
+for(const region of ["Atacama","Canyonlands","Gobi","Sahara"])
+  assert(rocky.description.en.includes(region),"falta la referencia visual inglesa del desierto rocoso: "+region);
+assert(rocky.description.es.includes("no requisitos"),"cañones y mesetas no deben exigirse siempre");
+assert(rocky.description.en.includes("not requirements"),"cañones y mesetas no deben exigirse siempre en inglés");
+assert.deepEqual(rocky.spawn.required,{terrain:"land",elevationLevel:{min:1,max:84},annualPrecipitationMm:{max:250},dominantSurfaceMaterial:"rock_gravel"},"no alterar las reglas requeridas del desierto rocoso");
+assert.deepEqual(rocky.spawn.preferred,{annualPrecipitationMm:{min:0,max:150},meanAnnualTemperatureC:{min:-5,max:30},slopeDegrees:{min:0,max:35},absoluteLatitudeDegrees:{min:15,max:50}},"no alterar las preferencias del desierto rocoso");
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
