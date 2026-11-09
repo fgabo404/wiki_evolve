@@ -45,3 +45,11 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 **Altura requerida en Evolve (2026-11-09):** los siete bosques ahora usan `spawn.required.elevationLevel` (enteros en la escala relativa 0–100) en vez de `spawn.preferred.elevationMeters`. El bosque subalpino requiere 65–84 y **no puede aparecer a altura 10**. Los niveles son límites de diseño ajustables al nuevo generador; no equivalen a metros. La restricción separada de distancia física al límite arbóreo permanece pendiente de modelado. Los demás campos se conservaron. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
 **Latitud preferida de los bosques (2026-11-09):** los siete subbiomas de Bosque ya incluyen `spawn.preferred.absoluteLatitudeDegrees`. Se agregaron Bosque nuboso 0–30°, Bosque subalpino 30–70°, Bosque de secuoyas 35–43° y Pantano arbolado 20–35°; los valores anteriores de Selva, Templado y Boreal permanecen intactos. Son preferencias latitudinales absolutas para ambos hemisferios, nunca filtros obligatorios; `spawn.required.elevationLevel` 0–100 continúa siendo obligatorio. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
+
+## Gráfica de distribución geográfica
+
+En la vista principal de cada bioma, el componente reutilizable `js/modules/biomes/biome-distribution-chart.js` muestra una gráfica SVG interactiva de **latitud absoluta (0°–90°)** frente a **altura de Evolve (0–100)**, encima del listado de subbiomas.
+
+Los rectángulos se generan exclusivamente con `spawn.required.elevationLevel.{min,max}` (altura obligatoria) y `spawn.preferred.absoluteLatitudeDegrees.{min,max}` (latitud preferida) del JSON cargado. Se pueden destacar subbiomas desde el selector, la leyenda o sus áreas. El idioma de la Wiki controla etiquetas y nombres; los subbiomas incompletos se muestran como pendientes. Ninguna altura o latitud de Bosque está codificada en el componente.
+
+La gráfica es una referencia ambiental, no una predicción exacta de aparición. Requiere Live Server o GitHub Pages y se actualiza al recargar tras editar `data/biomes/biomes.json`.

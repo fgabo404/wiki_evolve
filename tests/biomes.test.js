@@ -103,7 +103,7 @@ for(const biome of catalog.biomes){
     ids.add(sub.id);
   }
 }
-const scripts=["js/app.js","js/router.js","js/core/catalog-loader.js","js/core/catalog-index.js","js/modules/biomes/biomes.js","js/modules/biomes/biome-detail.js"];
+const scripts=["js/app.js","js/router.js","js/core/catalog-loader.js","js/core/catalog-index.js","js/modules/biomes/biomes.js","js/modules/biomes/biome-detail.js","js/modules/biomes/biome-distribution-chart.js"];
 for(const p of scripts)new vm.Script(read(p),{filename:p});
 const html=read("index.html");
 assert(!html.includes("offline/catalogs.js"),"HTML no debe cargar snapshot offline");
@@ -133,4 +133,39 @@ assert(nav.includes("wiki-biome-tree"));
 assert(!nav.includes("wiki-subbiome-tree"),"Los subbiomas deben mostrarse en el contenido");
 assert(nav.includes("router.go(biome.id)"));
 assert(nav.includes("router.go(b.id,sub.id)"));
+
+const chartSource=read("js/modules/biomes/biome-distribution-chart.js");
+assert(html.includes('src="./js/modules/biomes/biome-distribution-chart.js"'),"el HTML debe cargar el componente");
+assert(html.includes('id="distribution"'),"falta el contenedor de la gráfica");
+assert(nav.includes('globalThis.EvolveBiomeDistributionChart.render(distribution,b,lang)'),"la gráfica se debe renderizar con el bioma y el idioma actuales");
+assert(chartSource.includes("spawn?.required?.elevationLevel"),"altura requerida desde JSON");
+assert(chartSource.includes("spawn?.preferred?.absoluteLatitudeDegrees"),"latitud preferida desde JSON");
+assert(!chartSource.includes("forest_tropical"),"prohibidos los rangos codificados por bosque");
+assert(!chartSource.includes('id==="forest"'),"el componente debe ser genérico");
+const chartCtx={};
+vm.runInNewContext(chartSource,chartCtx);
+const chartAPI=chartCtx.EvolveBiomeDistributionChart;
+const data=chartAPI.getData(forest);
+assert.equal(data.defined.length,7,"los siete bosques deben representarse");
+assert.equal(data.pending.length,0);
+for(const sub of forest.subbiomes){
+  const plotted=data.defined.find(row=>row.id===sub.id);
+  assert(plotted);
+  assert.equal(plotted.latitude.min,sub.spawn.preferred.absoluteLatitudeDegrees.min);
+  assert.equal(plotted.latitude.max,sub.spawn.preferred.absoluteLatitudeDegrees.max);
+  assert.equal(plotted.elevation.min,sub.spawn.required.elevationLevel.min);
+  assert.equal(plotted.elevation.max,sub.spawn.required.elevationLevel.max);
+}
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest")){
+  const result=chartAPI.getData(biome);
+  assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
+  assert.equal(result.pending.length,biome.subbiomes.length);
+}
+const testPartial={subbiomes:[forest.subbiomes[0],{id:"without_ranges",name:{es:"Sin rangos"}}]};
+assert.equal(chartAPI.getData(testPartial).defined.length,1);
+assert.equal(chartAPI.getData(testPartial).pending.length,1);
+const changed=JSON.parse(JSON.stringify(forest));
+changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
+assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
+
 console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con latitud preferida y altura 0–100 requerida; manglar sigue marino; Wiki JSON directo");
