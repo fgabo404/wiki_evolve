@@ -79,42 +79,6 @@
           }
         },
         {
-          "id": "forest_subtropical",
-          "name": {
-            "es": "Subtropical",
-            "en": "Subtropical"
-          },
-          "spawn": {
-            "required": {
-              "terrain": "land",
-              "monthsMeanTemperatureAbove10C": {
-                "min": 8
-              },
-              "annualPrecipitationMm": {
-                "min": 600
-              }
-            },
-            "preferred": {
-              "meanAnnualTemperatureC": {
-                "min": 14,
-                "max": 22
-              },
-              "annualPrecipitationMm": {
-                "min": 900,
-                "max": 2200
-              },
-              "elevationMeters": {
-                "min": 0,
-                "max": 1800
-              },
-              "absoluteLatitudeDegrees": {
-                "min": 20,
-                "max": 40
-              }
-            }
-          }
-        },
-        {
           "id": "forest_temperate",
           "name": {
             "es": "Templado",
@@ -184,6 +148,50 @@
               "absoluteLatitudeDegrees": {
                 "min": 50,
                 "max": 75
+              }
+            }
+          }
+        },
+        {
+          "id": "forest_subalpine",
+          "name": {
+            "es": "Bosque subalpino",
+            "en": "Subalpine forest"
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "distanceBelowLocalTreelineMeters": {
+                "min": 0,
+                "max": 700
+              },
+              "annualPrecipitationMm": {
+                "min": 350
+              },
+              "slopeDegrees": {
+                "max": 40
+              }
+            },
+            "preferred": {
+              "meanAnnualTemperatureC": {
+                "min": -5,
+                "max": 6
+              },
+              "monthsMeanTemperatureAbove10C": {
+                "min": 1,
+                "max": 4
+              },
+              "annualPrecipitationMm": {
+                "min": 500,
+                "max": 1800
+              },
+              "elevationMeters": {
+                "min": 1400,
+                "max": 2800
+              },
+              "slopeDegrees": {
+                "min": 0,
+                "max": 25
               }
             }
           }
