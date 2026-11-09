@@ -32,6 +32,28 @@ assert(boreal.description.es.includes("Yakutia")&&boreal.description.en.includes
 assert.deepEqual(boreal.spawn.required.monthsMeanTemperatureAbove10C,{min:1,max:3},"debe conservarse el spawn boreal");
 assert.equal(boreal.spawn.required.annualPrecipitationMm.min,200);
 
+const expectedForestDistribution={
+ forest_tropical:{targetLandPercent:8.8,percentBasis:"earthProxy",minRegions:2,maxRegions:3},
+ forest_cloud:{targetLandPercent:0.165,percentBasis:"earthProxy",minRegions:1,maxRegions:null},
+ forest_temperate:{targetLandPercent:5.4,percentBasis:"earthProxy",minRegions:1,maxRegions:null},
+ forest_boreal:{targetLandPercent:8.9,percentBasis:"earthProxy",minRegions:1,maxRegions:null},
+ forest_subalpine:{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:null},
+ forest_redwood:{targetLandPercent:0.006,percentBasis:"historicalEarthProxy",minRegions:1,maxRegions:1},
+ forest_wooded_swamp:{targetLandPercent:0.9,percentBasis:"earthProxy",minRegions:1,maxRegions:null}
+};
+for(const sub of forest.subbiomes){
+ const dist=sub.distribution;
+ assert.deepEqual(dist,expectedForestDistribution[sub.id],"distribución terrestre incorrecta: "+sub.id);
+ assert(Number.isInteger(dist.minRegions)&&dist.minRegions>=1,"mínimo de masas inválido: "+sub.id);
+ assert(dist.maxRegions===null||Number.isInteger(dist.maxRegions)&&dist.maxRegions>=dist.minRegions,"máximo de masas inválido: "+sub.id);
+ if(dist.targetLandPercent!==null)assert(dist.targetLandPercent>0&&dist.targetLandPercent<=100,"porcentaje terrestre inválido: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"regionCount"),"los límites de masas no deben mezclarse con spawn: "+sub.id);
+}
+assert.equal(forest.subbiomes.find(s=>s.id==="forest_tropical").distribution.minRegions,2);
+assert.equal(forest.subbiomes.find(s=>s.id==="forest_tropical").distribution.maxRegions,3);
+assert.equal(forest.subbiomes.find(s=>s.id==="forest_redwood").distribution.maxRegions,1);
+assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
+assert(catalog.biomes.filter(b=>b.id!=="forest").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a otros biomas aún");
 const expectedHeights={"forest_tropical":{"min":1,"max":50},"forest_cloud":{"min":25,"max":74},"forest_temperate":{"min":1,"max":64},"forest_boreal":{"min":1,"max":55},"forest_subalpine":{"min":65,"max":84},"forest_redwood":{"min":1,"max":35},"forest_wooded_swamp":{"min":1,"max":20}};
 for(const sub of forest.subbiomes){
   assert.deepEqual(sub.spawn.required.elevationLevel,expectedHeights[sub.id],"altura obligatoria distinta a la aprobada: "+sub.id);
@@ -201,6 +223,10 @@ assert(detail.includes('endorheicBasin'),"falta cuenca endorreica");
 assert(detail.includes('materialLabels'),"los materiales desérticos deben localizarse");
 assert(detail.includes("herbaceousVegetationDominant"),"la ficha debe mostrar dominancia herbácea de sabana");
 assert(detail.includes("treeCanopyCoverPercent"),"la ficha debe mostrar cobertura arbórea de sabana");
+assert(detail.includes("sub.distribution"),"la ficha debe mostrar distribución si está definida");
+assert(detail.includes("targetLandPercent"),"la ficha debe mostrar porcentaje terrestre");
+assert(detail.includes("minRegions")&&detail.includes("maxRegions"),"la ficha debe mostrar límites de masas");
+assert(detail.includes("No comparable global reference"),"la ficha debe indicar ausencia de referencia real");
 assert(detail.includes('treeCanopyCoverPercent:"%"'),"la cobertura arbórea debe aparecer en %");
 assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
 const nav=read("js/modules/biomes/biomes.js");

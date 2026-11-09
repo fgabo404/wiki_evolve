@@ -142,3 +142,42 @@ El director aprobó completar `spawn.preferred.absoluteLatitudeDegrees` para los
 **Referencias:** para `forest_cloud` se priorizan montañas tropicales y subtropicales (0–30°) con niebla frecuente: [NatureServe, Tropical Montane Rainforest](https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1298972/Tropical_Montane_Rainforest_Ecobiome). Para `forest_subalpine` (30–70°), se prioriza estéticamente la taiga montana templada/fría tipo Banff; la línea de árboles también existe en montañas tropicales, que no quedan excluidas por una preferencia: [Nature Education, Global Treeline Position](https://www.nature.com/scitable/knowledge/library/global-treeline-position-15897370/). Para `forest_redwood`, la franja preferida de 35–43° engloba su área nativa costera de aproximadamente 35,7–42,2°N: [USFS, Silvics of North America: Redwood](https://research.fs.usda.gov/silvics/redwood). `forest_wooded_swamp` prefiere 20–35° como generalización subtropical del ejemplo Everglades: [USDA NRCS, Subtropical Freshwater Forested Wetlands of Everglades](https://edit.sc.egov.usda.gov/catalogs/esd/156A/F156AY210FL). Estos cuatro intervalos son **decisiones de diseño para Evolve**, no límites científicos.
 
 No se modificaron las condiciones de altura, temperatura, niebla, precipitación, pendiente, humedad ni la clasificación del manglar marino.
+
+
+## Distribución porcentual terrestre y número de masas (2026-11-09)
+
+**Nuevo contrato preliminar del catálogo:** `distribution` es independiente de `spawn`. Se refiere a **celdas terrestres de la cuadrícula hexagonal**, no a superficie en metros ni a km². Este diseño no se ha implementado en `fgabo404/Evolve` ni impone cuotas sobre la Wiki.
+
+- `targetLandPercent`: objetivo preliminar de porcentaje **sobre todas las celdas terrestres del planeta**, independientemente del tamaño de la cuadrícula. `null` significa **ausencia de una estimación global defendible**, no 0 %.
+- `percentBasis`: procedencia del valor: `earthProxy` (aproximación a partir de una categoría o inventario terrestre real), `historicalEarthProxy` (extensión histórica de un ecosistema) o `unavailable` (estimación global no disponible).
+- `minRegions`: cantidad mínima de **masas conectadas** del subbioma en el planeta.
+- `maxRegions`: máximo de masas conectadas; `null` significa *sin máximo definido*.
+- Una masa es un **componente conexo de celdas hexagonales del mismo subbioma**, según la vecindad del grid y su topología (incluido cierre longitudinal si aplica). **No equivale al número de hexágonos** de esa masa.
+
+### Referencias preliminares y límites de masas
+
+| Subbioma | `targetLandPercent` | Origen y limitación | Mín. masas | Máx. masas |
+|---|---:|---|---:|---:|
+| Selva | **8,8 %** | Aproximación: 1 140 millones ha de bosque en zona de selva tropical según IPCC (2020) divididos por tierra mundial del Banco Mundial (~129,76 millones km², 2023). No es exactamente el área del subbioma Evolve. | **2** | **3** |
+| Bosque nuboso | **0,165 %** | Aproximación: 214 630 km² de bosques nubosos tropicales reportados en síntesis científica (estimación histórica). | 1 | Sin límite |
+| Bosque templado | **5,4 %** | Aproximación: 17 % del bosque mundial en zona templada × 31,81 % de cobertura forestal terrestre. Zona climática ≠ subbioma Evolve. | 1 | Sin límite |
+| Bosque boreal (taiga) | **8,9 %** | Aproximación: 28 % del bosque mundial en zona boreal × 31,81 % de cobertura forestal terrestre. | 1 | Sin límite |
+| Bosque subalpino | **Pendiente (`null`)** | No se encontró una estadística global exclusiva y comparable de bosque subalpino. No inventar un porcentaje ni confundirlo con *todos* los bosques de montaña. | 1 | Sin límite |
+| Redwood | **0,006 %** | Referencia **histórica**, ≈2 millones de acres de bosque maduro costero original (NPS) / tierra mundial; no representa superficie actual ni regiones continuas reales. | **1** | **1** |
+| Pantano arbolado | **0,9 %** | Aproximación: 1,17 millones km² de bosques pantanosos/inundables, estimación global reportada por Ramsar con alta incertidumbre y posible solapamiento. | 1 | Sin límite |
+
+**Advertencia científica imprescindible:** estos siete porcentajes **no constituyen una partición global exclusiva del 31,81 % forestal**. Las fuentes usan años, definiciones y áreas de referencia diferentes: el bosque nuboso puede contarse dentro de selvas tropicales; Redwood dentro del bosque templado; subalpino dentro del templado/boreal; pantanos arbolados dentro de otras categorías. Además, existen bosques subtropicales y tipos no diferenciados en el catálogo. **No sumar estos porcentajes para exigir un presupuesto total del planeta sin antes definir una reclasificación exclusiva.** En la fase del nuevo generador se normalizarán las cuotas compatibles y se resolverán explícitamente las clases solapadas, respetando el presupuesto de tierra y otras categorías de bioma.
+
+**Regiones conectadas aprobadas:** Selva debe formar entre **2 y 3 masas**; Redwood **exactamente 1**. Los otros cinco bosques deben aparecer al menos una vez, sin un máximo todavía aprobado. Una masa de Redwood puede tener varios hexágonos, cuyo número escala con el tamaño del mapa. Al generar, hay que comprobar que el porcentaje se pueda representar y que existan lugares ambientalmente compatibles; no colocar biomas en zonas imposibles únicamente para cerrar cuotas.
+
+**Fuentes y metodología:**
+
+- [FAO, FRA 2025: 31,81 % de tierra con bosque](https://www.fao.org/sustainable-development-goals-data-portal/data/indicators/indicator-1511---forest-area-as-a-percentage-of-total-land-area/en).
+- [FAO, FRA 2025, cobertura mundial y distribución climática](https://www.fao.org/interactive/2025/forest-resources-assessment/en/).
+- [FAO, FRA 2020: bosques por dominios climáticos](https://www.fao.org/interactive/forest-resources-assessment/2020/en/).
+- [IPCC AR6, tropical forests, tabla CCP7.1](https://www.ipcc.ch/report/ar6/wg2/chapter/ccp7/).
+- [Scatena et al., tropical montane cloud forests, ~215 000 km²](https://pmc.ncbi.nlm.nih.gov/articles/PMC3997648/).
+- [NPS, extensión histórica de bosques maduros Redwood](https://www.nps.gov/muwo/learn/nature/old-growth.htm).
+- [Ramsar, Global Wetland Outlook, extensión de bosques pantanosos](https://www.ramsar.org/sites/default/files/documents/library/gwo_technical_note_status_e.pdf).
+- [Banco Mundial, área mundial de tierra ~129,76 millones de km² (2023)](https://data.worldbank.org/indicator/AG.LND.TOTL.K2?locations=1W).
+- [Forest Service, características de bosques subalpinos](https://research.fs.usda.gov/treesearch/52158).

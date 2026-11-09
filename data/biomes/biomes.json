@@ -186,6 +186,12 @@
                 "max": 23.5
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 8.8,
+            "percentBasis": "earthProxy",
+            "minRegions": 2,
+            "maxRegions": 3
           }
         },
         {
@@ -225,6 +231,12 @@
                 "max": 30
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 0.165,
+            "percentBasis": "earthProxy",
+            "minRegions": 1,
+            "maxRegions": null
           }
         },
         {
@@ -266,6 +278,12 @@
                 "max": 60
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 5.4,
+            "percentBasis": "earthProxy",
+            "minRegions": 1,
+            "maxRegions": null
           }
         },
         {
@@ -307,6 +325,12 @@
                 "max": 75
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 8.9,
+            "percentBasis": "earthProxy",
+            "minRegions": 1,
+            "maxRegions": null
           }
         },
         {
@@ -359,6 +383,12 @@
                 "max": 70
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": null
           }
         },
         {
@@ -405,6 +435,12 @@
                 "max": 43
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 0.006,
+            "percentBasis": "historicalEarthProxy",
+            "minRegions": 1,
+            "maxRegions": 1
           }
         },
         {
@@ -445,6 +481,12 @@
                 "max": 35
               }
             }
+          },
+          "distribution": {
+            "targetLandPercent": 0.9,
+            "percentBasis": "earthProxy",
+            "minRegions": 1,
+            "maxRegions": null
           }
         }
       ]
