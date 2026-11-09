@@ -10,13 +10,14 @@
 | Nombre | ID | Condiciones obligatorias resumidas |
 |---|---|---|
 | Selva | `forest_tropical` | Tierra, temperatura media anual 20–30 °C, ≥1500 mm de lluvia al año y ≤3 meses secos |
+| Bosque nuboso | `forest_cloud` | Tierra e inmersión frecuente en nubes bajas y niebla; clima húmedo de montaña, con altitud y lluvias como preferencias |
 | Bosque templado | `forest_temperate` | Tierra, 4–8 meses con temperatura media mensual >10 °C y lluvia anual ≥450 mm |
 | Bosque boreal (taiga) | `forest_boreal` | Tierra, 1–3 meses con temperatura media mensual >10 °C y lluvia anual ≥200 mm |
 | Bosque subalpino | `forest_subalpine` | Tierra, 0–700 m por debajo del límite local de árboles, lluvia ≥350 mm/año y pendiente ≤40° |
 | Bosque de secuoyas | `forest_redwood` | Tierra, temperatura media anual 8–18 °C, lluvia ≥750 mm/año y niebla costera frecuente | 
 | Pantano arbolado (Everglades) | `forest_wooded_swamp` | Tierra, suelo saturado durante temporada de crecimiento y agua dulce |
 
-Los seis conservan `spawn.required` y `spawn.preferred`, e incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
+Los siete conservan `spawn.required` y `spawn.preferred`, e incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
 
 ## Referencia visual de la cordillera
 
@@ -66,3 +67,24 @@ Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia semper
 **Nota de diseño:** los valores numéricos son intervalos iniciales para Evolve, no límites universales; la precipitación sola no explica estos bosques. `coastalFogFrequent` es un indicador booleano conceptual de niebla marítima frecuente durante la estación seca. Su cálculo, así como la distancia costera en una costa compleja y la distinción frente a `forest_temperate`, **no están implementados**. No se añaden nuevas especies a la flora por ahora.
 
 **Fuentes:** [California State Parks — About Coast Redwoods](https://www.parks.ca.gov/?page_id=22257), [UC ANR — Coast Redwood](https://ucanr.edu/site/forest-research-and-outreach/coast-redwood-sequoia-sempervirens), [USFS — Coast Redwood](https://research.fs.usda.gov/feis/species-reviews/seqsem) y [NPS — Redwood Weather](https://www.nps.gov/redw/planyourvisit/weather.htm).
+
+## Nuevo subbioma: Bosque nuboso / Cloud Forest (2026-11-09)
+
+**ID:** `forest_cloud`. Es el séptimo subbioma del bioma `forest`, con `name.es`, `name.en`, `description.es`, `description.en`, `spawn.required` y `spawn.preferred`.
+
+**Referencia natural:** bosques nubosos tropicales de montaña, como los de Monteverde (Costa Rica) o Sierra de las Minas (Guatemala). La característica determinante es la exposición recurrente de la vegetación a nubes bajas y niebla orográfica, que aporta humedad por interceptación. Abundan epífitas, musgos, helechos y bromelias.
+
+| Campo | Nivel | Valor inicial |
+|---|---|---|
+| `terrain` | `required` | `land` |
+| `cloudImmersionFrequent` | `required` | `true` |
+| `meanAnnualTemperatureC` | `preferred` | 10–22 °C |
+| `annualPrecipitationMm` | `preferred` | 1200–3500 mm/año |
+| `meanAnnualRelativeHumidityPercent` | `preferred` | 80–100 % |
+| `elevationMeters` | `preferred` | 400–2800 m |
+
+**Justificación del diseño:** la presencia recurrente de nubes a nivel del dosel es la condición ecológica distintiva; la altitud, la lluvia y la temperatura no deben imponerse como umbrales universales, pues varían con la ubicación, los vientos y el relieve. Los intervalos `preferred` son estimaciones iniciales ajustables para Evolve. El nuevo indicador `cloudImmersionFrequent` es conceptual y aún no está disponible en Engine; su cómputo futuro deberá tener en cuenta viento, relieve y condensación. Debe evitarse la clasificación automática de cualquier zona húmeda de selva como bosque nuboso.
+
+**Manglar:** ya existe como `marine_mangrove` dentro del bioma `marine` (Marino). **No se crea ningún manglar forestal ni se modifica la definición marítima existente**.
+
+**Fuentes:** [USGS — Do mountain clouds exist because of upwind forests?](https://www.usgs.gov/news/do-mountain-clouds-exist-because-upwind-forests), [The climate of cloud forests — GOV.UK](https://www.gov.uk/research-for-development-outputs/the-climate-of-cloud-forests), [Hydroclimatic and ecophysiological basis of cloud forest distributions](https://pmc.ncbi.nlm.nih.gov/articles/PMC3997648/) y [Fog precipitation in a cloud forest of Guatemala](https://www.sciencedirect.com/science/article/pii/S0378112703005139).

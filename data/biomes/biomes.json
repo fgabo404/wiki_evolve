@@ -83,6 +83,41 @@
           }
         },
         {
+          "id": "forest_cloud",
+          "name": {
+            "es": "Bosque nuboso",
+            "en": "Cloud Forest"
+          },
+          "description": {
+            "es": "Bosque húmedo de montaña donde las nubes bajas y la niebla envuelven frecuentemente la vegetación. Los árboles suelen estar cubiertos de musgos, helechos, bromelias y orquídeas, y sus copas capturan humedad de las gotas suspendidas en el aire.",
+            "en": "A humid montane forest frequently immersed in low clouds and mist. Trees are often covered with mosses, ferns, bromeliads, and orchids, and their canopies intercept moisture from water droplets suspended in the air."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "cloudImmersionFrequent": true
+            },
+            "preferred": {
+              "meanAnnualTemperatureC": {
+                "min": 10,
+                "max": 22
+              },
+              "annualPrecipitationMm": {
+                "min": 1200,
+                "max": 3500
+              },
+              "meanAnnualRelativeHumidityPercent": {
+                "min": 80,
+                "max": 100
+              },
+              "elevationMeters": {
+                "min": 400,
+                "max": 2800
+              }
+            }
+          }
+        },
+        {
           "id": "forest_temperate",
           "name": {
             "es": "Templado",
