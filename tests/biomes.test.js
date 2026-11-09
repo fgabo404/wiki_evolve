@@ -32,6 +32,14 @@ assert(boreal.description.es.includes("Yakutia")&&boreal.description.en.includes
 assert.deepEqual(boreal.spawn.required.monthsMeanTemperatureAbove10C,{min:1,max:3},"debe conservarse el spawn boreal");
 assert.equal(boreal.spawn.required.annualPrecipitationMm.min,200);
 
+const expectedHeights={"forest_tropical":{"min":1,"max":50},"forest_cloud":{"min":25,"max":74},"forest_temperate":{"min":1,"max":64},"forest_boreal":{"min":1,"max":55},"forest_subalpine":{"min":65,"max":84},"forest_redwood":{"min":1,"max":35},"forest_wooded_swamp":{"min":1,"max":20}};
+for(const sub of forest.subbiomes){
+  assert.deepEqual(sub.spawn.required.elevationLevel,expectedHeights[sub.id],"altura obligatoria distinta a la aprobada: "+sub.id);
+  assert.equal(sub.spawn.required.terrain,"land","todos los bosques necesitan terreno terrestre");
+  assert(!("elevationMeters" in sub.spawn.preferred),"altura en metros no debe permanecer como preferencia: "+sub.id);
+  assert(Number.isInteger(sub.spawn.required.elevationLevel.min)&&Number.isInteger(sub.spawn.required.elevationLevel.max),"altura debe usar niveles enteros");
+  assert(sub.spawn.required.elevationLevel.min>=1&&sub.spawn.required.elevationLevel.max<=100,"altura fuera de la escala 0–100: "+sub.id);
+}
 assert.equal(allSubbiomes.filter(x=>x.spawn).length,7);
 assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");
@@ -39,7 +47,7 @@ assert.equal(cloud.name.es,"Bosque nuboso");
 assert.equal(cloud.name.en,"Cloud Forest");
 assert.equal(cloud.spawn.required.terrain,"land");
 assert.equal(cloud.spawn.required.cloudImmersionFrequent,true);
-assert.deepEqual(cloud.spawn.preferred.elevationMeters,{min:400,max:2800});
+assert.deepEqual(cloud.spawn.required.elevationLevel,{min:25,max:74});
 assert(cloud.description.es.includes("niebla"));
 assert(cloud.description.en.includes("mist"));
 const marine=catalog.biomes.find(x=>x.id==="marine");
@@ -61,7 +69,9 @@ assert.equal(subalpine.name.es,"Bosque subalpino");
 assert.equal(subalpine.spawn.required.terrain,"land");
 assert.deepEqual(subalpine.spawn.required.distanceBelowLocalTreelineMeters,{min:0,max:700});
 assert.equal(subalpine.spawn.required.slopeDegrees.max,40);
-assert.deepEqual(subalpine.spawn.preferred.elevationMeters,{min:1400,max:2800});
+assert.deepEqual(subalpine.spawn.required.elevationLevel,{min:65,max:84});
+assert.equal(10>=subalpine.spawn.required.elevationLevel.min && 10<=subalpine.spawn.required.elevationLevel.max,false,"Bosque subalpino no puede aparecer a altura 10");
+assert.equal(subalpine.spawn.required.distanceBelowLocalTreelineMeters.max,700,"se conserva la condición local de árboles");
 
 const ids=new Set();
 for(const biome of catalog.biomes){
@@ -88,6 +98,9 @@ assert(app.includes("await globalThis.EvolveCatalogLoader.load()"),"El inicio de
 const detail=read("js/modules/biomes/biome-detail.js");
 assert(detail.includes("sub.description?.[lang]"),"la ficha debe mostrar la descripción en el idioma seleccionado");
 assert(detail.includes('el("p","biome-description",description)'),"la ficha debe mostrar la descripción como texto");
+assert(detail.includes("elevationLevel"),"la ficha debe mostrar altura 0–100");
+assert(detail.includes("Nivel de altura (0–100)"),"falta etiqueta de nivel de altura");
+assert(!detail.includes('elevationLevel:"m"'),"la escala 0–100 no usa metros");
 assert(detail.includes("distanceBelowLocalTreelineMeters"),"falta mostrar distancia al límite de árboles");
 assert(detail.includes("Distancia bajo el límite local de árboles"),"falta la etiqueta localizada");
 assert(detail.includes('distanceBelowLocalTreelineMeters:"m"'),"la distancia requiere unidades m");
@@ -102,4 +115,4 @@ assert(nav.includes("wiki-biome-tree"));
 assert(!nav.includes("wiki-subbiome-tree"),"Los subbiomas deben mostrarse en el contenido");
 assert(nav.includes("router.go(biome.id)"));
 assert(nav.includes("router.go(b.id,sub.id)"));
-console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con spawn y descripción bilingüe; manglar sigue marino; Wiki JSON directo");
+console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con altura 0–100 requerida; manglar sigue marino; Wiki JSON directo");

@@ -13,11 +13,11 @@
 | Bosque nuboso | `forest_cloud` | Tierra e inmersión frecuente en nubes bajas y niebla; clima húmedo de montaña, con altitud y lluvias como preferencias |
 | Bosque templado | `forest_temperate` | Tierra, 4–8 meses con temperatura media mensual >10 °C y lluvia anual ≥450 mm |
 | Bosque boreal (taiga) | `forest_boreal` | Tierra, 1–3 meses con temperatura media mensual >10 °C y lluvia anual ≥200 mm |
-| Bosque subalpino | `forest_subalpine` | Tierra, 0–700 m por debajo del límite local de árboles, lluvia ≥350 mm/año y pendiente ≤40° |
+| Bosque subalpino | `forest_subalpine` | Tierra, nivel de altura 65–84, 0–700 m por debajo del límite local de árboles, lluvia ≥350 mm/año y pendiente ≤40° |
 | Bosque de secuoyas | `forest_redwood` | Tierra, temperatura media anual 8–18 °C, lluvia ≥750 mm/año y niebla costera frecuente | 
 | Pantano arbolado (Everglades) | `forest_wooded_swamp` | Tierra, suelo saturado durante temporada de crecimiento y agua dulce |
 
-Los siete conservan `spawn.required` y `spawn.preferred`, e incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
+Los siete incluyen `spawn.required.elevationLevel` en una escala **0–100**, además de `spawn.preferred` y `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
 
 ## Referencia visual de la cordillera
 
@@ -59,7 +59,7 @@ Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia semper
 | `meanAnnualTemperatureC` | `required` | 8–18 °C |
 | `annualPrecipitationMm` | `required` | ≥750 mm/año |
 | `coastalFogFrequent` | `required` | `true` |
-| `elevationMeters` | `preferred` | 0–900 m |
+| `elevationLevel` | `required` | 1–35 (escala Evolve 0–100) |
 | `annualPrecipitationMm` | `preferred` | 1200–2500 mm/año |
 | `meanAnnualRelativeHumidityPercent` | `preferred` | 75–95 % |
 | `distanceToCoastKm` | `preferred` | 0–80 km |
@@ -81,9 +81,9 @@ Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia semper
 | `meanAnnualTemperatureC` | `preferred` | 10–22 °C |
 | `annualPrecipitationMm` | `preferred` | 1200–3500 mm/año |
 | `meanAnnualRelativeHumidityPercent` | `preferred` | 80–100 % |
-| `elevationMeters` | `preferred` | 400–2800 m |
+| `elevationLevel` | `required` | 25–74 (escala Evolve 0–100) |
 
-**Justificación del diseño:** la presencia recurrente de nubes a nivel del dosel es la condición ecológica distintiva; la altitud, la lluvia y la temperatura no deben imponerse como umbrales universales, pues varían con la ubicación, los vientos y el relieve. Los intervalos `preferred` son estimaciones iniciales ajustables para Evolve. El nuevo indicador `cloudImmersionFrequent` es conceptual y aún no está disponible en Engine; su cómputo futuro deberá tener en cuenta viento, relieve y condensación. Debe evitarse la clasificación automática de cualquier zona húmeda de selva como bosque nuboso.
+**Justificación del diseño:** la presencia recurrente de nubes a nivel del dosel es la condición ecológica distintiva; la lluvia y la temperatura no deben imponerse como umbrales universales, pues varían con la ubicación, los vientos y el relieve. El nivel de altura 25–74 sí es ahora una condición obligatoria del diseño de Evolve, no un rango universal en metros. Los intervalos `preferred` son estimaciones iniciales ajustables para Evolve. El nuevo indicador `cloudImmersionFrequent` es conceptual y aún no está disponible en Engine; su cómputo futuro deberá tener en cuenta viento, relieve y condensación. Debe evitarse la clasificación automática de cualquier zona húmeda de selva como bosque nuboso.
 
 **Manglar:** ya existe como `marine_mangrove` dentro del bioma `marine` (Marino). **No se crea ningún manglar forestal ni se modifica la definición marítima existente**.
 
@@ -100,3 +100,25 @@ Representa en primer lugar los bosques de **secuoyas costeras** (`Sequoia semper
 **Diferencia frente a Bosque subalpino:** la taiga se determina por el clima boreal de las regiones frías del norte; el bosque subalpino aparece cerca del límite local de árboles en las montañas. Son paisajes que pueden compartir coníferas, pero tienen criterios ambientales distintos.
 
 **Pendiente para la fase de flora y estaciones:** asociar especies de pinos, abetos, píceas, musgos y alerces a la vegetación regional y sus colores de otoño. No se añaden mecánicas estacionales ni se modifica Engine.
+
+## Altura obligatoria: escala de Evolve 0–100 (2026-11-09)
+
+El director aprobó sustituir los rangos **preferidos en metros** por un **rango obligatorio de altura de Evolve** para los siete bosques. El único campo de altitud del `spawn` pasa a ser `spawn.required.elevationLevel`, con enteros de 0 a 100, inclusive. Fuera del intervalo `required`, **el subbioma no puede aparecer**, aunque todas las demás variables sean favorables.
+
+| Subbioma | `spawn.required.elevationLevel` |
+|---|---:|
+| Selva (`forest_tropical`) | 1–50 |
+| Bosque nuboso (`forest_cloud`) | 25–74 |
+| Bosque templado (`forest_temperate`) | 1–64 |
+| Bosque boreal (`forest_boreal`) | 1–55 |
+| Bosque subalpino (`forest_subalpine`) | **65–84** |
+| Bosque de secuoyas (`forest_redwood`) | 1–35 |
+| Pantano arbolado (`forest_wooded_swamp`) | 1–20 |
+
+**Origen de los umbrales:** propuesta inicial de diseño relativa a las formas del relieve de Evolve. Las reglas históricas aisladas en `Evolve/worldgenerationold` situaban la montaña inclinada desde nivel 65 y la cumbre infranqueable desde 85; eso inspira el intervalo subalpino 65–84, **pero no reactiva ni vincula el nuevo motor a ese código**. Cuando se diseñe la elevación canónica en el nuevo generador, estos números deberán validarse contra su distribución y contra el solapamiento con Montaña rocosa.
+
+**No equivale a metros.** La escala 0–100 es un índice normalizado del relieve del mundo, no una magnitud geográfica con un factor fijo de conversión a metros. Por ello se eliminaron todas las `spawn.preferred.elevationMeters` forestales en vez de aplicar una falsa regla como «1 nivel = 30 m». Se mantiene `terrain: land` en todos los bosques; el 0 se reserva en esta propuesta como referencia del mar, de modo que los bosques inician desde nivel 1.
+
+**Nota sobre línea de árboles:** `forest_subalpine` conserva la restricción distinta `distanceBelowLocalTreelineMeters: { min: 0, max: 700 }` hasta diseñar cómo representar esa distancia física respecto al límite arbóreo local en un generador que solo usa altura normalizada. No es una segunda altitud absoluta y sigue pendiente de implementación. En ningún caso puede anular `elevationLevel: 65–84`: un bosque subalpino en altura 10 está prohibido.
+
+**Conservación:** temperatura, lluvia, humedad, pendientes, latitud, niebla, agua dulce, y descripciones bilingües permanecen sin cambios. Los restantes 16 subbiomas siguen sin `spawn` y el manglar continúa en Marino. El motor de `Evolve` no se modifica durante esta fase teórica.
