@@ -48,7 +48,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 ## Gráfica de distribución geográfica
 
-En la vista principal de cada bioma, el componente reutilizable `js/modules/biomes/biome-distribution-chart.js` muestra una gráfica SVG interactiva de **latitud absoluta (0°–90°)** frente a **altura de Evolve (0–100)**, encima del listado de subbiomas.
+En la vista principal de cada bioma, el componente reutilizable `js/modules/biomes/biome-distribution-chart.js` muestra una gráfica SVG interactiva de **latitud absoluta (0°–90°)** frente a **altura de Evolve (0–100)**, debajo del listado de subbiomas y del panel de detalles, incluso al abrir una ficha.
 
 Los rectángulos se generan exclusivamente con `spawn.required.elevationLevel.{min,max}` (altura obligatoria) y `spawn.preferred.absoluteLatitudeDegrees.{min,max}` (latitud preferida) del JSON cargado. Se pueden destacar subbiomas desde el selector, la leyenda o sus áreas. El idioma de la Wiki controla etiquetas y nombres; los subbiomas incompletos se muestran como pendientes. Ninguna altura o latitud de Bosque está codificada en el componente.
 
