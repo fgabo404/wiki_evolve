@@ -93,6 +93,13 @@ assert(rocky.description.es.includes("no requisitos"),"cañones y mesetas no deb
 assert(rocky.description.en.includes("not requirements"),"cañones y mesetas no deben exigirse siempre en inglés");
 assert.deepEqual(rocky.spawn.required,{terrain:"land",elevationLevel:{min:1,max:84},annualPrecipitationMm:{max:250},dominantSurfaceMaterial:"rock_gravel"},"no alterar las reglas requeridas del desierto rocoso");
 assert.deepEqual(rocky.spawn.preferred,{annualPrecipitationMm:{min:0,max:150},meanAnnualTemperatureC:{min:-5,max:30},slopeDegrees:{min:0,max:35},absoluteLatitudeDegrees:{min:15,max:50}},"no alterar las preferencias del desierto rocoso");
+const saltFlat=desert.subbiomes.find(s=>s.id==="desert_salt_flat");
+for(const word of ["Uyuni","Bolivia","blanca","poligonales","estación seca","reflejar"])
+  assert(saltFlat.description.es.includes(word),"falta identidad visual española del Salar: "+word);
+for(const word of ["Uyuni","Bolivia","white","polygonal","dry season","reflect"])
+  assert(saltFlat.description.en.includes(word),"falta identidad visual inglesa del Salar: "+word);
+assert.deepEqual(saltFlat.spawn.required,{terrain:"land",elevationLevel:{min:1,max:74},annualPrecipitationMm:{max:250},dominantSurfaceMaterial:"salt_crust",endorheicBasin:true,slopeDegrees:{max:5}},"no modificar las condiciones requeridas del Salar");
+assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150},meanAnnualTemperatureC:{min:-5,max:30},slopeDegrees:{min:0,max:2},absoluteLatitudeDegrees:{min:15,max:45}},"no modificar las preferencias del Salar");
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");

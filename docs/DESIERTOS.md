@@ -73,6 +73,27 @@ Esta es una definición visual de diseño; no representa que todas las variantes
 
 **No todos los desiertos rocosos deben tener cañones, mesetas o acantilados.** La condición esencial del subbioma es una superficie árida dominada por roca o grava. El relieve local, los materiales geológicos y los procesos erosivos determinarán visualmente la variante en el futuro. No se crean nuevos subbiomas ni campos ejecutables para estas formas y colores. Se mantienen la temperatura y la pendiente como preferencias, permitiendo terrenos planos y ambientes fríos.
 
+## Identidad visual aprobada: Salar (2026-11-09)
+
+`desert_salt_flat` utiliza **el Salar de Uyuni, Bolivia, como referencia visual principal y definitiva** del subbioma:
+
+- **Superficie dominante:** una extensa llanura salina blanca, muy plana y de horizonte abierto.
+- **Estación seca:** costra de sal blanca y brillante, con posibles patrones poligonales.
+- **Tras las lluvias:** una lámina de agua muy somera puede inundar temporalmente parte del salar y producir reflejos de cielo (*efecto espejo*); no es permanente ni cubre necesariamente toda la superficie.
+- **Variaciones locales menores:** textura algo más rugosa o tonos claros beige o grisáceos, sin desplazar la identidad blanca y plana de Uyuni.
+
+Se mantiene un **único subbioma** sin crear variantes con ID propio. La presencia de cuenca endorreica, costra salina, aridez y pendiente baja continúa siendo obligatoria; la altura y latitud siguen sus valores declarados. Las estaciones y la lámina superficial de agua son referencias visuales conceptuales, todavía no reglas ejecutables del nuevo motor. La referencia a Uyuni es estética y geomorfológica; no limita la generación a Bolivia.
+
+### Estado de Desierto — definición teórica cerrada
+
+Los tres subbiomas existentes han sido revisados y aprobados:
+
+1. **Arenoso:** Sahara y Rub al-Jali como base; Namib y Taklamakán como variantes.
+2. **Rocoso:** Atacama y Canyonlands como base; Gobi y hamadas saharianas como variantes.
+3. **Salar:** Uyuni como base, con costra blanca poligonal y espejo estacional.
+
+Cada uno tiene `name` y `description` bilingües, `spawn.required` y `spawn.preferred`, y distribución de latitud y altura disponible en la gráfica SVG reutilizable. **Este cierre corresponde al catálogo teórico de la Wiki, no a la implementación de la generación geológica o climática en Evolve.** No cambiar los valores acordados sin una nueva revisión explícita.
+
 ## Contrato conceptual del terreno
 
 Los nuevos campos geológicos son declarativos y **no están implementados** en el nuevo generador de Evolve:

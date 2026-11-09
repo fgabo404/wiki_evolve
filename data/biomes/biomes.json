@@ -95,8 +95,8 @@
             "en": "Salt flat"
           },
           "description": {
-            "es": "Extensión desértica muy plana cubierta por costras de sal, formada en cuencas cerradas donde el agua se acumula temporalmente y se evapora, concentrando minerales. Puede presentar polígonos de sal y láminas de agua estacionales que reflejan el cielo. Su referencia visual es el Salar de Uyuni, Bolivia.",
-            "en": "A very flat desert expanse covered by salt crusts, formed in closed basins where water periodically collects and evaporates, concentrating minerals. It may feature polygonal salt patterns and seasonal shallow water that reflects the sky. Its visual reference is Salar de Uyuni, Bolivia."
+            "es": "Desierto de sal inspirado principalmente en el Salar de Uyuni, Bolivia: una inmensa llanura blanca, muy plana y de horizonte abierto, cubierta por una costra salina que puede formar patrones poligonales. Se origina en una cuenca cerrada donde el agua concentra minerales y luego se evapora. Durante la estación seca predominan las superficies blancas; tras las lluvias, algunos sectores pueden cubrirse temporalmente con una fina lámina de agua y reflejar el cielo. La sal puede presentar variaciones locales de textura y tonos claros, sin dejar de conservar la apariencia característica de Uyuni.",
+            "en": "A salt desert primarily inspired by Salar de Uyuni, Bolivia: an immense, very flat white plain with an open horizon, covered by a salt crust that can form polygonal patterns. It develops in a closed basin where water concentrates dissolved minerals and later evaporates. White surfaces dominate in the dry season; after rainfall, some areas may temporarily hold a thin sheet of water and reflect the sky. The salt may vary locally in texture and pale tones while retaining Uyuni's distinctive appearance."
           },
           "spawn": {
             "required": {
