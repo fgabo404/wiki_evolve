@@ -1,0 +1,1 @@
+"use strict";globalThis.EvolveCatalogLoader={load(){const result=globalThis.EvolveOfflineCatalogs?.biomes;if(!Array.isArray(result?.biomes))throw Error("No se encontró el catálogo de biomas");return result;}};

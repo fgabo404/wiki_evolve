@@ -1,0 +1,1 @@
+"use strict";(()=>{const n=document.getElementById("notice");try{const idx=globalThis.EvolveCatalogIndex(globalThis.EvolveCatalogLoader.load());let view;const router=globalThis.EvolveRouter(idx,route=>view.show(route));view=globalThis.EvolveBiomesView(idx,router);view.show(router.current());}catch(e){n.hidden=false;n.textContent="Error al cargar biomas: "+e.message;}})();
