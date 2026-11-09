@@ -589,6 +589,47 @@
           "name": {
             "es": "Pradera",
             "en": "Prairie"
+          },
+          "description": {
+            "es": "Pradera templada de extensos pastizales dominados por hierbas densas, con pocos árboles y paisajes planos o suavemente ondulados. Su apariencia se inspira principalmente en las Grandes Llanuras de Norteamérica, especialmente las praderas de hierba alta, y en las Pampas argentinas. Presenta horizontes abiertos, hierbas verdes durante la estación de crecimiento y tonos dorados durante las épocas secas o frías. La altura de las hierbas varía según las lluvias y las estaciones; puede haber flores silvestres, sin que los árboles dominen el paisaje. Se distingue de la sabana tropical por su clima templado y de la estepa por su mayor disponibilidad de humedad y cobertura herbácea.",
+            "en": "A temperate grassland dominated by extensive, dense herbaceous vegetation, with very few trees and flat to gently rolling terrain. Its appearance is primarily inspired by the Great Plains of North America, especially tallgrass prairie, and Argentina's Pampas. It features open horizons, green grasses during the growing season, and golden tones during dry or cold periods. Grass height varies with rainfall and season; wildflowers may occur, while trees do not dominate the landscape. It differs from tropical savanna through its temperate climate and from steppe through generally greater moisture availability and denser grass cover."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 64
+              },
+              "meanAnnualTemperatureC": {
+                "min": 2,
+                "max": 20
+              },
+              "annualPrecipitationMm": {
+                "min": 450,
+                "max": 1200
+              },
+              "herbaceousVegetationDominant": true,
+              "treeCanopyCoverPercent": {
+                "max": 10
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 30,
+                "max": 60
+              },
+              "slopeDegrees": {
+                "min": 0,
+                "max": 10
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {

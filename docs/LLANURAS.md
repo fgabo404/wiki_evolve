@@ -9,11 +9,11 @@
 Conservar exactamente cuatro subbiomas existentes de Llanuras:
 
 1. `plains_savanna` — Sabana / Savanna — **definido y aprobado**.
-2. `plains_prairie` — Pradera / Prairie — pendiente.
+2. `plains_prairie` — Pradera / Prairie — **definido y aprobado**.
 3. `plains_steppe` — Estepa / Steppe — pendiente.
 4. `plains_open_wetland` — Humedal abierto (Pantanal) / Open wetland (Pantanal) — pendiente.
 
-No añadir Matorral. **Tundra permanece como bioma independiente**; puede ocupar tanto llanuras como montañas. No asignar `spawn` ni descripciones a los tres subbiomas que aún no se han revisado.
+No añadir Matorral. **Tundra permanece como bioma independiente**; puede ocupar tanto llanuras como montañas. No asignar `spawn` ni descripciones a Estepa y Humedal abierto mientras permanezcan sin revisar.
 
 ## Sabana — `plains_savanna`
 
@@ -49,7 +49,7 @@ Todas pertenecen al **mismo subbioma**. En el futuro, especies de árboles, colo
 
 ### Gráfica de distribución
 
-La Wiki usa automáticamente el componente existente `js/modules/biomes/biome-distribution-chart.js` para dibujar un rectángulo de **latitud preferida 0–30°** (X) y **altura requerida 1–64** (Y) para Sabana. Pradera, Estepa y Humedal abierto permanecen en el listado de pendientes, sin rangos inventados.
+La Wiki usa automáticamente el componente existente `js/modules/biomes/biome-distribution-chart.js` para dibujar un rectángulo de **latitud preferida 0–30°** (X) y **altura requerida 1–64** (Y) para Sabana. Pradera ahora se representa con latitud preferida 30–60° y altura requerida 1–64. Estepa y Humedal abierto permanecen pendientes y sin rangos inventados.
 
 ### Referencias ecológicas
 
@@ -59,7 +59,7 @@ La Wiki usa automáticamente el componente existente `js/modules/biomes/biome-di
 
 ## Restricciones de la fase teórica
 
-Esta entrega solo modifica datos declarativos, las etiquetas de la ficha y pruebas de la Wiki. **No modifica `fgabo404/Evolve`, su generador ni la definición ya aprobada de Bosque o Desierto.** La implementación de vegetación, clima, fuego y pastoreo forma parte de un trabajo posterior. Llanuras **no está cerrado** hasta revisar Pradera, Estepa y Humedal abierto.
+Esta entrega solo modifica datos declarativos, las etiquetas de la ficha y pruebas de la Wiki. **No modifica `fgabo404/Evolve`, su generador ni la definición ya aprobada de Bosque o Desierto.** La implementación de vegetación, clima, fuego y pastoreo forma parte de un trabajo posterior. Llanuras **no está cerrado** hasta revisar Estepa y Humedal abierto.
 
 ## Distribución territorial de Sabana (2026-11-09)
 
@@ -76,4 +76,40 @@ Esta entrega solo modifica datos declarativos, las etiquetas de la ficha y prueb
 
 **Procedencia y cautela:** 13,8 % es una **aproximación** inspirada en una estimación amplia de *sabanas y sabanas arboladas* de la Tierra. No es una superficie mundial exclusiva y exactamente idéntica al subbioma Sabana de Evolve; puede solaparse con ciertas formaciones forestales o abiertos de otras taxonomías. Debe reconciliarse más adelante con las cuotas de Bosque, Desierto y otras Llanuras antes de usarse como suma mundial obligatoria. El número de masas es un **límite de diseño**, no una cifra global observada. Los 2–4 componentes conectados de hexágonos pueden variar en tamaño y deben respetar clima, estación seca, vegetación y altura ya aprobados.
 
-**Pradera, Estepa y Humedal abierto** no reciben porcentajes ni conteos por defecto mientras estén pendientes de revisión. El motor nuevo de Evolve no se modifica.
+**Pradera** queda definida por separado con porcentaje terrestre pendiente de diferenciar de Estepa. **Estepa y Humedal abierto** no reciben porcentajes ni conteos por defecto mientras estén pendientes de revisión. El motor nuevo de Evolve no se modifica.
+
+## Pradera — `plains_prairie` (2026-11-09, aprobado)
+
+**Identidad visual:** pastizales templados de las Grandes Llanuras de Norteamérica (especialmente pradera de hierba alta) y las Pampas argentinas. Horizontes amplios, relieve plano o suavemente ondulado, hierbas verdes en estación de crecimiento y doradas en periodos secos o fríos, con árboles muy escasos. La altura de la hierba puede variar regionalmente y entre estaciones. Pradera se distingue de **Sabana** por el régimen templado y de **Estepa** por su humedad relativamente mayor.
+
+**Contrato declarativo:**
+
+| Parámetro | `required` | `preferred` |
+|---|---|---|
+| Terreno | `land` | — |
+| Altura Evolve normalizada | **1–64** | — |
+| Latitud absoluta | — | **30–60°** |
+| Temperatura media anual | **2–20 °C** | — |
+| Precipitación anual | **450–1200 mm/año** | — |
+| Dominancia herbácea | `herbaceousVegetationDominant: true` | — |
+| Cobertura de copas | **máximo 10 %** | — |
+| Pendiente | — | **0–10°** (aproximación a terreno plano/suavemente ondulado) |
+
+La pendiente preferida 0–10° es una **heurística de diseño** para concretar la apariencia aprobada; no excluye absolutamente praderas sobre laderas y no forma parte de `spawn.required`. Los demás rangos son decisiones de diseño de Evolve, no límites naturales universales.
+
+**Distribución y masas:**
+
+```json
+"distribution": {
+  "targetLandPercent": null,
+  "percentBasis": "unavailable",
+  "minRegions": 2,
+  "maxRegions": 4
+}
+```
+
+El porcentaje terrestre permanece **pendiente de estimación exclusiva** (`null` no significa 0 %). La referencia aproximada del **8,3 %** que estamos utilizando incluye conjuntamente praderas, estepas y otros pastizales no arbolados, así que **no puede atribuirse íntegramente a Pradera**. Se evaluará junto con Estepa para evitar duplicidades. En cambio, los límites de **2–4 masas conectadas** sí están aprobados por planeta, independientemente del tamaño de la cuadrícula.
+
+**Gráfica:** la vista reutilizable trazará automáticamente Pradera con latitud preferida 30–60° y altura requerida 1–64 junto a Sabana. Estepa y Humedal abierto continúan pendientes.
+
+**Referencias:** [FAO, Grasslands of the World: South American temperate grasslands](https://www.fao.org/4/y8344e/y8344e0g.htm); [National Geographic, Grassland Biome](https://education.nationalgeographic.org/resource/grassland-biome/).
