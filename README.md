@@ -32,4 +32,4 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado migrado (2026-11-09):** 8 biomas, 21 subbiomas y 5 bosques con `spawn.required` y `spawn.preferred`. Los otros 16 siguen sin `spawn`; Bosque subtropical permanece retirado.
+**Estado actual (2026-11-09):** 8 biomas y 21 subbiomas. Los cinco bosques cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los otros 16 subbiomas siguen sin `spawn` ni `description` hasta su revisión. Bosque subtropical permanece retirado.

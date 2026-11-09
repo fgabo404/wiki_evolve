@@ -12,9 +12,13 @@ assert(forest,"falta Bosque");
 assert.deepEqual(forest.subbiomes.map(x=>x.id),["forest_tropical","forest_temperate","forest_boreal","forest_subalpine","forest_wooded_swamp"]);
 assert(!allSubbiomes.some(x=>x.id==="forest_subtropical"),"Bosque subtropical no debe reaparecer");
 for(const sub of forest.subbiomes){
+  assert.equal(typeof sub.description?.es,"string","falta descripción en español: "+sub.id);
+  assert.equal(typeof sub.description?.en,"string","falta descripción en inglés: "+sub.id);
+  assert(sub.description.es.trim()&&sub.description.en.trim(),"descripción vacía: "+sub.id);
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
+assert.equal(allSubbiomes.filter(x=>x.description).length,5,"solo los 5 bosques revisados tienen descripción");
 assert.equal(allSubbiomes.filter(x=>x.spawn).length,5);
 assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
 const subalpine=forest.subbiomes.find(x=>x.id==="forest_subalpine");
@@ -47,6 +51,8 @@ assert(loader.includes('cache:"no-store"'),"Las recargas deben leer datos fresco
 const app=read("js/app.js");
 assert(app.includes("await globalThis.EvolveCatalogLoader.load()"),"El inicio debe esperar los datos");
 const detail=read("js/modules/biomes/biome-detail.js");
+assert(detail.includes("sub.description?.[lang]"),"la ficha debe mostrar la descripción en el idioma seleccionado");
+assert(detail.includes('el("p","biome-description",description)'),"la ficha debe mostrar la descripción como texto");
 assert(detail.includes("distanceBelowLocalTreelineMeters"),"falta mostrar distancia al límite de árboles");
 assert(detail.includes("Distancia bajo el límite local de árboles"),"falta la etiqueta localizada");
 assert(detail.includes('distanceBelowLocalTreelineMeters:"m"'),"la distancia requiere unidades m");
@@ -56,4 +62,4 @@ assert(nav.includes("wiki-biome-tree"));
 assert(!nav.includes("wiki-subbiome-tree"),"Los subbiomas deben mostrarse en el contenido");
 assert(nav.includes("router.go(biome.id)"));
 assert(nav.includes("router.go(b.id,sub.id)"));
-console.log("PASS: 8 biomas, 21 subbiomas, 5 bosques con spawn, sin subtropical; Wiki JSON directo");
+console.log("PASS: 8 biomas, 21 subbiomas, 5 bosques con spawn y descripción bilingüe, sin subtropical; Wiki JSON directo");

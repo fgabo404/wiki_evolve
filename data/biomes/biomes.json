@@ -43,6 +43,10 @@
             "es": "Selva",
             "en": "Rainforest"
           },
+          "description": {
+            "es": "Bosque tropical cálido y muy húmedo, con vegetación densa, árboles altos y varios estratos de plantas. Recibe lluvias abundantes durante gran parte del año y alberga una elevada diversidad de especies.",
+            "en": "A warm, very humid tropical forest with dense vegetation, tall trees, and multiple plant layers. It receives abundant rainfall during much of the year and supports exceptionally diverse wildlife and plant life."
+          },
           "spawn": {
             "required": {
               "terrain": "land",
@@ -84,6 +88,10 @@
             "es": "Templado",
             "en": "Temperate"
           },
+          "description": {
+            "es": "Bosque de regiones con estaciones diferenciadas y temperaturas moderadas o frescas. Puede estar formado por árboles de hoja caduca, coníferas o una mezcla de ambos, y cambia su aspecto según las estaciones.",
+            "en": "A forest in regions with distinct seasons and moderate or cool temperatures. It may contain deciduous trees, conifers, or a mixture of both, and its appearance changes with the seasons."
+          },
           "spawn": {
             "required": {
               "terrain": "land",
@@ -121,6 +129,10 @@
             "es": "Boreal (taiga)",
             "en": "Boreal (taiga)"
           },
+          "description": {
+            "es": "Bosque de regiones frías, conocido también como taiga, con inviernos largos y veranos cortos. Suele estar dominado por coníferas resistentes al frío, aunque también puede incluir árboles de hoja caduca.",
+            "en": "A forest of cold regions, also known as taiga, with long winters and short summers. It is commonly dominated by cold-adapted conifers, although deciduous trees may also occur."
+          },
           "spawn": {
             "required": {
               "terrain": "land",
@@ -157,6 +169,10 @@
           "name": {
             "es": "Bosque subalpino",
             "en": "Subalpine forest"
+          },
+          "description": {
+            "es": "Bosque de alta montaña situado cerca del límite natural de crecimiento de los árboles. Predominan con frecuencia las coníferas adaptadas al frío, y la vegetación se vuelve más dispersa hacia las laderas rocosas y la zona alpina.",
+            "en": "A high-mountain forest near the natural upper limit of tree growth. Cold-adapted conifers are often common, and tree cover becomes more scattered toward rocky slopes and the alpine zone."
           },
           "spawn": {
             "required": {
@@ -201,6 +217,10 @@
           "name": {
             "es": "Pantano arbolado (Everglades)",
             "en": "Forested swamp (Everglades)"
+          },
+          "description": {
+            "es": "Bosque de zonas bajas y húmedas cuyo suelo permanece saturado o se inunda durante parte del año. Sus árboles y otras plantas están adaptados al exceso de agua y forman un ecosistema de transición entre tierra firme y humedales.",
+            "en": "A forest of low-lying, wet areas where the soil remains saturated or floods during part of the year. Its trees and other plants are adapted to excess water, forming a transition between dry land and wetlands."
           },
           "spawn": {
             "required": {

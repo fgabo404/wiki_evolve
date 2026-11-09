@@ -15,7 +15,7 @@
 | Bosque subalpino | `forest_subalpine` | Tierra, 0–700 m por debajo del límite local de árboles, lluvia ≥350 mm/año y pendiente ≤40° |
 | Pantano arbolado (Everglades) | `forest_wooded_swamp` | Tierra, suelo saturado durante temporada de crecimiento y agua dulce |
 
-Los cinco conservan `spawn.required` y `spawn.preferred`; **las condiciones completas, incluidas las preferencias, están en el JSON**. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
+Los cinco conservan `spawn.required` y `spawn.preferred`, y ahora incluyen `description: { es, en }` con una presentación ecológica breve. **Las descripciones y las condiciones completas, incluidas las preferencias, están en el JSON**, y la Wiki elige el idioma adecuado. Los rangos son criterios iniciales del diseño de Evolve, no límites universales de los ecosistemas.
 
 ## Referencia visual de la cordillera
 
