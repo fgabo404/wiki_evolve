@@ -2,7 +2,8 @@
 const navSource=read("js/modules/biomes/biomes.js");
 assert(navSource.includes("wiki-nav-heading"));
 assert(navSource.includes("wiki-biome-tree"));
-assert(navSource.includes("wiki-subbiome-tree"));
+assert(!navSource.includes("wiki-subbiome-tree"),"subbiomes must appear only in the main list");
 assert(navSource.includes("aria-expanded"));
-assert(navSource.includes("router.go(biome.id,sub.id)"));
+assert(navSource.includes("router.go(biome.id)"),"clicking a biome opens its main-page list");
+assert(navSource.includes("router.go(b.id,sub.id)"),"main-page subbiomes remain selectable");
 console.log("PASS: 8 biomes, 21 subbiomes, offline sync, JS syntax, hierarchical sidebar");
