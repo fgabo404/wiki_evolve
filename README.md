@@ -53,3 +53,9 @@ En la vista principal de cada bioma, el componente reutilizable `js/modules/biom
 Los rectángulos se generan exclusivamente con `spawn.required.elevationLevel.{min,max}` (altura obligatoria) y `spawn.preferred.absoluteLatitudeDegrees.{min,max}` (latitud preferida) del JSON cargado. Se pueden destacar subbiomas desde el selector, la leyenda o sus áreas. El idioma de la Wiki controla etiquetas y nombres; los subbiomas incompletos se muestran como pendientes. Ninguna altura o latitud de Bosque está codificada en el componente.
 
 La gráfica es una referencia ambiental, no una predicción exacta de aparición. Requiere Live Server o GitHub Pages y se actualiza al recargar tras editar `data/biomes/biomes.json`.
+
+## Desierto — tres subbiomas definidos (2026-11-09)
+
+Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
+
+**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques y 3 desiertos con definiciones completas, 13 subbiomas pendientes. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.

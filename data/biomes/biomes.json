@@ -12,6 +12,38 @@
           "name": {
             "es": "Arenoso (dunas)",
             "en": "Sandy (dunes)"
+          },
+          "description": {
+            "es": "Desierto árido con grandes superficies de arena y campos de dunas modelados por el viento. Las crestas y laderas arenosas cambian con el transporte de sedimentos, y la vegetación es muy dispersa. Su referencia visual son los ergs del Sahara, aunque las dunas también pueden formarse en desiertos fríos.",
+            "en": "An arid desert with broad sandy expanses and dune fields shaped by the wind. Sandy ridges and slopes shift as sediment is transported, and vegetation is sparse. Its visual reference is the Sahara's ergs, although dunes can also form in cold deserts."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 64
+              },
+              "annualPrecipitationMm": {
+                "max": 250
+              },
+              "dominantSurfaceMaterial": "sand",
+              "aeolianDuneField": true
+            },
+            "preferred": {
+              "annualPrecipitationMm": {
+                "min": 0,
+                "max": 150
+              },
+              "meanAnnualTemperatureC": {
+                "min": 10,
+                "max": 35
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 10,
+                "max": 40
+              }
+            }
           }
         },
         {
@@ -19,6 +51,41 @@
           "name": {
             "es": "Rocoso (cañones y mesetas)",
             "en": "Rocky (canyons and plateaus)"
+          },
+          "description": {
+            "es": "Desierto árido de roca expuesta, grava y suelos pedregosos, con laderas erosionadas, mesetas y cañones donde el relieve lo permite. La lluvia escasa y la erosión dejan al descubierto las formaciones geológicas. Su referencia visual es el desierto de Atacama, con variantes frías como las del Gobi.",
+            "en": "An arid desert of exposed bedrock, gravel, and stony ground, with eroded slopes, plateaus, and canyons where the terrain allows. Sparse rainfall and erosion expose geological formations. Its visual reference is the Atacama Desert, with cold variants such as those of the Gobi."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 84
+              },
+              "annualPrecipitationMm": {
+                "max": 250
+              },
+              "dominantSurfaceMaterial": "rock_gravel"
+            },
+            "preferred": {
+              "annualPrecipitationMm": {
+                "min": 0,
+                "max": 150
+              },
+              "meanAnnualTemperatureC": {
+                "min": -5,
+                "max": 30
+              },
+              "slopeDegrees": {
+                "min": 0,
+                "max": 35
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 15,
+                "max": 50
+              }
+            }
           }
         },
         {
@@ -26,6 +93,45 @@
           "name": {
             "es": "Salar",
             "en": "Salt flat"
+          },
+          "description": {
+            "es": "Extensión desértica muy plana cubierta por costras de sal, formada en cuencas cerradas donde el agua se acumula temporalmente y se evapora, concentrando minerales. Puede presentar polígonos de sal y láminas de agua estacionales que reflejan el cielo. Su referencia visual es el Salar de Uyuni, Bolivia.",
+            "en": "A very flat desert expanse covered by salt crusts, formed in closed basins where water periodically collects and evaporates, concentrating minerals. It may feature polygonal salt patterns and seasonal shallow water that reflects the sky. Its visual reference is Salar de Uyuni, Bolivia."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 74
+              },
+              "annualPrecipitationMm": {
+                "max": 250
+              },
+              "dominantSurfaceMaterial": "salt_crust",
+              "endorheicBasin": true,
+              "slopeDegrees": {
+                "max": 5
+              }
+            },
+            "preferred": {
+              "annualPrecipitationMm": {
+                "min": 0,
+                "max": 150
+              },
+              "meanAnnualTemperatureC": {
+                "min": -5,
+                "max": 30
+              },
+              "slopeDegrees": {
+                "min": 0,
+                "max": 2
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 15,
+                "max": 45
+              }
+            }
           }
         }
       ]

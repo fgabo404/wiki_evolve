@@ -58,8 +58,31 @@ for(const sub of forest.subbiomes){
     forest_redwood:{min:1,max:35},forest_wooded_swamp:{min:1,max:20}
   }[sub.id],"la altura requerida debe conservarse: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,7);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,16);
+const desert=catalog.biomes.find(x=>x.id==="desert");
+assert(desert,"debe existir Desierto");
+assert.deepEqual(desert.subbiomes.map(s=>s.id),["desert_sandy","desert_rocky","desert_salt_flat"],"no agregar ni retirar subbiomas desérticos");
+const expectedDesert={
+ desert_sandy:{height:{min:1,max:64},lat:{min:10,max:40},material:"sand"},
+ desert_rocky:{height:{min:1,max:84},lat:{min:15,max:50},material:"rock_gravel"},
+ desert_salt_flat:{height:{min:1,max:74},lat:{min:15,max:45},material:"salt_crust"}
+};
+for(const sub of desert.subbiomes){
+ const e=expectedDesert[sub.id];
+ assert(sub.description?.es?.trim()&&sub.description?.en?.trim(),"faltan las descripciones bilingües del desierto: "+sub.id);
+ assert.deepEqual(sub.spawn?.required?.elevationLevel,e.height,"altura obligatoria fuera del estándar 0–100: "+sub.id);
+ assert.deepEqual(sub.spawn?.preferred?.absoluteLatitudeDegrees,e.lat,"latitud preferida incorrecta: "+sub.id);
+ assert.equal(sub.spawn.required.terrain,"land");
+ assert.equal(sub.spawn.required.annualPrecipitationMm.max,250,"aridez obligatoria incorrecta: "+sub.id);
+ assert.equal(sub.spawn.required.dominantSurfaceMaterial,e.material,"material geológico incorrecto: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"absoluteLatitudeDegrees"),"la latitud del desierto no debe ser obligatoria");
+ assert(sub.spawn.preferred.meanAnnualTemperatureC,"temperatura como preferencia sin excluir desiertos fríos");
+}
+assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
+assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
+assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
+assert.equal(allSubbiomes.filter(x=>x.description).length,10,"solo los 7 bosques y 3 desiertos revisados tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,10);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,13);
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");
 assert.equal(cloud.name.es,"Bosque nuboso");
 assert.equal(cloud.name.en,"Cloud Forest");
@@ -127,6 +150,11 @@ assert(detail.includes("Inmersión frecuente en nubes bajas"),"falta la etiqueta
 assert(detail.includes("coastalFogFrequent"),"la ficha debe mostrar la niebla costera");
 assert(detail.includes("Niebla costera frecuente"),"falta etiqueta traducida para niebla costera");
 assert(detail.includes('distanceToCoastKm:"km"'),"la ficha debe mostrar distancia a costa en km");
+assert(detail.includes('dominantSurfaceMaterial'),"falta campo de material superficial");
+assert(detail.includes('aeolianDuneField'),"falta campo de dunas");
+assert(detail.includes('endorheicBasin'),"falta cuenca endorreica");
+assert(detail.includes('materialLabels'),"los materiales desérticos deben localizarse");
+assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
 const nav=read("js/modules/biomes/biomes.js");
 assert(nav.includes("wiki-nav-heading"));
 assert(nav.includes("wiki-biome-tree"));
@@ -156,7 +184,18 @@ for(const sub of forest.subbiomes){
   assert.equal(plotted.elevation.min,sub.spawn.required.elevationLevel.min);
   assert.equal(plotted.elevation.max,sub.spawn.required.elevationLevel.max);
 }
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest")){
+const desertChart=chartAPI.getData(desert);
+assert.equal(desertChart.defined.length,3,"la gráfica debe representar los tres desiertos");
+assert.equal(desertChart.pending.length,0,"no deben quedar desiertos pendientes de distribución");
+for(const sub of desert.subbiomes){
+ const plotted=desertChart.defined.find(x=>x.id===sub.id);
+ assert(plotted,"falta en la gráfica: "+sub.id);
+ assert.equal(plotted.latitude.min,sub.spawn.preferred.absoluteLatitudeDegrees.min);
+ assert.equal(plotted.latitude.max,sub.spawn.preferred.absoluteLatitudeDegrees.max);
+ assert.equal(plotted.elevation.min,sub.spawn.required.elevationLevel.min);
+ assert.equal(plotted.elevation.max,sub.spawn.required.elevationLevel.max);
+}
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
   assert.equal(result.pending.length,biome.subbiomes.length);
@@ -168,4 +207,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques con latitud preferida y altura 0–100 requerida; manglar sigue marino; Wiki JSON directo");
+console.log("PASS: 8 biomas, 23 subbiomas, 7 bosques + 3 desiertos con descripción y spawn; gráfica reutilizable para ambos biomas; manglar sigue marino");
