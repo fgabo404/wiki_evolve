@@ -160,15 +160,15 @@ No se modificaron las condiciones de altura, temperatura, niebla, precipitación
 |---|---:|---|---:|---:|
 | Selva | **8,8 %** | Aproximación: 1 140 millones ha de bosque en zona de selva tropical según IPCC (2020) divididos por tierra mundial del Banco Mundial (~129,76 millones km², 2023). No es exactamente el área del subbioma Evolve. | **2** | **3** |
 | Bosque nuboso | **0,165 %** | Aproximación: 214 630 km² de bosques nubosos tropicales reportados en síntesis científica (estimación histórica). | 1 | Sin límite |
-| Bosque templado | **5,4 %** | Aproximación: 17 % del bosque mundial en zona templada × 31,81 % de cobertura forestal terrestre. Zona climática ≠ subbioma Evolve. | 1 | Sin límite |
+| Bosque templado | **5,4 %** | Aproximación: 17 % del bosque mundial en zona templada × 31,81 % de cobertura forestal terrestre. Zona climática ≠ subbioma Evolve. | **2** | **4** |
 | Bosque boreal (taiga) | **8,9 %** | Aproximación: 28 % del bosque mundial en zona boreal × 31,81 % de cobertura forestal terrestre. | 1 | Sin límite |
 | Bosque subalpino | **Pendiente (`null`)** | No se encontró una estadística global exclusiva y comparable de bosque subalpino. No inventar un porcentaje ni confundirlo con *todos* los bosques de montaña. | 1 | Sin límite |
 | Redwood | **0,006 %** | Referencia **histórica**, ≈2 millones de acres de bosque maduro costero original (NPS) / tierra mundial; no representa superficie actual ni regiones continuas reales. | **1** | **1** |
-| Pantano arbolado | **0,9 %** | Aproximación: 1,17 millones km² de bosques pantanosos/inundables, estimación global reportada por Ramsar con alta incertidumbre y posible solapamiento. | 1 | Sin límite |
+| Pantano arbolado | **0,9 %** | Aproximación: 1,17 millones km² de bosques pantanosos/inundables, estimación global reportada por Ramsar con alta incertidumbre y posible solapamiento. | **1** | **2** |
 
 **Advertencia científica imprescindible:** estos siete porcentajes **no constituyen una partición global exclusiva del 31,81 % forestal**. Las fuentes usan años, definiciones y áreas de referencia diferentes: el bosque nuboso puede contarse dentro de selvas tropicales; Redwood dentro del bosque templado; subalpino dentro del templado/boreal; pantanos arbolados dentro de otras categorías. Además, existen bosques subtropicales y tipos no diferenciados en el catálogo. **No sumar estos porcentajes para exigir un presupuesto total del planeta sin antes definir una reclasificación exclusiva.** En la fase del nuevo generador se normalizarán las cuotas compatibles y se resolverán explícitamente las clases solapadas, respetando el presupuesto de tierra y otras categorías de bioma.
 
-**Regiones conectadas aprobadas:** Selva debe formar entre **2 y 3 masas**; Redwood **exactamente 1**. Los otros cinco bosques deben aparecer al menos una vez, sin un máximo todavía aprobado. Una masa de Redwood puede tener varios hexágonos, cuyo número escala con el tamaño del mapa. Al generar, hay que comprobar que el porcentaje se pueda representar y que existan lugares ambientalmente compatibles; no colocar biomas en zonas imposibles únicamente para cerrar cuotas.
+**Regiones conectadas aprobadas:** Selva debe formar entre **2 y 3 masas**; Bosque templado entre **2 y 4**; Pantano arbolado entre **1 y 2**; Redwood **exactamente 1**. Bosque nuboso, subalpino y boreal conservan mínimo provisional de una región y máximo pendiente de definición. Una masa de Redwood puede tener varios hexágonos, cuyo número escala con el tamaño del mapa. Al generar, hay que comprobar que el porcentaje se pueda representar y que existan lugares ambientalmente compatibles; no colocar biomas en zonas imposibles únicamente para cerrar cuotas.
 
 **Fuentes y metodología:**
 
@@ -181,3 +181,15 @@ No se modificaron las condiciones de altura, temperatura, niebla, precipitación
 - [Ramsar, Global Wetland Outlook, extensión de bosques pantanosos](https://www.ramsar.org/sites/default/files/documents/library/gwo_technical_note_status_e.pdf).
 - [Banco Mundial, área mundial de tierra ~129,76 millones de km² (2023)](https://data.worldbank.org/indicator/AG.LND.TOTL.K2?locations=1W).
 - [Forest Service, características de bosques subalpinos](https://research.fs.usda.gov/treesearch/52158).
+
+## Criterios pendientes para bosque nuboso, subalpino y boreal (propuesta, no aprobada)
+
+**No modificar `distribution` ni `spawn` de estas tres categorías hasta que el usuario apruebe el contrato.** Se estudia un sistema de regiones dependientes de sistemas montañosos y clima local, manteniendo el contador de masas como componentes conectados de la cuadrícula.
+
+- **Nuboso:** permitir bosques en franjas montanas húmedas frecuentemente inmersas en nubes; favorecido en latitudes tropicales/subtropicales y en laderas expuestas a humedad orográfica. No asignar una masa por montaña automáticamente: una misma cordillera puede contener varias masas fragmentadas, y una montaña seca puede no contener ninguna.
+- **Subalpino:** ubicar los bosques justo por debajo de la línea local de árboles, en zonas montañosas frías; preferir latitudes templadas o altas, sin prohibir bosques de límite arbóreo tropicales si el clima lo permite. La latitud modifica las cotas térmicas y la línea de árboles, pero no sustituye temperatura, humedad ni relieve.
+- **Boreal:** priorizar grandes bandas de bosque frío hacia latitudes altas, vinculadas a condiciones térmicas y continuidad territorial; **no depende de existir montañas**. El número de masas puede ser pequeño y mayoritariamente continuo, pero todavía no se fija máximo.
+
+El bosque nuboso tropical y el subalpino pueden coexistir en una misma cadena montañosa en diferentes altitudes. También pueden existir otros bosques montanos intermedios; no forzar una transición directa si los requisitos ecológicos no se cumplen. Las restricciones actuales de altura 25–74 (nuboso) y 65–84 (subalpino), la latitud preferida y las condiciones de niebla/línea de árboles permanecen intactas. En la nueva generación habrá que evaluar montaña/cordillera, humedad orográfica, temperatura y línea de árboles local antes de asignar sectores de bosque.
+
+Referencias de ecología y zonación: [Körner et al., pisos bioclimáticos montañosos dependientes de la latitud](https://link.springer.com/article/10.1007/s00035-011-0094-4); [FAO, ecosistemas montanos y subalpinos](https://www.fao.org/fileadmin/templates/mountain_partnership/doc/ipromo_1_motta.pdf); [UNECE, banda boreal circumpolar](https://unece.org/forests/boreal-forests).

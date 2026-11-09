@@ -282,8 +282,8 @@
           "distribution": {
             "targetLandPercent": 5.4,
             "percentBasis": "earthProxy",
-            "minRegions": 1,
-            "maxRegions": null
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {
@@ -486,7 +486,7 @@
             "targetLandPercent": 0.9,
             "percentBasis": "earthProxy",
             "minRegions": 1,
-            "maxRegions": null
+            "maxRegions": 2
           }
         }
       ]
