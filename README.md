@@ -32,7 +32,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos** y **Sabana** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **12 subbiomas restantes** siguen sin `spawn` ni `description` hasta su revisión. Bosque subtropical permanece retirado.
+**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos** y los **4 subbiomas de Llanuras** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **9 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
 
 **Criterio visual de Bosque templado (2026-11-09):** se representa como bosque europeo caducifolio o mixto, con hayas, robles y cambios estacionales; esto no restringe la aparición del subbioma a Europa. Su `spawn` no cambió. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
@@ -58,11 +58,11 @@ La gráfica es una referencia ambiental, no una predicción exacta de aparición
 
 Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
 
-**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos, Sabana y Pradera con definición; 11 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos y los 4 subbiomas de Llanuras con definición; 9 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
 
 ## Llanuras — revisión gradual (2026-11-09)
 
-El catálogo conserva los cuatro subbiomas: Sabana, Pradera, Estepa y Humedal abierto (Pantanal). **Sabana** (`plains_savanna`) es el primer subbioma aprobado, inspirado en Serengeti y Masái Mara como paisaje principal, y con variantes de Cerrado y Australia. Cuenta con descripción bilingüe, clima cálido, estación seca y lluviosa, cobertura de árboles abierta, `elevationLevel` obligatorio 1–64 y latitud preferida 0–30°. La gráfica de distribución SVG muestra su área y marca los otros tres subbiomas como pendientes. Los rangos son decisiones de diseño, no implementación en Engine.
+El catálogo conserva los cuatro subbiomas aprobados: **Sabana**, **Pradera**, **Estepa** y **Humedal abierto (Pantanal)**. Sabana toma Serengeti y Masái Mara como referencia; Pradera, las Grandes Llanuras y Pampas; Estepa, Mongolia/Asia Central y Patagonia; Humedal abierto, principalmente el Pantanal brasileño. Todos cuentan con descripción bilingüe y condiciones declarativas. La gráfica SVG muestra las cuatro áreas según sus latitudes preferidas y alturas requeridas, siempre debajo de las fichas. Los rangos son decisiones de diseño, no implementación en Engine.
 
 Ver [docs/LLANURAS.md](docs/LLANURAS.md).
 
@@ -76,8 +76,16 @@ Los tres subbiomas de Desierto incorporan `distribution` (porcentaje preliminar 
 
 ## Llanuras — Sabana, cuota terrestre y masas (2026-11-09)
 
-Sabana tiene aprobado `distribution.targetLandPercent: 13.8` como referencia provisional de superficie **terrestre** (no cuota del mapa total), y `minRegions: 2`, `maxRegions: 4` para contar masas hexagonales conectadas. Se conserva la latitud absoluta **preferida 0–30°** y altura **obligatoria 1–64**. Los otros tres subbiomas de Llanuras siguen pendientes de definición, y no se ejecutan estas cuotas en el Engine. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
+Sabana tiene aprobado `distribution.targetLandPercent: 13.8` como referencia provisional de superficie **terrestre** (no cuota del mapa total), y `minRegions: 2`, `maxRegions: 4` para contar masas hexagonales conectadas. Se conserva la latitud absoluta **preferida 0–30°** y altura **obligatoria 1–64**. Pradera, Estepa y Pantanal ya están definidos y conservan porcentajes terrestres pendientes (`null`); no se ejecutan estas cuotas en Engine. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
 
 ## Llanuras — Pradera aprobada (2026-11-09)
 
-Pradera (`plains_prairie`) ahora incluye descripción bilingüe de las Grandes Llanuras de Norteamérica y Pampas argentinas, altura requerida de Evolve **1–64**, latitud absoluta preferida **30–60°**, temperatura media anual **2–20 °C**, precipitaciones **450–1200 mm**, predominio herbáceo y cobertura arbórea **≤10 %**. Pendiente **0–10°** es una preferencia de terreno plano/ondulado. Su bloque `distribution` fija **2–4 masas** y mantiene `targetLandPercent:null` hasta distinguir de Estepa la cuota real de pastizal templado. La gráfica genérica muestra Sabana y Pradera; Estepa y Humedal abierto siguen pendientes. No se cambia el Engine. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
+Pradera (`plains_prairie`) ahora incluye descripción bilingüe de las Grandes Llanuras de Norteamérica y Pampas argentinas, altura requerida de Evolve **1–64**, latitud absoluta preferida **30–60°**, temperatura media anual **2–20 °C**, precipitaciones **450–1200 mm**, predominio herbáceo y cobertura arbórea **≤10 %**. Pendiente **0–10°** es una preferencia de terreno plano/ondulado. Su bloque `distribution` fija **2–4 masas** y mantiene `targetLandPercent:null` hasta distinguir de Estepa la cuota real de pastizal templado. La gráfica genérica muestra los cuatro subbiomas de Llanuras. No se cambia el Engine. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
+
+## Llanuras — Estepa y Pantanal aprobados (2026-11-09)
+
+**Estepa** (`plains_steppe`) adopta Mongolia y Asia Central como referencia principal, con una variante patagónica. Altura requerida **1–74**, latitud preferida **30–60°**, temperatura **−10 a 15 °C**, precipitación **150–500 mm** (preferida 200–400 mm), hierbas dominantes y cobertura arbórea **≤10 %**. Prefiere interiores continentales **o** sombras orográficas. `distribution`: porcentaje terrestre pendiente y **2–4 masas conectadas**.
+
+**Humedal abierto (Pantanal)** (`plains_open_wetland`) adopta el **Pantanal brasileño** como referencia visual principal, con grandes pastizales inundables, lagunas y canales. Altura requerida **1–38** (preferida 1–20), latitud preferida **10–25°**, temperatura **20–28 °C**, precipitación **900–1700 mm** (preferida 1100–1500 mm), influencia de llanura fluvial, drenaje lento e inundación estacional. `distribution`: porcentaje terrestre pendiente y **mínimo 1, máximo 1 masa conectada si las condiciones permiten el bioma**.
+
+Las nuevas condiciones geográficas e hidrológicas son declarativas; la implementación de la hidrología y los cambios visuales por estación permanece pendiente en Engine. La gráfica existente incorpora automáticamente ambos rectángulos, sin imágenes PNG ni rangos codificados. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
