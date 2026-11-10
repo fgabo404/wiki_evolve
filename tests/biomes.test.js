@@ -18,7 +18,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,12,"7 bosques, 3 desiertos, Sabana y Pradera tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,14,"7 bosques, 3 desiertos y 4 Llanuras tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -156,9 +156,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,12,"7 bosques, 3 desiertos, Sabana y Pradera tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,12);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,11);
+assert.equal(allSubbiomes.filter(x=>x.description).length,14,"7 bosques, 3 desiertos y 4 Llanuras tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,14);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,9);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -178,8 +178,11 @@ assert.deepEqual(savanna.spawn.preferred,{
  treeCanopyCoverPercent:{min:5,max:30},absoluteLatitudeDegrees:{min:0,max:30}
 },"las preferencias de sabana deben conservarse");
 assert(!Object.hasOwn(savanna.spawn.required,"absoluteLatitudeDegrees"),"latitud de sabana no debe ser obligatoria");
-for(const pending of plains.subbiomes.filter(s=>!["plains_savanna","plains_prairie"].includes(s.id)))
-  assert(!pending.description&&!pending.spawn,"otros subbiomas de Llanuras pendientes de revisión: "+pending.id);
+for(const sub of plains.subbiomes){
+  assert(sub.description?.es?.trim()&&sub.description?.en?.trim(),"Llanuras requiere descripción bilingüe: "+sub.id);
+  assert(sub.spawn?.required&&sub.spawn?.preferred,"Llanuras requiere spawn completo: "+sub.id);
+  assert(sub.distribution,"Llanuras requiere distribución: "+sub.id);
+}
 assert(catalog.biomes.find(x=>x.id==="tundra"),"Tundra sigue como bioma independiente");
 const cloud=forest.subbiomes.find(x=>x.id==="forest_cloud");
 assert.equal(cloud.name.es,"Bosque nuboso");
@@ -263,6 +266,8 @@ assert(detail.includes("Bosque montano húmedo"),"falta traducción de la franja
 assert(detail.includes("Bajo el límite local de árboles"),"falta traducción de la franja subalpina");
 assert(detail.includes("No comparable global reference"),"la ficha debe indicar ausencia de referencia real");
 assert(detail.includes('treeCanopyCoverPercent:"%"'),"la cobertura arbórea debe aparecer en %");
+for(const label of ["interiorOrRainShadow","fluvialFloodplainInfluence","slowDrainage","seasonalFlooding"])
+ assert(detail.includes(label),"campo geográfico o hidrológico sin etiqueta localizada: "+label);
 assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
 const nav=read("js/modules/biomes/biomes.js");
 assert(nav.includes("wiki-nav-heading"));
@@ -312,7 +317,7 @@ for(const sub of desert.subbiomes){
 assert.deepEqual(savanna.distribution,{targetLandPercent:13.8,percentBasis:"earthProxy",minRegions:2,maxRegions:4},"Sabana debe ocupar referencia terrestre 13,8 % y formar 2–4 masas");
 assert.deepEqual(savanna.spawn.preferred.absoluteLatitudeDegrees,{min:0,max:30},"Sabana debe mantener su latitud preferida 0–30°");
 assert.deepEqual(savanna.spawn.required.elevationLevel,{min:1,max:64},"Sabana debe mantener elevación requerida 1–64");
-assert(plains.subbiomes.filter(s=>!["plains_savanna","plains_prairie"].includes(s.id)).every(s=>!s.distribution&&!s.spawn),"no se deben inventar distribución ni spawn para Estepa y Pantanal");
+assert(plains.subbiomes.every(s=>s.distribution&&s.spawn),"todos los subbiomas de Llanuras están definidos");
 assert(!Object.hasOwn(savanna.spawn.required,"regionCount"),"las masas de Sabana no pertenecen al spawn");
 const prairie=plains.subbiomes.find(s=>s.id==="plains_prairie");
 assert(prairie,"falta Pradera");
@@ -323,11 +328,26 @@ assert.deepEqual(prairie.spawn.preferred,{absoluteLatitudeDegrees:{min:30,max:60
 assert(!Object.hasOwn(prairie.spawn.required,"absoluteLatitudeDegrees"),"la latitud de Pradera no debe ser obligatoria");
 assert.deepEqual(prairie.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:4},"Pradera 2–4 masas y porcentaje pendiente");
 assert(!Object.hasOwn(prairie.spawn.required,"regionCount"),"las masas no pertenecen al spawn");
-assert(!plains.subbiomes.find(s=>s.id==="plains_steppe").spawn&&!plains.subbiomes.find(s=>s.id==="plains_steppe").distribution,"Estepa pendiente");
-assert(!plains.subbiomes.find(s=>s.id==="plains_open_wetland").spawn&&!plains.subbiomes.find(s=>s.id==="plains_open_wetland").distribution,"Pantanal pendiente");
+const steppe=plains.subbiomes.find(s=>s.id==="plains_steppe");
+assert(steppe.description.es.includes("Mongolia")&&steppe.description.es.includes("Patagonia"),"Estepa: faltan ambas referencias visuales");
+assert(steppe.description.en.includes("Mongolia")&&steppe.description.en.includes("Patagonia"),"Estepa: descripción inglesa incompleta");
+assert.deepEqual(steppe.spawn.required,{terrain:"land",elevationLevel:{min:1,max:74},meanAnnualTemperatureC:{min:-10,max:15},annualPrecipitationMm:{min:150,max:500},herbaceousVegetationDominant:true,treeCanopyCoverPercent:{max:10}},"Estepa debe conservar sus rangos aprobados");
+assert.deepEqual(steppe.spawn.preferred,{absoluteLatitudeDegrees:{min:30,max:60},annualPrecipitationMm:{min:200,max:400},interiorOrRainShadow:true},"Estepa favorece interiores o sombras de lluvia");
+assert.deepEqual(steppe.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:4},"Estepa 2–4 masas; porcentaje pendiente");
+const wetland=plains.subbiomes.find(s=>s.id==="plains_open_wetland");
+assert(wetland.description.es.includes("Pantanal brasileño"),"Pantanal debe tener como referencia principal Brasil");
+assert(wetland.description.en.includes("Brazil's Pantanal"),"Pantanal: descripción inglesa incompleta");
+assert.deepEqual(wetland.spawn.required,{terrain:"land",elevationLevel:{min:1,max:38},meanAnnualTemperatureC:{min:20,max:28},annualPrecipitationMm:{min:900,max:1700},herbaceousVegetationDominant:true,fluvialFloodplainInfluence:true,slowDrainage:true,seasonalFlooding:true},"Pantanal requiere hidrología estacional y altura 1–38");
+assert.deepEqual(wetland.spawn.preferred,{elevationLevel:{min:1,max:20},absoluteLatitudeDegrees:{min:10,max:25},annualPrecipitationMm:{min:1100,max:1500},treeCanopyCoverPercent:{max:20}},"Pantanal debe conservar las preferencias aprobadas");
+assert.deepEqual(wetland.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:1},"Pantanal debe tener exactamente una masa cuando aparece");
+for(const sub of [steppe,wetland]){
+ assert(!Object.hasOwn(sub.spawn.required,"absoluteLatitudeDegrees"),"latitud no debe ser filtro duro: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"regionCount"),"masas no deben estar dentro de spawn: "+sub.id);
+}
+
 const savannaChart=chartAPI.getData(plains);
-assert.equal(savannaChart.defined.length,2,"la gráfica de Llanuras debe dibujar Sabana y Pradera");
-assert.equal(savannaChart.pending.length,2,"Estepa y Pantanal siguen pendientes");
+assert.equal(savannaChart.defined.length,4,"la gráfica de Llanuras debe dibujar los cuatro subbiomas");
+assert.equal(savannaChart.pending.length,0,"Llanuras ya no tiene subbiomas pendientes");
 assert.equal(savannaChart.defined[0].id,"plains_savanna");
 assert.equal(savannaChart.defined[0].latitude.min,0);
 assert.equal(savannaChart.defined[0].latitude.max,30);
@@ -336,6 +356,15 @@ assert.equal(savannaChart.defined[0].elevation.max,64);
 const prairieChart=savannaChart.defined.find(x=>x.id==="plains_prairie");
 assert(prairieChart,"Pradera debe figurar en la gráfica");
 assert.deepEqual({latitude:{min:prairieChart.latitude.min,max:prairieChart.latitude.max},elevation:{min:prairieChart.elevation.min,max:prairieChart.elevation.max}},{latitude:{min:30,max:60},elevation:{min:1,max:64}},"Pradera debe graficarse con latitud 30–60 y altura 1–64");
+for(const [id,latitude,elevation] of [
+  ["plains_steppe",{min:30,max:60},{min:1,max:74}],
+  ["plains_open_wetland",{min:10,max:25},{min:1,max:38}]
+]){
+  const p=savannaChart.defined.find(x=>x.id===id);
+  assert(p,"la gráfica debe incluir "+id);
+  assert.deepEqual({min:p.latitude.min,max:p.latitude.max},latitude,"latitud gráfica incorrecta: "+id);
+  assert.deepEqual({min:p.elevation.min,max:p.elevation.max},elevation,"altura gráfica incorrecta: "+id);
+}
 for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
@@ -348,4 +377,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + Sabana y Pradera definidos; 11 subbiomas pendientes");
+console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras definidos; 9 subbiomas pendientes");
