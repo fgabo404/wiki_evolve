@@ -637,6 +637,48 @@
           "name": {
             "es": "Estepa",
             "en": "Steppe"
+          },
+          "description": {
+            "es": "Pastizal templado o frío y semiárido, de horizontes inmensos, hierbas bajas resistentes a la sequía, árboles muy escasos y relieve de llanuras, mesetas o colinas suaves. Su referencia principal son las grandes estepas de Mongolia y Asia Central, que pueden reverdecer durante la estación de crecimiento y adquirir tonos ocres y dorados en periodos secos. La Patagonia argentina representa una variante regional más fría y pedregosa, con arbustos bajos y vegetación dispersa. Se distingue de Pradera por la menor humedad y la menor densidad de los pastos.",
+            "en": "A temperate or cold, semi-arid grassland of vast horizons, low drought-tolerant grasses, very few trees, and plains, plateaus or gently rolling hills. Its main visual reference is the extensive steppe of Mongolia and Central Asia, which can turn green during the growing season and ochre or golden in dry periods. Argentine Patagonia represents a colder, stonier regional variant with low shrubs and sparse vegetation. It differs from Prairie through its lower moisture availability and sparser grass cover."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 74
+              },
+              "meanAnnualTemperatureC": {
+                "min": -10,
+                "max": 15
+              },
+              "annualPrecipitationMm": {
+                "min": 150,
+                "max": 500
+              },
+              "herbaceousVegetationDominant": true,
+              "treeCanopyCoverPercent": {
+                "max": 10
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 30,
+                "max": 60
+              },
+              "annualPrecipitationMm": {
+                "min": 200,
+                "max": 400
+              },
+              "interiorOrRainShadow": true
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         },
         {
@@ -644,6 +686,54 @@
           "name": {
             "es": "Humedal abierto (Pantanal)",
             "en": "Open wetland (Pantanal)"
+          },
+          "description": {
+            "es": "Humedal tropical abierto inspirado principalmente en el Pantanal brasileño, con grandes llanuras inundables, pastizales verdes, lagunas poco profundas, canales fluviales y pequeñas islas de árboles y arbustos. El sistema del Pantanal también se extiende por Bolivia y Paraguay. Durante la estación húmeda, las aguas de la cuenca fluvial se extienden sobre el terreno casi plano; durante la estación seca reaparecen amplios pastizales y permanecen algunas lagunas y canales. Predomina la vegetación herbácea y acuática, no un bosque cerrado. Las inundaciones estacionales forman parte de la identidad del bioma, aunque su animación es futura.",
+            "en": "An open tropical wetland primarily inspired by Brazil's Pantanal, featuring vast floodplains, green grasslands, shallow lagoons, river channels, and small islands of trees and shrubs. The Pantanal system also extends into Bolivia and Paraguay. In the wet season, river-basin waters spread across nearly flat ground; in the dry season, extensive grasslands re-emerge while some lagoons and channels retain water. Herbaceous and aquatic vegetation dominate rather than closed forest. Seasonal flooding defines this biome, while animated seasonal changes remain a future feature."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 38
+              },
+              "meanAnnualTemperatureC": {
+                "min": 20,
+                "max": 28
+              },
+              "annualPrecipitationMm": {
+                "min": 900,
+                "max": 1700
+              },
+              "herbaceousVegetationDominant": true,
+              "fluvialFloodplainInfluence": true,
+              "slowDrainage": true,
+              "seasonalFlooding": true
+            },
+            "preferred": {
+              "elevationLevel": {
+                "min": 1,
+                "max": 20
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 10,
+                "max": 25
+              },
+              "annualPrecipitationMm": {
+                "min": 1100,
+                "max": 1500
+              },
+              "treeCanopyCoverPercent": {
+                "max": 20
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": 1
           }
         }
       ]
