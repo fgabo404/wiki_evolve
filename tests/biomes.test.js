@@ -18,7 +18,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,14,"7 bosques, 3 desiertos y 4 Llanuras tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,15,"7 bosques, 3 desiertos, 4 Llanuras y Arrecife tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -156,9 +156,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,14,"7 bosques, 3 desiertos y 4 Llanuras tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,14);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,9);
+assert.equal(allSubbiomes.filter(x=>x.description).length,15,"7 bosques, 3 desiertos, 4 Llanuras y Arrecife tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,15);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,8);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -194,6 +194,22 @@ assert(cloud.description.es.includes("niebla"));
 assert(cloud.description.en.includes("mist"));
 const marine=catalog.biomes.find(x=>x.id==="marine");
 assert(marine,"debe existir el bioma Marino");
+const reef=marine.subbiomes.find(x=>x.id==="marine_reef");
+assert(reef,"falta el arrecife marino");
+assert(reef.description.es.includes("Gran Barrera de Coral")&&reef.description.en.includes("Great Barrier Reef"),"referencia australiana aprobada de Arrecife");
+for(const form of ["costero","barrera","atolones"])assert(reef.description.es.includes(form),"falta forma de arrecife: "+form);
+assert.deepEqual(reef.spawn.required,{
+ terrain:"water",waterDepthMeters:{min:0,max:50},waterSalinityPpt:{min:32,max:42},
+ meanAnnualTemperatureC:{min:20,max:30}
+},"Arrecife solo incorpora profundidad y salinidad como campos nuevos");
+assert.deepEqual(reef.spawn.preferred,{
+ absoluteLatitudeDegrees:{min:0,max:30},waterDepthMeters:{min:0,max:30},meanAnnualTemperatureC:{min:23,max:29}
+},"Arrecife usa latitud y temperatura comunes");
+assert.deepEqual(reef.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:4,maxRegions:8},"Arrecife 4–8 sistemas; porcentaje pendiente");
+assert(!Object.hasOwn(reef.spawn.required,"elevationLevel"),"profundidad oceánica no equivale a elevación Evolve");
+assert(!Object.hasOwn(reef.spawn.required,"absoluteLatitudeDegrees"),"latitud marina debe ser preferencia");
+for(const sub of marine.subbiomes.filter(x=>x.id!=="marine_reef"))
+ assert(!sub.spawn&&!sub.description&&!sub.distribution,"otros subbiomas marinos deben seguir pendientes");
 const mangrove=marine.subbiomes.find(x=>x.id==="marine_mangrove");
 assert.equal(mangrove.name.es,"Manglar");
 assert(!forest.subbiomes.some(x=>x.id==="forest_mangrove"),"Manglar no debe duplicarse en Bosque");
@@ -266,6 +282,8 @@ assert(detail.includes("Bosque montano húmedo"),"falta traducción de la franja
 assert(detail.includes("Bajo el límite local de árboles"),"falta traducción de la franja subalpina");
 assert(detail.includes("No comparable global reference"),"la ficha debe indicar ausencia de referencia real");
 assert(detail.includes('treeCanopyCoverPercent:"%"'),"la cobertura arbórea debe aparecer en %");
+assert(detail.includes('waterDepthMeters:"m"')&&detail.includes('waterSalinityPpt:"‰"'),"faltan unidades de profundidad y salinidad marina");
+assert(detail.includes("Profundidad del agua")&&detail.includes("Salinidad del agua"),"faltan etiquetas marinas bilingües");
 for(const label of ["interiorOrRainShadow","fluvialFloodplainInfluence","slowDrainage","seasonalFlooding"])
  assert(detail.includes(label),"campo geográfico o hidrológico sin etiqueta localizada: "+label);
 assert(detail.includes('Costra salina')&&detail.includes('Salt crust'),"faltan nombres de materiales en ambos idiomas");
@@ -365,7 +383,17 @@ for(const [id,latitude,elevation] of [
   assert.deepEqual({min:p.latitude.min,max:p.latitude.max},latitude,"latitud gráfica incorrecta: "+id);
   assert.deepEqual({min:p.elevation.min,max:p.elevation.max},elevation,"altura gráfica incorrecta: "+id);
 }
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains")){
+const reefChart=chartAPI.getData(marine);
+assert.equal(reefChart.defined.length,1,"Arrecife debe dibujarse en la gráfica marina");
+assert.equal(reefChart.pending.length,3,"Estuario, Manglar y Alta mar continúan pendientes");
+const plottedReef=reefChart.defined[0];
+assert.equal(plottedReef.id,"marine_reef");
+assert.deepEqual({min:plottedReef.latitude.min,max:plottedReef.latitude.max},{min:0,max:30});
+assert.deepEqual({min:plottedReef.depth.min,max:plottedReef.depth.max},{min:0,max:50},"la gráfica usa metros de profundidad, no altura terrestre");
+assert(!Object.hasOwn(plottedReef,"elevation"),"Arrecife no debe heredar elevación terrestre");
+assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiquetar profundidad del océano");
+assert(chartSource.includes("marine?y0+v/maximum*h"),"la profundidad debe aumentar hacia abajo");
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
   assert.equal(result.pending.length,biome.subbiomes.length);
@@ -377,4 +405,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras definidos; 9 subbiomas pendientes");
+console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras + Arrecife definidos; 8 subbiomas pendientes");
