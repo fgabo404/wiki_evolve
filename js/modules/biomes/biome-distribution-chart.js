@@ -5,29 +5,37 @@ globalThis.EvolveBiomeDistributionChart = (() => {
   const words = {
     es: {
       title: "Distribución de subbiomas — Latitud y altura",
+      marineTitle: "Distribución de subbiomas — Latitud y profundidad",
       subtitle: "Distribución ambiental de referencia",
       all: "Todos los subbiomas",
       select: "Destacar subbioma",
       latitude: "Latitud absoluta (°)",
       elevation: "Altura de Evolve (0–100)",
+      depth: "Profundidad del agua (m)",
       lat: "Latitud preferida",
       height: "Altura requerida",
+      depthRange: "Profundidad requerida",
       pending: "Distribución pendiente de definición.",
       missing: "Subbiomas pendientes de definición",
-      note: "Las áreas representan la altura requerida y la latitud preferida de cada subbioma. Las zonas superpuestas pueden corresponder a varios subbiomas; el clima y las demás condiciones de generación determinan cuál aparece."
+      note: "Las áreas representan la altura requerida y la latitud preferida de cada subbioma. Las zonas superpuestas pueden corresponder a varios subbiomas; el clima y las demás condiciones de generación determinan cuál aparece.",
+      marineNote: "Las áreas representan la profundidad requerida en metros y la latitud preferida. La profundidad aumenta hacia abajo; salinidad y temperatura determinan qué subbioma puede aparecer."
     },
     en: {
       title: "Subbiome distribution — Latitude and elevation",
+      marineTitle: "Subbiome distribution — Latitude and depth",
       subtitle: "Reference environmental distribution",
       all: "All subbiomes",
       select: "Highlight subbiome",
       latitude: "Absolute latitude (°)",
       elevation: "Evolve elevation (0–100)",
+      depth: "Water depth (m)",
       lat: "Preferred latitude",
       height: "Required elevation",
+      depthRange: "Required depth",
       pending: "Distribution pending definition.",
       missing: "Subbiomes pending definition",
-      note: "Areas represent the required elevation and preferred latitude of each subbiome. Overlapping zones may correspond to multiple subbiomes; climate and other generation conditions determine which one appears."
+      note: "Areas represent the required elevation and preferred latitude of each subbiome. Overlapping zones may correspond to multiple subbiomes; climate and other generation conditions determine which one appears.",
+      marineNote: "Areas represent required water depth in meters and preferred latitude. Depth increases downward; salinity and temperature determine which subbiome can occur."
     }
   };
   function validRange(range, min, max) {
@@ -36,11 +44,14 @@ globalThis.EvolveBiomeDistributionChart = (() => {
   }
   function getData(biome) {
     const defined = [], pending = [];
+    const marine = biome?.id === "marine";
     for (const sub of biome.subbiomes || []) {
-      const elevation = sub.spawn?.required?.elevationLevel;
+      const vertical = marine ? sub.spawn?.required?.waterDepthMeters : sub.spawn?.required?.elevationLevel;
       const latitude = sub.spawn?.preferred?.absoluteLatitudeDegrees;
-      if (validRange(elevation, 0, 100) && validRange(latitude, 0, 90)) {
-        defined.push({id:sub.id, name:sub.name, latitude:{min:latitude.min,max:latitude.max}, elevation:{min:elevation.min,max:elevation.max}});
+      if (validRange(vertical, 0, marine ? 11000 : 100) && validRange(latitude, 0, 90)) {
+        const item = {id:sub.id, name:sub.name, latitude:{min:latitude.min,max:latitude.max}};
+        item[marine ? "depth" : "elevation"] = {min:vertical.min,max:vertical.max};
+        defined.push(item);
       } else pending.push({id:sub.id,name:sub.name});
     }
     return {defined,pending};
@@ -67,9 +78,12 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const t=words[lang]||words.es;
     const name=obj=>obj?.[lang]??obj?.es??obj?.en??"";
     const data=getData(biome);
+    const marine=biome?.id==="marine";
+    const maximum=marine?Math.max(50,...data.defined.map(x=>x.depth.max)):100;
+    const vertical=x=>marine?x.depth:x.elevation;
     host.replaceChildren();
     const section=host.appendChild(node("section","biome-distribution"));
-    section.appendChild(node("h2","distribution-title",t.title));
+    section.appendChild(node("h2","distribution-title",marine?t.marineTitle:t.title));
     section.appendChild(node("p","distribution-subtitle",t.subtitle));
     if(!data.defined.length){
       section.appendChild(node("p","distribution-pending",t.pending));
@@ -85,30 +99,31 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       const option=select.appendChild(node("option","",name(sub.name)));option.value=sub.id;
     }
     const chart=section.appendChild(node("div","distribution-chart"));
-    const svg=svgNode("svg",{viewBox:"0 0 840 455",role:"img","aria-label":t.title,"preserveAspectRatio":"xMidYMid meet"});
+    const svg=svgNode("svg",{viewBox:"0 0 840 455",role:"img","aria-label":marine?t.marineTitle:t.title,"preserveAspectRatio":"xMidYMid meet"});
     chart.appendChild(svg);
     const x0=88,y0=26,w=710,h=340;
-    const px=v=>x0+v/90*w,py=v=>y0+(100-v)/100*h;
+    const px=v=>x0+v/90*w,py=v=>marine?y0+v/maximum*h:y0+(100-v)/100*h;
     appendSvg(svg,"rect",{x:x0,y:y0,width:w,height:h,fill:"#f8fbff",stroke:"#d6e2ef"});
     for(let x=0;x<=90;x+=15){
       appendSvg(svg,"line",{x1:px(x),y1:y0,x2:px(x),y2:y0+h,stroke:"#dce7f3","stroke-width":1});
       appendSvg(svg,"text",{x:px(x),y:y0+h+22,"text-anchor":"middle",class:"distribution-tick"},x+"°");
     }
-    for(let y=0;y<=100;y+=20){
+    for(let i=0;i<=5;i++){
+      const y=maximum*i/5;
       appendSvg(svg,"line",{x1:x0,y1:py(y),x2:x0+w,y2:py(y),stroke:"#dce7f3","stroke-width":1});
-      appendSvg(svg,"text",{x:x0-12,y:py(y)+4,"text-anchor":"end",class:"distribution-tick"},String(y));
+      appendSvg(svg,"text",{x:x0-12,y:py(y)+4,"text-anchor":"end",class:"distribution-tick"},format(y,lang));
     }
     const layer=appendSvg(svg,"g",{"aria-label":t.subtitle});
     appendSvg(svg,"text",{x:x0+w/2,y:433,"text-anchor":"middle",class:"distribution-axis"},t.latitude);
-    appendSvg(svg,"text",{transform:"translate(23 "+(y0+h/2)+") rotate(-90)","text-anchor":"middle",class:"distribution-axis"},t.elevation);
+    appendSvg(svg,"text",{transform:"translate(23 "+(y0+h/2)+") rotate(-90)","text-anchor":"middle",class:"distribution-axis"},marine?t.depth:t.elevation);
     const legend=section.appendChild(node("div","distribution-legend"));
     const rects=new Map(),buttons=new Map();
     for(let i=0;i<data.defined.length;i++){
-      const sub=data.defined[i],color=colors[i%colors.length];
+      const sub=data.defined[i],color=colors[i%colors.length],range=vertical(sub);
       const rect=svgNode("rect",{
-        x:px(sub.latitude.min),y:py(sub.elevation.max),
+        x:px(sub.latitude.min),y:py(marine?range.min:range.max),
         width:Math.max(1,px(sub.latitude.max)-px(sub.latitude.min)),
-        height:Math.max(1,py(sub.elevation.min)-py(sub.elevation.max)),
+        height:Math.max(1,Math.abs(py(range.min)-py(range.max))),
         fill:color,stroke:color,"stroke-width":1.5,rx:2,tabindex:0,role:"button",
         "aria-label":name(sub.name)
       });
@@ -122,7 +137,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       swatch.style.backgroundColor=color;
       const text=entry.appendChild(node("span","distribution-legend-copy"));
       text.appendChild(node("strong","",name(sub.name)));
-      text.appendChild(node("small","",t.lat+": "+format(sub.latitude.min,lang)+"–"+format(sub.latitude.max,lang)+"° · "+t.height+": "+format(sub.elevation.min,lang)+"–"+format(sub.elevation.max,lang)));
+      text.appendChild(node("small","",t.lat+": "+format(sub.latitude.min,lang)+"–"+format(sub.latitude.max,lang)+"° · "+(marine?t.depthRange:t.height)+": "+format(range.min,lang)+"–"+format(range.max,lang)+(marine?" m":"")));
       entry.addEventListener("click",()=>highlight(sub.id));
       buttons.set(sub.id,entry);
     }
@@ -145,7 +160,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     select.addEventListener("change",()=>highlight(select.value));
     highlight("");
     if(data.pending.length)section.appendChild(node("p","distribution-missing",t.missing+": "+data.pending.map(x=>name(x.name)).join(", ")));
-    section.appendChild(node("p","distribution-note",t.note));
+    section.appendChild(node("p","distribution-note",marine?t.marineNote:t.note));
     return data;
   }
   return {getData,render};
