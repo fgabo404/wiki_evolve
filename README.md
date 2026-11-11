@@ -32,7 +32,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos** y los **4 subbiomas de Llanuras** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **9 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
+**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos**, los **4 subbiomas de Llanuras** y **Arrecife** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **8 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
 
 **Criterio visual de Bosque templado (2026-11-09):** se representa como bosque europeo caducifolio o mixto, con hayas, robles y cambios estacionales; esto no restringe la aparición del subbioma a Europa. Su `spawn` no cambió. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
@@ -58,7 +58,7 @@ La gráfica es una referencia ambiental, no una predicción exacta de aparición
 
 Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
 
-**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos y los 4 subbiomas de Llanuras con definición; 9 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos, los 4 subbiomas de Llanuras y Arrecife con definición; 8 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
 
 ## Llanuras — revisión gradual (2026-11-09)
 
@@ -89,3 +89,9 @@ Pradera (`plains_prairie`) ahora incluye descripción bilingüe de las Grandes L
 **Humedal abierto (Pantanal)** (`plains_open_wetland`) adopta el **Pantanal brasileño** como referencia visual principal, con grandes pastizales inundables, lagunas y canales. Altura requerida **1–38** (preferida 1–20), latitud preferida **10–25°**, temperatura **20–28 °C**, precipitación **900–1700 mm** (preferida 1100–1500 mm), influencia de llanura fluvial, drenaje lento e inundación estacional. `distribution`: porcentaje terrestre pendiente y **mínimo 1, máximo 1 masa conectada si las condiciones permiten el bioma**.
 
 Las nuevas condiciones geográficas e hidrológicas son declarativas; la implementación de la hidrología y los cambios visuales por estación permanece pendiente en Engine. La gráfica existente incorpora automáticamente ambos rectángulos, sin imágenes PNG ni rangos codificados. Ver [docs/LLANURAS.md](docs/LLANURAS.md).
+
+## Marino — Arrecife aprobado (2026-11-10)
+
+**Arrecife** (`marine_reef`) utiliza la **Gran Barrera de Coral de Australia** como referencia principal e incluye arrecifes costeros, de barrera y atolones dentro del mismo subbioma. **Solamente añade dos parámetros nuevos**, `waterDepthMeters` (profundidad real **0–50 m**, preferida **0–30 m**) y `waterSalinityPpt` (**32–42 ‰**). Reutiliza las condiciones comunes de terreno (`water`), temperatura media anual (**20–30 °C**, preferida **23–29 °C**) y latitud absoluta preferida (**0–30°**). Tiene **4–8 masas regionales** y porcentaje de superficie oceánica pendiente. El campo heredado `targetLandPercent:null` no representa cuota terrestre marina ni fija una cuota oceánica.
+
+La gráfica SVG de Marino usa **latitud absoluta y profundidad en metros**, con profundidad creciente hacia abajo; los biomas terrestres conservan sus ejes anteriores de latitud y altura Evolve 0–100. La ficha muestra unidades de profundidad y salinidad en ambos idiomas. **Estuario, Manglar y Océano abierto** siguen pendientes. Nada de esto se ejecuta en el generador todavía. Ver [docs/MARINO.md](docs/MARINO.md).
