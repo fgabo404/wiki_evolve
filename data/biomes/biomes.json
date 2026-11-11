@@ -750,6 +750,47 @@
           "name": {
             "es": "Arrecife",
             "en": "Reef"
+          },
+          "description": {
+            "es": "Arrecife coralino tropical inspirado principalmente en la Gran Barrera de Coral de Australia: plataformas de coral, lagunas de aguas turquesas, canales, bordes arrecifales y una gran diversidad de corales y peces. Puede formar arrecifes costeros, arrecifes de barrera y atolones, sin crear subbiomas diferentes; también pueden existir arrecifes de parche. Predominan aguas marinas cálidas, saladas, iluminadas y relativamente poco profundas. Los corales de aguas frías y profundas no forman parte de esta definición inicial. El crecimiento, blanqueamiento y deterioro del arrecife quedan como posibles estados dinámicos futuros, no como condiciones declarativas adicionales.",
+            "en": "A tropical coral reef primarily inspired by Australia's Great Barrier Reef: coral platforms, turquoise lagoons, channels, reef edges, and diverse corals and fish. It can form fringing reefs, barrier reefs and atolls without splitting them into separate subbiomes; patch reefs may also occur. Warm, saline, sunlit, relatively shallow seawater predominates. Cold-water and deep-water coral habitats are outside this initial definition. Reef growth, bleaching and degradation remain possible future dynamic states rather than additional declarative spawn conditions."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "water",
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 50
+              },
+              "waterSalinityPpt": {
+                "min": 32,
+                "max": 42
+              },
+              "meanAnnualTemperatureC": {
+                "min": 20,
+                "max": 30
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 30
+              },
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 30
+              },
+              "meanAnnualTemperatureC": {
+                "min": 23,
+                "max": 29
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 4,
+            "maxRegions": 8
           }
         },
         {
