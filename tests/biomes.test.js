@@ -31,7 +31,21 @@ assert.deepEqual(polar.subbiomes.map(s=>s.id),["polar_north_ice","polar_south_ic
 assert.deepEqual(polar.subbiomes.map(s=>s.name.es),["Polo Norte","Polo Sur"],"los dos subbiomas son Norte y Sur");
 assert.deepEqual(polar.subbiomes.map(s=>s.name.en),["North Pole","South Pole"],"ambos subbiomas tienen nombre inglés");
 assert(!catalog.biomes.some(b=>b.id==="polar_north"||b.id==="polar_south"),"no mantener polos como biomas independientes");
-assert(polar.subbiomes.every(s=>!s.spawn&&!s.description&&!s.distribution),"no asignar clima ni altura de polos antes de aprobar su diseño");
+const northIce=polar.subbiomes.find(s=>s.id==="polar_north_ice");
+const southIce=polar.subbiomes.find(s=>s.id==="polar_south_ice");
+assert(northIce&&southIce,"deben existir ambos polos");
+assert(northIce.description.es.includes("parte superior")&&northIce.description.en.includes("top"),"Polo Norte solo en extremo superior");
+assert(northIce.description.es.includes("hielo marino flotante")&&northIce.description.en.includes("floating sea ice"),"Polo Norte es hielo sobre océano");
+assert.deepEqual(northIce.spawn.required,{
+  terrain:"water",waterDepthMeters:{min:0,max:6000},waterSalinityPpt:{min:25,max:35},meanAnnualTemperatureC:{min:-2,max:1}
+},"condiciones requeridas de Polo Norte");
+assert.deepEqual(northIce.spawn.preferred,{
+  absoluteLatitudeDegrees:{min:75,max:90},meanAnnualTemperatureC:{min:-2,max:0},waterSalinityPpt:{min:30,max:34}
+},"preferencias de Polo Norte");
+assert.deepEqual(northIce.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:1},"Polo Norte exige una sola masa conectada");
+assert(!Object.hasOwn(northIce.spawn.required,"elevationLevel"),"Polo Norte no introduce altura terrestre sobre agua");
+assert(!Object.hasOwn(northIce.spawn.required,"absoluteLatitudeDegrees"),"la latitud absoluta no sustituye la ubicación obligatoria en hemisferio norte");
+assert(!southIce.spawn&&!southIce.description&&!southIce.distribution,"Polo Sur permanece sin aprobar");
 
 assert(forest,"falta Bosque");
 assert.deepEqual(forest.subbiomes.map(x=>x.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp"]);
@@ -43,7 +57,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,18,"7 bosques, 3 desiertos, 4 Llanuras y los 4 Marinos tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,19,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y Polo Norte tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -181,9 +195,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,18,"7 bosques, 3 desiertos, 4 Llanuras y los 4 Marinos tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,18);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,5);
+assert.equal(allSubbiomes.filter(x=>x.description).length,19,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y Polo Norte tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,19);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,4);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -474,7 +488,16 @@ assert(!Object.hasOwn(plottedOcean,"elevation"),"Océano no usa altura terrestre
 assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiquetar profundidad del océano");
 assert(chartSource.includes("deepMarine?y0+"),"la profundidad marina debe crecer hacia abajo y ampliar los 0–50 m");
 assert(chartSource.includes("paintOrder"),"regiones profundas detrás de los hábitats someros");
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine")){
+const polarChart=chartAPI.getData(polar);
+assert.equal(polarChart.defined.length,1,"Polo Norte debe verse en gráfica polar");
+assert.equal(polarChart.pending.length,1,"Polo Sur permanece pendiente en gráfica polar");
+assert.equal(polarChart.defined[0].id,"polar_north_ice");
+assert.deepEqual(polarChart.defined[0].depth,{min:0,max:6000},"Polo Norte muestra batimetría en metros");
+assert.deepEqual(polarChart.defined[0].latitude,{min:75,max:90},"Polo Norte muestra 75–90 grados");
+assert(!Object.hasOwn(polarChart.defined[0],"elevation"),"Polo Norte no debe tener altitud terrestre");
+assert(chartSource.includes('biome?.id==="polar"'),"Polo debe tener vistas separadas");
+assert(chartSource.includes('id:"polar_land"'),"Polo Sur debe utilizar eje de altura Evolve");
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine"&&b.id!=="polar")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
   assert.equal(result.pending.length,biome.subbiomes.length);
@@ -486,4 +509,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 7 biomas, 23 subbiomas; Polo unificado con Norte y Sur, 18 definidos y 5 pendientes");
+console.log("PASS: 7 biomas, 23 subbiomas; Polo Norte una sola masa arriba, 19 definidos y 4 pendientes");
