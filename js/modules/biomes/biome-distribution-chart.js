@@ -18,7 +18,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       pending: "Distribución pendiente de definición.",
       missing: "Subbiomas pendientes de definición",
       note: "Las áreas representan la altura requerida y la latitud preferida de cada subbioma. Las zonas superpuestas pueden corresponder a varios subbiomas; el clima y las demás condiciones de generación determinan cuál aparece.",
-      marineNote: "Las áreas representan la profundidad requerida en metros y la latitud preferida. La profundidad aumenta hacia abajo; salinidad y temperatura determinan qué subbioma puede aparecer."
+      marineNote: "Las áreas representan profundidad requerida (metros) y latitud preferida. La profundidad aumenta hacia abajo; con océano profundo se amplía el tramo de 0–50 m y se comprime el de 50 m al fondo, por lo que el eje no es lineal. Salinidad y temperatura ayudan a determinar dónde aparece cada subbioma."
     },
     en: {
       title: "Subbiome distribution — Latitude and elevation",
@@ -35,7 +35,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       pending: "Distribution pending definition.",
       missing: "Subbiomes pending definition",
       note: "Areas represent the required elevation and preferred latitude of each subbiome. Overlapping zones may correspond to multiple subbiomes; climate and other generation conditions determine which one appears.",
-      marineNote: "Areas represent required water depth in meters and preferred latitude. Depth increases downward; salinity and temperature determine which subbiome can occur."
+      marineNote: "Areas represent required depth (meters) and preferred latitude. Depth increases downward; when deep ocean is present, the 0–50 m zone is expanded and the 50 m-to-bottom zone compressed, so the vertical axis is not linear. Salinity and temperature help determine where each subbiome may occur."
     }
   };
   function validRange(range, min, max) {
@@ -80,6 +80,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const data=getData(biome);
     const marine=biome?.id==="marine";
     const maximum=marine?Math.max(50,...data.defined.map(x=>x.depth.max)):100;
+    const deepMarine=marine&&maximum>50;
     const vertical=x=>marine?x.depth:x.elevation;
     host.replaceChildren();
     const section=host.appendChild(node("section","biome-distribution"));
@@ -102,15 +103,20 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const svg=svgNode("svg",{viewBox:"0 0 840 455",role:"img","aria-label":marine?t.marineTitle:t.title,"preserveAspectRatio":"xMidYMid meet"});
     chart.appendChild(svg);
     const x0=88,y0=26,w=710,h=340;
-    const px=v=>x0+v/90*w,py=v=>marine?y0+v/maximum*h:y0+(100-v)/100*h;
+    const px=v=>x0+v/90*w;
+    // When deep-sea ranges are present, reserve 40% of the plot for 0–50 m.
+    // This retains visible reef and mangrove areas while still displaying 0–11,000 m.
+    const py=v=>!marine?y0+(100-v)/100*h:
+      deepMarine?y0+(v<=50?(v/50)*.4:(.4+(v-50)/(maximum-50)*.6))*h:
+      y0+v/maximum*h;
     appendSvg(svg,"rect",{x:x0,y:y0,width:w,height:h,fill:"#f8fbff",stroke:"#d6e2ef"});
     for(let x=0;x<=90;x+=15){
       appendSvg(svg,"line",{x1:px(x),y1:y0,x2:px(x),y2:y0+h,stroke:"#dce7f3","stroke-width":1});
       appendSvg(svg,"text",{x:px(x),y:y0+h+22,"text-anchor":"middle",class:"distribution-tick"},x+"°");
     }
-    for(let i=0;i<=5;i++){
-      const y=maximum*i/5;
-      appendSvg(svg,"line",{x1:x0,y1:py(y),x2:x0+w,y2:py(y),stroke:"#dce7f3","stroke-width":1});
+    const ticks=deepMarine?[0,10,25,50,2000,6000,maximum]:Array.from({length:6},(_,i)=>maximum*i/5);
+    for(const y of [...new Set(ticks)]){
+      appendSvg(svg,"line",{x1:x0,y1:py(y),x2:x0+w,y2:py(y),stroke:deepMarine&&y===50?"#8294aa":"#dce7f3","stroke-width":deepMarine&&y===50?2:1,"stroke-dasharray":deepMarine&&y===50?"5 4":"none"});
       appendSvg(svg,"text",{x:x0-12,y:py(y)+4,"text-anchor":"end",class:"distribution-tick"},format(y,lang));
     }
     const layer=appendSvg(svg,"g",{"aria-label":t.subtitle});
@@ -141,6 +147,11 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       entry.addEventListener("click",()=>highlight(sub.id));
       buttons.set(sub.id,entry);
     }
+    // Paint the largest ranges first so shallow coastal habitats remain visible.
+    const paintOrder=[...data.defined].sort((a,b)=>{
+      const area=s=>(s.latitude.max-s.latitude.min)*(py(vertical(s).max)-py(vertical(s).min));
+      return area(b)-area(a);
+    });
     function highlight(id){
       select.value=id;
       for(const sub of data.defined){
@@ -154,7 +165,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
         buttons.get(sub.id).setAttribute("aria-pressed",String(id===sub.id));
       }
       // Draw the highlighted area last so it remains visible wherever ranges overlap.
-      for(const sub of data.defined)if(sub.id!==id)layer.appendChild(rects.get(sub.id));
+      for(const sub of paintOrder)if(sub.id!==id)layer.appendChild(rects.get(sub.id));
       if(id)layer.appendChild(rects.get(id));
     }
     select.addEventListener("change",()=>highlight(select.value));
