@@ -894,6 +894,47 @@
           "name": {
             "es": "Océano abierto (alta mar)",
             "en": "Open ocean (high seas)"
+          },
+          "description": {
+            "es": "Grandes extensiones oceánicas alejadas de las costas, inspiradas principalmente en el océano Pacífico, con horizontes de agua azul intensa, oleaje y grandes cuencas interconectadas. Incluye variantes tropicales, templadas y frías, sin crear subbiomas separados. Bajo la superficie, la columna de agua se oscurece con la profundidad y alberga fauna pelágica adaptada a distintas condiciones. El fondo puede alcanzar desde aguas relativamente someras hasta fosas de unos 11.000 metros, pero las formas costeras, arrecifales y manglares conservan sus biomas propios cuando corresponda. La temperatura declarada representa el agua superficial, no la temperatura de toda la columna. Una gran masa oceánica conectada es preferible a dividir artificialmente los océanos por sus nombres geográficos. La proximidad a la costa y la continuidad del océano se deducirán del mapa, sin añadir parámetros de aparición.",
+            "en": "Vast offshore ocean expanses primarily inspired by the Pacific Ocean, with deep blue open-water horizons, waves and large interconnected basins. Tropical, temperate and cold seas are visual variants within the same subbiome. Beneath the surface, the water column darkens with depth and supports pelagic wildlife adapted to different environments. The seafloor may range from relatively shallow water to trenches around 11,000 meters deep, while coastal, reef and mangrove habitats retain their own classifications when appropriate. The declared temperature refers to surface seawater rather than the entire water column. One large connected oceanic region is preferred over artificially separating oceans by their geographical names. Offshore location and ocean connectivity will be derived from the map without adding spawn parameters."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "water",
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 11000
+              },
+              "waterSalinityPpt": {
+                "min": 30,
+                "max": 40
+              },
+              "meanAnnualTemperatureC": {
+                "min": -2,
+                "max": 32
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 90
+              },
+              "waterDepthMeters": {
+                "min": 200,
+                "max": 6000
+              },
+              "waterSalinityPpt": {
+                "min": 33,
+                "max": 37
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": 3
           }
         }
       ]
