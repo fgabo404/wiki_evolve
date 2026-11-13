@@ -32,7 +32,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos**, los **4 subbiomas de Llanuras** y los **4 subbiomas de Marino** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **5 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
+**Estado actual (2026-11-13):** 7 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos**, los **4 subbiomas de Llanuras** y los **4 subbiomas de Marino** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **5 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
 
 **Criterio visual de Bosque templado (2026-11-09):** se representa como bosque europeo caducifolio o mixto, con hayas, robles y cambios estacionales; esto no restringe la aparición del subbioma a Europa. Su `spawn` no cambió. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
@@ -58,7 +58,7 @@ La gráfica es una referencia ambiental, no una predicción exacta de aparición
 
 Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
 
-**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos, los 4 subbiomas de Llanuras y los 4 subbiomas de Marino con definición; 5 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+**Estado del catálogo:** 7 biomas y 23 subbiomas; 7 bosques, 3 desiertos, los 4 subbiomas de Llanuras y los 4 subbiomas de Marino con definición; 5 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
 
 ## Llanuras — revisión gradual (2026-11-09)
 
@@ -119,3 +119,9 @@ Su `distribution` conserva porcentaje oceánico pendiente y **1–3 masas**, pre
 ## Escala de altura oficial y profundidad marina (2026-11-13)
 
 **El sistema de altura del mundo siempre utiliza niveles normalizados de 0 a 100**: 0 es la referencia del nivel del mar y 1–100 son alturas terrestres relativas, **no metros**. El parámetro marino `waterDepthMeters` permanece separado y expresa profundidad física en metros positivos hacia abajo; por ejemplo, los 11.000 m del Océano abierto **no son una altura Evolve de 11.000**. La gráfica de latitud/profundidad marina es una visualización especializada y **no reemplaza la escala oficial de altura 0–100**. No se establece ninguna conversión adicional ni se cambian los rangos aprobados. Ver [docs/MARINO.md](docs/MARINO.md).
+
+## Polo — categoría unificada Norte y Sur (2026-11-13)
+
+Los antiguos biomas principales **Polo Norte** y **Polo Sur** se agrupan bajo **un solo bioma: Polo** (`polar`), con **exactamente dos subbiomas: Polo Norte** (`polar_north_ice`) y **Polo Sur** (`polar_south_ice`). Los IDs de subbioma se conservan; solo cambian su categoría padre y sus etiquetas visibles. Los enlaces antiguos `#biome=polar_north` y `#biome=polar_south` se redirigen a las fichas correspondientes.
+
+**No se han asignado condiciones de aparición sin aprobar.** El Polo Norte se encuentra sobre el océano Ártico y tiene hielo marino flotante; el Polo Sur se ubica sobre la Antártida continental cubierta de hielo terrestre. Sus diferencias climáticas, geográficas, reglas de aparición y distribución se definirán por separado. **La altura del mundo sigue siendo la escala 0–100**, no metros. El gráfico inferior de la Wiki marcará ambos subbiomas como pendientes hasta definir sus intervalos. Se conservan **23 subbiomas**, con **18 definidos y 5 pendientes**. El nuevo generador de `fgabo404/Evolve` no se modifica. Ver [docs/POLO.md](docs/POLO.md).
