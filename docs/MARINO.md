@@ -9,11 +9,11 @@
 | ID | Subbioma | Estado |
 |---|---|---|
 | `marine_reef` | Arrecife | **Aprobado** |
-| `marine_estuary_littoral` | Estuario o litoral | Pendiente |
+| `marine_estuary_littoral` | Estuario o litoral | **Aprobado** |
 | `marine_mangrove` | Manglar | Pendiente |
 | `marine_open_ocean` | Océano abierto (alta mar) | Pendiente |
 
-**Alcance:** esta fase define arrecifes de coral tropicales, sin crear nuevos subbiomas, editar otros biomas ni modificar el generador de `fgabo404/Evolve`.
+**Alcance:** se han definido Arrecife y Estuario o litoral sin subdividir el catálogo ni modificar el generador de `fgabo404/Evolve`. Manglar y Océano abierto permanecen pendientes.
 
 ## 1. Apariencia de Arrecife
 
@@ -63,11 +63,62 @@ Se proponen **4–8 masas regionales conectadas** en mundos con condiciones mari
 
 La ficha de Arrecife muestra los mismos grupos `required` y `preferred` de los biomas terrestres; los campos adicionales muestran unidades **m** y **‰** con etiquetas bilingües.
 
-La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario, Manglar y Alta mar permanecen sin rectángulos mientras no tengan definiciones.
+La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario o litoral también se dibuja entre 0–90° y 0–50 m. Manglar y Alta mar permanecen sin rectángulos mientras no tengan definiciones.
 
 ## 6. Límites de esta fase
 
 - Es una **definición de diseño**, todavía no implementada en Engine.
-- No se modifican los subbiomas pendientes ni otros grupos de biomas.
+- No se modifican los subbiomas pendientes (Manglar y Océano abierto) ni otros grupos de biomas.
 - La exactitud de profundidad física, salinidad y temperatura dependerá de que el generador calcule esos campos.
 - El comportamiento estacional o dinámico del coral queda para etapas futuras.
+
+
+## Estuario o litoral — `marine_estuary_littoral` (aprobado 2026-11-12)
+
+### 1. Apariencia
+
+**Referencia visual principal: costa rocosa.** Costas con rocas expuestas al oleaje, acantilados, pozas de marea, algas, aguas someras y pequeñas ensenadas. **Costas arenosas, bahías y marismas** son variantes geográficas y visuales del mismo subbioma, no subdivisiones adicionales.
+
+**Referencia estuarina: bahía de Chesapeake (Estados Unidos).** Desembocaduras, canales, marismas y mezcla variable de agua dulce fluvial y agua salada marina. Los ambientes estuarinos y litorales se **combinan deliberadamente en un solo subbioma** por la resolución actual de la cuadrícula de Evolve.
+
+### 2. Condiciones de aparición
+
+| Parámetro | `spawn.required` | `spawn.preferred` |
+|---|---|---|
+| Terreno (`terrain`) | `water` | — |
+| Profundidad (`waterDepthMeters`) | **0–50 m** | **0–20 m** |
+| Salinidad (`waterSalinityPpt`) | **0–40 ‰** | — |
+| Temperatura media anual del agua (`meanAnnualTemperatureC`) | **−2 a 35 °C** | — |
+| Latitud absoluta (`absoluteLatitudeDegrees`) | — | **0–90°** (distribución global) |
+| Precipitación atmosférica | Sin límite establecido | — |
+
+Los **únicos parámetros marinos añadidos** a la estructura habitual siguen siendo `waterDepthMeters` y `waterSalinityPpt`, reutilizados desde Arrecife. Terreno, temperatura y latitud usan las claves comunes. Estos rangos son aproximaciones de diseño: estuarios tropicales y costas frías pueden coexistir dentro de la misma categoría. Salinidad 0–40 ‰ evita excluir el agua poco salina de desembocaduras y las costas con salinidad oceánica ordinaria.
+
+**Regla de emplazamiento geográfico, sin campo nuevo:** la celda marina debe encontrarse junto a una costa continental o insular o en una desembocadura reconocible. Esta condición será inferida de la geometría costera, conectividad de hexágonos y red fluvial en el motor futuro; **no se añade** un indicador propio de proximidad costera, estuario, distancia a costa ni sedimentos dentro de `spawn`. El mero cumplimiento de temperatura, profundidad y salinidad sin costa cercana **no convierte automáticamente** un punto del océano abierto en litoral.
+
+### 3. Distribución geográfica y masas
+
+Se prefieren **franjas costeras continuas** que puedan rodear grandes continentes y archipiélagos. No subdividir artificialmente un litoral continuo solo para alcanzar un número de masas.
+
+```json
+"distribution": {
+  "targetLandPercent": null,
+  "percentBasis": "unavailable",
+  "minRegions": 1,
+  "maxRegions": 8
+}
+```
+
+**1–8** es la **propuesta preliminar** de cantidad de regiones conectadas en mundos con zonas costeras adecuadas, no una medida empírica de la Tierra. Si el trazado natural crea más regiones en un mundo de muchas islas, el límite deberá reconsiderarse durante el diseño del generador: está prohibido romper o unir arbitrariamente costas reales para cumplirlo. Un mundo con condiciones inviables tampoco debe generar una franja ficticia para satisfacer el mínimo. La superficie oceánica permanece pendiente y no se inventa un porcentaje.
+
+### 4. Comparación con Arrecife y representación
+
+- **Arrecife:** preferencia tropical 0–30°; corales tropicales y atolones; salinidad 32–42 ‰ y condiciones térmicas cálidas. Puede solaparse espacialmente con zonas costeras apropiadas.
+- **Estuario o litoral:** distribución latitudinal mundial 0–90°, mezcla amplia de salinidades, costas rocosas o arenosas y desembocaduras, sin requerir coral.
+- **Manglar:** pendiente de definición. La prioridad entre estas categorías se resolverá en el futuro sistema de clasificación, sin imponer ahora una jerarquía no aprobada.
+
+La gráfica existente muestra **dos rectángulos** para Marino: Arrecife y Estuario o litoral. Ambos usan la misma escala física de profundidad en metros y latitud absoluta. No se modifica la gráfica de biomas terrestres ni se añade imagen PNG.
+
+### 5. Estado técnico
+
+Definición **declarativa** del catálogo y documentación de la Wiki. No implica que Engine calcule salinidad, batimetría, conectividad costera o clasificadores de desembocaduras. La adaptación del generador y la posible división posterior de litorales/estuarios quedan fuera de esta aprobación.
