@@ -10,10 +10,10 @@
 |---|---|---|
 | `marine_reef` | Arrecife | **Aprobado** |
 | `marine_estuary_littoral` | Estuario o litoral | **Aprobado** |
-| `marine_mangrove` | Manglar | Pendiente |
+| `marine_mangrove` | Manglar | **Aprobado** |
 | `marine_open_ocean` | Océano abierto (alta mar) | Pendiente |
 
-**Alcance:** se han definido Arrecife y Estuario o litoral sin subdividir el catálogo ni modificar el generador de `fgabo404/Evolve`. Manglar y Océano abierto permanecen pendientes.
+**Alcance:** se han definido Arrecife, Estuario o litoral y Manglar sin subdividir el catálogo ni modificar el generador de `fgabo404/Evolve`. Océano abierto permanece pendiente.
 
 ## 1. Apariencia de Arrecife
 
@@ -63,12 +63,12 @@ Se proponen **4–8 masas regionales conectadas** en mundos con condiciones mari
 
 La ficha de Arrecife muestra los mismos grupos `required` y `preferred` de los biomas terrestres; los campos adicionales muestran unidades **m** y **‰** con etiquetas bilingües.
 
-La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario o litoral también se dibuja entre 0–90° y 0–50 m. Manglar y Alta mar permanecen sin rectángulos mientras no tengan definiciones.
+La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario o litoral se dibuja entre 0–90° y 0–50 m; Manglar se dibuja entre 0–30° y 0–5 m. Alta mar permanece sin rectángulo hasta que se defina.
 
 ## 6. Límites de esta fase
 
 - Es una **definición de diseño**, todavía no implementada en Engine.
-- No se modifican los subbiomas pendientes (Manglar y Océano abierto) ni otros grupos de biomas.
+- No se modifica el subbioma pendiente (Océano abierto) ni otros grupos de biomas.
 - La exactitud de profundidad física, salinidad y temperatura dependerá de que el generador calcule esos campos.
 - El comportamiento estacional o dinámico del coral queda para etapas futuras.
 
@@ -115,10 +115,67 @@ Se prefieren **franjas costeras continuas** que puedan rodear grandes continente
 
 - **Arrecife:** preferencia tropical 0–30°; corales tropicales y atolones; salinidad 32–42 ‰ y condiciones térmicas cálidas. Puede solaparse espacialmente con zonas costeras apropiadas.
 - **Estuario o litoral:** distribución latitudinal mundial 0–90°, mezcla amplia de salinidades, costas rocosas o arenosas y desembocaduras, sin requerir coral.
-- **Manglar:** pendiente de definición. La prioridad entre estas categorías se resolverá en el futuro sistema de clasificación, sin imponer ahora una jerarquía no aprobada.
+- **Manglar:** definido como bosque intermareal tropical y subtropical; prevalece su identidad forestal y de mareas sobre la apariencia de costa rocosa de Estuario. La prioridad entre estas categorías se resolverá en el futuro sistema de clasificación, sin imponer ahora una jerarquía no aprobada.
 
-La gráfica existente muestra **dos rectángulos** para Marino: Arrecife y Estuario o litoral. Ambos usan la misma escala física de profundidad en metros y latitud absoluta. No se modifica la gráfica de biomas terrestres ni se añade imagen PNG.
+La gráfica existente muestra **tres rectángulos** para Marino: Arrecife, Estuario o litoral y Manglar. Ambos usan la misma escala física de profundidad en metros y latitud absoluta. No se modifica la gráfica de biomas terrestres ni se añade imagen PNG.
 
 ### 5. Estado técnico
 
 Definición **declarativa** del catálogo y documentación de la Wiki. No implica que Engine calcule salinidad, batimetría, conectividad costera o clasificadores de desembocaduras. La adaptación del generador y la posible división posterior de litorales/estuarios quedan fuera de esta aprobación.
+
+
+## Manglar — `marine_mangrove` (aprobado 2026-11-13)
+
+### 1. Apariencia y referencias
+
+**Referencia principal: Sundarbans, Bangladesh e India.** Se busca un gran bosque verde intermareal surcado por canales sinuosos, ríos de marea, bancos de lodo e islas con vegetación arbórea densa. Como variante visual se admiten **raíces aéreas prominentes** similares a las de manglares tropicales de Florida, aguas someras y franjas forestales alrededor de bahías protegidas e islas.
+
+El color del agua puede variar entre pardo y turquesa por condiciones locales; no se crean subbiomas nuevos. Manglar sigue dentro de **Marino** y no debe duplicarse bajo Bosque.
+
+### 2. Condiciones de aparición
+
+| Parámetro | `spawn.required` | `spawn.preferred` |
+|---|---|---|
+| Terreno (`terrain`) | `water` | — |
+| Profundidad costera (`waterDepthMeters`) | **0–5 m** | **0–2 m** |
+| Salinidad del agua (`waterSalinityPpt`) | **0–40 ‰** | **5–30 ‰** |
+| Temperatura media anual (`meanAnnualTemperatureC`) | **20–30 °C** | **24–28 °C** |
+| Latitud absoluta (`absoluteLatitudeDegrees`) | — | **0–30°** |
+| Precipitación atmosférica | Sin requisito universal | — |
+
+Se reutiliza el contrato ya introducido para Arrecife y Estuario. **Los únicos parámetros marinos nuevos en el catálogo siguen siendo profundidad y salinidad**; el resto usa nombres compartidos con los biomas anteriores. Estos valores son rangos de diseño, no límites ecológicos universales.
+
+**Interpretación crítica de profundidad:** el manglar crece sobre **sustrato intermareal**, expuesto o inundado según las mareas. El rango físico 0–5 m representa un entorno costero somero en el hexágono y **no significa árboles sumergidos permanentemente bajo cinco metros de agua**. Cuando Engine disponga de nivel de marea y topografía litoral deberán refinarse los criterios, sin reescribir por ahora las reglas aprobadas.
+
+### 3. Distribución geográfica
+
+Favorecer grandes deltas, estuarios, costas protegidas, bahías someras y franjas de islas tropicales. Esos emplazamientos se reconocerán a partir de la forma del litoral, los ríos y la conectividad del mundo, **sin añadir campos nuevos en `spawn`**. La latitud 0–30° es **preferida**, no un límite global rígido: pueden existir manglares subtropicales fuera de ella cuando el clima lo permite.
+
+### 4. Masas conectadas y porcentaje
+
+```json
+"distribution": {
+  "targetLandPercent": null,
+  "percentBasis": "unavailable",
+  "minRegions": 2,
+  "maxRegions": 6
+}
+```
+
+Se aprueban **2–6 sistemas regionales** conectados en mundos con condiciones adecuadas. Una gran masa puede representar un sistema deltaico como Sundarbans y otra una franja costera o insular. No se inventan masas en regiones inviables ni se fija un tamaño artificial de cada bosque. El porcentaje oceánico permanece sin definir; `targetLandPercent:null` es el campo común heredado por compatibilidad y **no debe interpretarse como porcentaje terrestre de Manglar**.
+
+### 5. Comparación
+
+| Característica | Manglar | Estuario o litoral | Pantano arbolado |
+|---|---|---|---|
+| Apariencia | Bosque costero con raíces adaptadas | Costas rocosas/arenosas, bahías, desembocaduras | Bosques de humedal |
+| Régimen del agua | Mareas e inundación intermareal | Oleaje, mareas, mezcla fluvial | Saturación o inundación de agua dulce |
+| Entorno preferido | Costas y deltas tropicales | Costas de todo el mundo | Depresiones y humedales terrestres |
+| Clasificación | Marino | Marino | Bosque |
+| Masas | **2–6** | 1–8, provisional | 1–2 |
+
+### 6. Visualización y estado técnico
+
+La gráfica SVG reutilizable de Marino muestra ahora Arrecife, Estuario o litoral y Manglar. Manglar aparece en latitudes preferidas **0–30°** y profundidad requerida **0–5 m**, con profundidad positiva hacia abajo. No requiere cambios en la gráfica ni en los campos de la ficha bilingüe: `waterDepthMeters` y `waterSalinityPpt` ya tienen etiquetas/unidades.
+
+**Solo definición teórica:** el nuevo Engine aún no calcula la hidrología intermareal ni genera este bosque. No se introducen tipos, parámetros ni subbiomas extra.
