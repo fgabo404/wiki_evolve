@@ -45,7 +45,18 @@ assert.deepEqual(northIce.spawn.preferred,{
 assert.deepEqual(northIce.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:1},"Polo Norte exige una sola masa conectada");
 assert(!Object.hasOwn(northIce.spawn.required,"elevationLevel"),"Polo Norte no introduce altura terrestre sobre agua");
 assert(!Object.hasOwn(northIce.spawn.required,"absoluteLatitudeDegrees"),"la latitud absoluta no sustituye la ubicación obligatoria en hemisferio norte");
-assert(!southIce.spawn&&!southIce.description&&!southIce.distribution,"Polo Sur permanece sin aprobar");
+assert(southIce.description.es.includes("parte inferior")&&southIce.description.en.includes("bottom"),"Polo Sur se ubica en el extremo inferior");
+assert(southIce.description.es.includes("masa continental")&&southIce.description.en.includes("landmass"),"Polo Sur debe ser continente helado");
+assert.deepEqual(southIce.spawn.required,{
+ terrain:"land",elevationLevel:{min:1,max:100},meanAnnualTemperatureC:{min:-60,max:0}
+},"Polo Sur mantiene elevación terrestre 1–100 y temperatura aprobada");
+assert.deepEqual(southIce.spawn.preferred,{
+ absoluteLatitudeDegrees:{min:65,max:90},elevationLevel:{min:25,max:75},meanAnnualTemperatureC:{min:-55,max:-15}
+},"Preferencias del Polo Sur aprobadas");
+assert.deepEqual(southIce.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:1},"Polo Sur debe ser una sola masa continental");
+assert(!Object.hasOwn(southIce.spawn.required,"waterDepthMeters"),"Polo Sur no utiliza profundidad oceánica");
+assert(!Object.hasOwn(southIce.spawn.required,"absoluteLatitudeDegrees"),"La latitud absoluta no sustituye hemisferio sur");
+assert.equal(southIce.spawn.required.terrain,"land","Polo Sur es continente, no océano");
 
 assert(forest,"falta Bosque");
 assert.deepEqual(forest.subbiomes.map(x=>x.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp"]);
@@ -57,7 +68,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,19,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y Polo Norte tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,20,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y ambos Polos tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -107,7 +118,7 @@ function getMountainPlacement(id){return forest.subbiomes.find(s=>s.id===id).reg
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.maxRegions},{min:2,max:4},"templado debe tener 2–4 masas");
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.maxRegions},{min:1,max:2},"pantano arbolado debe tener 1–2 masas");
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
-assert(catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains").flatMap(b=>b.subbiomes).every(s=>!s.distribution),"no asignar distribución a biomas pendientes");
+assert(allSubbiomes.filter(s=>!s.spawn).every(s=>!s.distribution),"no asignar distribución a subbiomas pendientes");
 const desertDistributionById={
  desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
  desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
@@ -195,9 +206,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,19,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y Polo Norte tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,19);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,4);
+assert.equal(allSubbiomes.filter(x=>x.description).length,20,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y ambos Polos tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,20);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,3);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -489,12 +500,17 @@ assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiq
 assert(chartSource.includes("deepMarine?y0+"),"la profundidad marina debe crecer hacia abajo y ampliar los 0–50 m");
 assert(chartSource.includes("paintOrder"),"regiones profundas detrás de los hábitats someros");
 const polarChart=chartAPI.getData(polar);
-assert.equal(polarChart.defined.length,1,"Polo Norte debe verse en gráfica polar");
-assert.equal(polarChart.pending.length,1,"Polo Sur permanece pendiente en gráfica polar");
+assert.equal(polarChart.defined.length,2,"ambos polos deben verse en la gráfica polar");
+assert.equal(polarChart.pending.length,0,"Polo queda completamente definido en gráfica");
 assert.equal(polarChart.defined[0].id,"polar_north_ice");
 assert.deepEqual({min:polarChart.defined[0].depth.min,max:polarChart.defined[0].depth.max},{min:0,max:6000},"Polo Norte muestra batimetría en metros");
 assert.deepEqual({min:polarChart.defined[0].latitude.min,max:polarChart.defined[0].latitude.max},{min:75,max:90},"Polo Norte muestra 75–90 grados");
 assert(!Object.hasOwn(polarChart.defined[0],"elevation"),"Polo Norte no debe tener altitud terrestre");
+const plottedSouth=polarChart.defined.find(x=>x.id==="polar_south_ice");
+assert(plottedSouth,"Polo Sur debe figurar en la gráfica");
+assert.deepEqual({min:plottedSouth.latitude.min,max:plottedSouth.latitude.max},{min:65,max:90},"Latitud de Polo Sur");
+assert.deepEqual({min:plottedSouth.elevation.min,max:plottedSouth.elevation.max},{min:1,max:100},"Escala Evolve para Polo Sur");
+assert(!Object.hasOwn(plottedSouth,"depth"),"Polo Sur no tiene profundidad marina");
 assert(chartSource.includes('biome?.id==="polar"'),"Polo debe tener vistas separadas");
 assert(chartSource.includes('id:"polar_land"'),"Polo Sur debe utilizar eje de altura Evolve");
 for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine"&&b.id!=="polar")){
@@ -509,4 +525,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 7 biomas, 23 subbiomas; Polo Norte una sola masa arriba, 19 definidos y 4 pendientes");
+console.log("PASS: 7 biomas, 23 subbiomas; ambos Polos aprobados (una masa cada uno), 20 definidos y 3 pendientes");
