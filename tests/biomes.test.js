@@ -22,8 +22,17 @@ for(const sub of allSubbiomes){
 }
 
 const forest=catalog.biomes.find(b=>b.id==="forest");
-assert.equal(catalog.biomes.length,8,"deben conservarse ocho biomas");
+assert.equal(catalog.biomes.length,7,"Polo agrupa Norte y Sur: deben existir siete biomas");
 assert.equal(allSubbiomes.length,23,"deben existir 23 subbiomas");
+const polar=catalog.biomes.find(b=>b.id==="polar");
+assert(polar,"debe existir el nuevo bioma Polo");
+assert.deepEqual(polar.name,{es:"Polo",en:"Pole"},"nombre de bioma Polo debe ser bilingüe");
+assert.deepEqual(polar.subbiomes.map(s=>s.id),["polar_north_ice","polar_south_ice"],"conservar identificadores previos de ambos polos");
+assert.deepEqual(polar.subbiomes.map(s=>s.name.es),["Polo Norte","Polo Sur"],"los dos subbiomas son Norte y Sur");
+assert.deepEqual(polar.subbiomes.map(s=>s.name.en),["North Pole","South Pole"],"ambos subbiomas tienen nombre inglés");
+assert(!catalog.biomes.some(b=>b.id==="polar_north"||b.id==="polar_south"),"no mantener polos como biomas independientes");
+assert(polar.subbiomes.every(s=>!s.spawn&&!s.description&&!s.distribution),"no asignar clima ni altura de polos antes de aprobar su diseño");
+
 assert(forest,"falta Bosque");
 assert.deepEqual(forest.subbiomes.map(x=>x.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp"]);
 assert(!allSubbiomes.some(x=>x.id==="forest_subtropical"),"Bosque subtropical no debe reaparecer");
@@ -334,6 +343,10 @@ assert(nav.includes("wiki-biome-tree"));
 assert(!nav.includes("wiki-subbiome-tree"),"Los subbiomas deben mostrarse en el contenido");
 assert(nav.includes("router.go(biome.id)"));
 assert(nav.includes("router.go(b.id,sub.id)"));
+const routerSource=read("js/router.js");
+assert(routerSource.includes("polar_north:\"polar_north_ice\""),"enlaces anteriores del Polo Norte deben redirigir al subbioma");
+assert(routerSource.includes("polar_south:\"polar_south_ice\""),"enlaces anteriores del Polo Sur deben redirigir al subbioma");
+
 
 const chartSource=read("js/modules/biomes/biome-distribution-chart.js");
 assert(html.includes('src="./js/modules/biomes/biome-distribution-chart.js"'),"el HTML debe cargar el componente");
@@ -473,4 +486,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras + 4 Marinos definidos; 5 subbiomas pendientes");
+console.log("PASS: 7 biomas, 23 subbiomas; Polo unificado con Norte y Sur, 18 definidos y 5 pendientes");
