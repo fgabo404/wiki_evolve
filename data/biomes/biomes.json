@@ -798,6 +798,43 @@
           "name": {
             "es": "Estuario o litoral",
             "en": "Estuary or littoral"
+          },
+          "description": {
+            "es": "Ambiente marino costero que combina estuarios y litorales en un solo subbioma, debido a la resolución actual de la cuadrícula de Evolve. Su referencia visual principal es la costa rocosa: acantilados, rocas expuestas al oleaje, pozas de marea, algas y aguas someras. Incluye litorales arenosos, bahías y ensenadas como variantes visuales; la bahía de Chesapeake (Estados Unidos) sirve de referencia estuarina, donde las desembocaduras mezclan agua dulce y salada y pueden formarse marismas y canales. Aparece como una franja costera continua donde la geografía y la profundidad lo permiten, incluso alrededor de grandes continentes; la clasificación de desembocadura o litoral se deriva del mapa, sin crear un parámetro nuevo. Se diferencia del arrecife tropical por no exigir sus condiciones coralinas particulares.",
+            "en": "A marine coastal environment combining estuaries and littoral zones in one subbiome because of Evolve's current hex-grid resolution. Its primary visual reference is a rocky coastline: cliffs, wave-washed rocks, tidal pools, seaweed and shallow seawater. Sandy shores, bays and coves are visual variants; Chesapeake Bay (United States) provides the estuarine reference, where river mouths mix fresh and saline water and can form marshes and channels. It appears as continuous coastal belts wherever geography and water depth allow, including around large continents; estuarine or littoral placement derives from the map without introducing a new spawn parameter. Unlike tropical reefs, it does not require their distinct coral-favoring conditions."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "water",
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 50
+              },
+              "waterSalinityPpt": {
+                "min": 0,
+                "max": 40
+              },
+              "meanAnnualTemperatureC": {
+                "min": -2,
+                "max": 35
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 90
+              },
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 20
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": 8
           }
         },
         {
