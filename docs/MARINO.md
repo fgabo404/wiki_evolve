@@ -4,6 +4,14 @@
 **Rama:** `develop`  
 **Catálogo canónico:** [`data/biomes/biomes.json`](../data/biomes/biomes.json)
 
+## Escalas oficiales de Evolve (aclaración 2026-11-13)
+
+**Invariante del mundo: la altura de Evolve siempre se expresa en la escala normalizada 0–100.** El nivel **0** representa el nivel del mar como referencia y los niveles terrestres **1–100** describen la elevación relativa. Esta escala **no equivale a metros** y no se sustituye, reescala ni amplía a 11.000 por existir zonas oceánicas profundas.
+
+En Marino, `waterDepthMeters` es **otro parámetro**, exclusivamente de profundidad batimétrica expresada en metros positivos hacia abajo, y `waterSalinityPpt` describe salinidad. Los valores de profundidad aprobados (por ejemplo 0–5 m de Manglar y 0–11.000 m de Océano abierto) **no son niveles de altura Evolve**. Una celda de superficie marina se ubica en el nivel de referencia 0 mientras la profundidad informa de la distancia al fondo. El mapeo físico de profundidades marinas al relieve del futuro generador está pendiente y no debe inventarse ahora.
+
+La visualización de **latitud y profundidad marina** es una vista especializada en metros: **no reemplaza la escala oficial de altura 0–100** que se conserva para los biomas terrestres. Toda decisión futura sobre una escala submarina normalizada necesita un contrato separado y explícitamente aprobado. No se añaden claves nuevas ni se alteran los rangos aprobados del catálogo.
+
 ## Estado de revisión
 
 | ID | Subbioma | Estado |
