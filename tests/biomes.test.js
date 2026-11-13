@@ -5,6 +5,22 @@ const read=p=>fs.readFileSync(path.join(__dirname,"..",p),"utf8");
 const catalog=JSON.parse(read("data/biomes/biomes.json"));
 assert(Array.isArray(catalog.biomes),"biomes.json debe contener biomes[]");
 const allSubbiomes=catalog.biomes.flatMap(biome=>biome.subbiomes);
+// Contrato global: altura normalizada 0–100; profundidad en metros es un campo distinto.
+for(const sub of allSubbiomes){
+  if(!sub.spawn)continue;
+  const required=sub.spawn.required;
+  if(required.terrain==="land"){
+    const elevation=required.elevationLevel;
+    assert(elevation&&Number.isInteger(elevation.min)&&Number.isInteger(elevation.max),"tierra requiere elevación normalizada: "+sub.id);
+    assert(elevation.min>=0&&elevation.max<=100&&elevation.min<=elevation.max,"altura Evolve fuera de 0–100: "+sub.id);
+  }else if(required.terrain==="water"){
+    assert(!Object.hasOwn(required,"elevationLevel"),"profundidad marina no debe sustituir altura Evolve: "+sub.id);
+    const depth=required.waterDepthMeters;
+    assert(depth&&Number.isFinite(depth.min)&&Number.isFinite(depth.max)&&depth.min>=0&&depth.max>=depth.min,"profundidad marina en metros inválida: "+sub.id);
+    assert(Number.isFinite(required.waterSalinityPpt?.min)&&Number.isFinite(required.waterSalinityPpt?.max),"falta salinidad marina: "+sub.id);
+  }
+}
+
 const forest=catalog.biomes.find(b=>b.id==="forest");
 assert.equal(catalog.biomes.length,8,"deben conservarse ocho biomas");
 assert.equal(allSubbiomes.length,23,"deben existir 23 subbiomas");
