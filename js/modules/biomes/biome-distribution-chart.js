@@ -75,6 +75,25 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     return new Intl.NumberFormat(lang==="en"?"en-US":"es-ES",{maximumFractionDigits:2}).format(value);
   }
   function render(host,biome,lang="es") {
+    // Polo mixes floating Arctic sea ice and continental Antarctic ice.
+    // Render them in separate existing charts: metres of water depth vs Evolve 0–100 elevation.
+    if(biome?.id==="polar"){
+      host.replaceChildren();
+      const sections=[
+        {id:"marine",name:lang==="en"?"North Pole":"Polo Norte",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_north_ice")},
+        {id:"polar_land",name:lang==="en"?"South Pole":"Polo Sur",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_south_ice")}
+      ];
+      const combined={defined:[],pending:[]};
+      for(const part of sections){
+        const wrapper=host.appendChild(node("section","polar-distribution-section"));
+        wrapper.appendChild(node("h3","",part.name));
+        const drawing=wrapper.appendChild(node("div",""));
+        const result=render(drawing,part,lang);
+        combined.defined.push(...result.defined);
+        combined.pending.push(...result.pending);
+      }
+      return combined;
+    }
     const t=words[lang]||words.es;
     const name=obj=>obj?.[lang]??obj?.es??obj?.en??"";
     const data=getData(biome);
