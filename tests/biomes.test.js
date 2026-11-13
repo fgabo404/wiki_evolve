@@ -18,7 +18,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,16,"7 bosques, 3 desiertos, 4 Llanuras, Arrecife y Estuario o litoral tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,17,"7 bosques, 3 desiertos, 4 Llanuras, Arrecife, Estuario y Manglar tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -156,9 +156,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,16,"7 bosques, 3 desiertos, 4 Llanuras, Arrecife y Estuario o litoral tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,16);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,7);
+assert.equal(allSubbiomes.filter(x=>x.description).length,17,"7 bosques, 3 desiertos, 4 Llanuras, Arrecife, Estuario y Manglar tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,17);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,6);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -218,12 +218,28 @@ assert.deepEqual(estuary.spawn.preferred,{absoluteLatitudeDegrees:{min:0,max:90}
 assert.deepEqual(estuary.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:1,maxRegions:8},"Estuario 1–8 masas preliminares y porcentaje pendiente");
 assert(!Object.hasOwn(estuary.spawn.required,"elevationLevel"),"el litoral no debe heredar elevación terrestre");
 assert(!Object.hasOwn(estuary.spawn.required,"absoluteLatitudeDegrees"),"latitud del litoral no debe ser filtro duro");
-for(const sub of marine.subbiomes.filter(x=>!["marine_reef","marine_estuary_littoral"].includes(x.id)))
- assert(!sub.spawn&&!sub.description&&!sub.distribution,"Manglar y Alta mar deben seguir pendientes");
+for(const sub of marine.subbiomes.filter(x=>!["marine_reef","marine_estuary_littoral","marine_mangrove"].includes(x.id)))
+ assert(!sub.spawn&&!sub.description&&!sub.distribution,"Alta mar debe seguir pendiente");
 const mangrove=marine.subbiomes.find(x=>x.id==="marine_mangrove");
 assert.equal(mangrove.name.es,"Manglar");
 assert(!forest.subbiomes.some(x=>x.id==="forest_mangrove"),"Manglar no debe duplicarse en Bosque");
-assert(!mangrove.spawn&&!mangrove.description,"Manglar marino no revisado debe permanecer intacto");
+assert(mangrove.description.es.includes("Sundarbans")&&mangrove.description.es.includes("Bangladesh")&&mangrove.description.es.includes("India"),"Manglar requiere referencia principal de Sundarbans");
+assert(mangrove.description.en.includes("Sundarbans")&&mangrove.description.en.includes("intertidal"),"Manglar requiere descripción inglesa");
+assert(mangrove.description.es.includes("raíces aéreas")&&mangrove.description.es.includes("deltas"),"Manglar requiere raíces y distribución costera");
+assert.deepEqual(mangrove.spawn.required,{
+  terrain:"water",waterDepthMeters:{min:0,max:5},waterSalinityPpt:{min:0,max:40},
+  meanAnnualTemperatureC:{min:20,max:30}
+},"Manglar no debe añadir parámetros marinos diferentes de profundidad y salinidad");
+assert.deepEqual(mangrove.spawn.preferred,{
+  absoluteLatitudeDegrees:{min:0,max:30},waterDepthMeters:{min:0,max:2},
+  waterSalinityPpt:{min:5,max:30},meanAnnualTemperatureC:{min:24,max:28}
+},"Manglar debe conservar preferencias aprobadas");
+assert.deepEqual(mangrove.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:6},"Manglar debe tener de 2 a 6 masas y porcentaje pendiente");
+assert(!Object.hasOwn(mangrove.spawn.required,"elevationLevel"),"Manglar no usa altura terrestre");
+assert(!Object.hasOwn(mangrove.spawn.required,"absoluteLatitudeDegrees"),"latitud debe ser preferencia");
+const sharedMarineParams=new Set(["terrain","meanAnnualTemperatureC","absoluteLatitudeDegrees","waterDepthMeters","waterSalinityPpt"]);
+for(const k of [...Object.keys(mangrove.spawn.required),...Object.keys(mangrove.spawn.preferred)])
+ assert(sharedMarineParams.has(k),"Manglar introduce un parámetro inesperado: "+k);
 const redwood=forest.subbiomes.find(x=>x.id==="forest_redwood");
 assert.equal(redwood.name.es,"Bosque de secuoyas");
 assert.equal(redwood.name.en,"Redwood Forest");
@@ -394,8 +410,8 @@ for(const [id,latitude,elevation] of [
   assert.deepEqual({min:p.elevation.min,max:p.elevation.max},elevation,"altura gráfica incorrecta: "+id);
 }
 const reefChart=chartAPI.getData(marine);
-assert.equal(reefChart.defined.length,2,"Arrecife y Estuario deben dibujarse en la gráfica marina");
-assert.equal(reefChart.pending.length,2,"Manglar y Alta mar continúan pendientes");
+assert.equal(reefChart.defined.length,3,"Arrecife, Estuario y Manglar deben dibujarse en la gráfica marina");
+assert.equal(reefChart.pending.length,1,"Solo Alta mar continúa pendiente");
 const plottedReef=reefChart.defined[0];
 assert.equal(plottedReef.id,"marine_reef");
 assert.deepEqual({min:plottedReef.latitude.min,max:plottedReef.latitude.max},{min:0,max:30});
@@ -406,6 +422,11 @@ assert(plottedEstuary,"Estuario o litoral debe aparecer en la gráfica marina");
 assert.deepEqual({min:plottedEstuary.latitude.min,max:plottedEstuary.latitude.max},{min:0,max:90});
 assert.deepEqual({min:plottedEstuary.depth.min,max:plottedEstuary.depth.max},{min:0,max:50});
 assert(!Object.hasOwn(plottedEstuary,"elevation"),"el litoral no debe utilizar altura terrestre");
+const plottedMangrove=reefChart.defined.find(x=>x.id==="marine_mangrove");
+assert(plottedMangrove,"Manglar debe aparecer en la gráfica marina");
+assert.deepEqual({min:plottedMangrove.latitude.min,max:plottedMangrove.latitude.max},{min:0,max:30},"latitud de Manglar en la gráfica");
+assert.deepEqual({min:plottedMangrove.depth.min,max:plottedMangrove.depth.max},{min:0,max:5},"profundidad de Manglar en la gráfica");
+assert(!Object.hasOwn(plottedMangrove,"elevation"),"Manglar no debe utilizar altura terrestre");
 assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiquetar profundidad del océano");
 assert(chartSource.includes("marine?y0+v/maximum*h"),"la profundidad debe aumentar hacia abajo");
 for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine")){
@@ -420,4 +441,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras + Arrecife + Estuario definidos; 7 subbiomas pendientes");
+console.log("PASS: 8 biomas, 23 subbiomas; 7 bosques + 3 desiertos + 4 Llanuras + Arrecife + Estuario + Manglar definidos; 6 subbiomas pendientes");
