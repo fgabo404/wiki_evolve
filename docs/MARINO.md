@@ -11,9 +11,9 @@
 | `marine_reef` | Arrecife | **Aprobado** |
 | `marine_estuary_littoral` | Estuario o litoral | **Aprobado** |
 | `marine_mangrove` | Manglar | **Aprobado** |
-| `marine_open_ocean` | Océano abierto (alta mar) | Pendiente |
+| `marine_open_ocean` | Océano abierto (alta mar) | **Aprobado** |
 
-**Alcance:** se han definido Arrecife, Estuario o litoral y Manglar sin subdividir el catálogo ni modificar el generador de `fgabo404/Evolve`. Océano abierto permanece pendiente.
+**Alcance:** los cuatro subbiomas de Marino (Arrecife, Estuario o litoral, Manglar y Océano abierto) están definidos sin dividir nuevas categorías ni modificar el generador de `fgabo404/Evolve`.
 
 ## 1. Apariencia de Arrecife
 
@@ -63,12 +63,12 @@ Se proponen **4–8 masas regionales conectadas** en mundos con condiciones mari
 
 La ficha de Arrecife muestra los mismos grupos `required` y `preferred` de los biomas terrestres; los campos adicionales muestran unidades **m** y **‰** con etiquetas bilingües.
 
-La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario o litoral se dibuja entre 0–90° y 0–50 m; Manglar se dibuja entre 0–30° y 0–5 m. Alta mar permanece sin rectángulo hasta que se defina.
+La gráfica SVG reutilizable sigue situada debajo del contenido. Para el bioma **Marino**, cambia el eje vertical a **profundidad física en metros**, positiva hacia abajo. El eje horizontal sigue siendo latitud absoluta 0–90°. Arrecife se dibuja entre 0–30° y 0–50 m. Para biomas terrestres, la gráfica conserva la **altura Evolve 0–100**. Estuario o litoral se dibuja entre 0–90° y 0–50 m; Manglar entre 0–30° y 0–5 m; Océano abierto entre 0–90° y 0–11.000 m. Con el océano profundo presente, el eje vertical amplía los primeros 50 m y comprime el resto; es una escala no lineal, indicada en la propia gráfica.
 
 ## 6. Límites de esta fase
 
 - Es una **definición de diseño**, todavía no implementada en Engine.
-- No se modifica el subbioma pendiente (Océano abierto) ni otros grupos de biomas.
+- Los cuatro subbiomas marinos quedan definidos. No se modifican otros grupos de biomas.
 - La exactitud de profundidad física, salinidad y temperatura dependerá de que el generador calcule esos campos.
 - El comportamiento estacional o dinámico del coral queda para etapas futuras.
 
@@ -117,7 +117,7 @@ Se prefieren **franjas costeras continuas** que puedan rodear grandes continente
 - **Estuario o litoral:** distribución latitudinal mundial 0–90°, mezcla amplia de salinidades, costas rocosas o arenosas y desembocaduras, sin requerir coral.
 - **Manglar:** definido como bosque intermareal tropical y subtropical; prevalece su identidad forestal y de mareas sobre la apariencia de costa rocosa de Estuario. La prioridad entre estas categorías se resolverá en el futuro sistema de clasificación, sin imponer ahora una jerarquía no aprobada.
 
-La gráfica existente muestra **tres rectángulos** para Marino: Arrecife, Estuario o litoral y Manglar. Ambos usan la misma escala física de profundidad en metros y latitud absoluta. No se modifica la gráfica de biomas terrestres ni se añade imagen PNG.
+La gráfica existente muestra **cuatro rectángulos** para Marino: Arrecife, Estuario o litoral, Manglar y Océano abierto. Ambos usan la misma escala física de profundidad en metros y latitud absoluta. No se modifica la gráfica de biomas terrestres ni se añade imagen PNG.
 
 ### 5. Estado técnico
 
@@ -176,6 +176,70 @@ Se aprueban **2–6 sistemas regionales** conectados en mundos con condiciones a
 
 ### 6. Visualización y estado técnico
 
-La gráfica SVG reutilizable de Marino muestra ahora Arrecife, Estuario o litoral y Manglar. Manglar aparece en latitudes preferidas **0–30°** y profundidad requerida **0–5 m**, con profundidad positiva hacia abajo. No requiere cambios en la gráfica ni en los campos de la ficha bilingüe: `waterDepthMeters` y `waterSalinityPpt` ya tienen etiquetas/unidades.
+La gráfica SVG reutilizable de Marino muestra ahora Arrecife, Estuario o litoral, Manglar y Océano abierto. Manglar aparece en latitudes preferidas **0–30°** y profundidad requerida **0–5 m**, con profundidad positiva hacia abajo. No requiere cambios en la gráfica ni en los campos de la ficha bilingüe: `waterDepthMeters` y `waterSalinityPpt` ya tienen etiquetas/unidades.
 
 **Solo definición teórica:** el nuevo Engine aún no calcula la hidrología intermareal ni genera este bosque. No se introducen tipos, parámetros ni subbiomas extra.
+
+## Océano abierto (alta mar) — `marine_open_ocean` (aprobado 2026-11-13)
+
+### 1. Identidad visual
+
+**Referencia principal: océano Pacífico.** Grandes extensiones de agua azul, horizonte despejado, olas y cuencas conectadas. El Atlántico, Índico, Ártico y océano Austral también se incluyen como regiones del **mismo subbioma**: no se crean categorías separadas por océanos geográficos, temperaturas o profundidad.
+
+Como variaciones visuales se permiten océanos tropicales, templados y fríos. Bajo la superficie, la zona pelágica pierde luz progresivamente y alberga organismos adaptados a diferentes profundidades. Las franjas de profundidad son **zonas ecológicas del océano**, no nuevos subbiomas:
+- Epipelágica: 0–200 m;
+- Mesopelágica: 200–1.000 m;
+- Batipelágica: 1.000–4.000 m;
+- Abisopelágica: 4.000–6.000 m;
+- Hadopelágica: más de 6.000 m.
+
+### 2. Condiciones declarativas
+
+| Parámetro | `spawn.required` | `spawn.preferred` |
+|---|---|---|
+| Terreno (`terrain`) | `water` | — |
+| Profundidad del fondo (`waterDepthMeters`) | **0–11.000 m** | **200–6.000 m** |
+| Salinidad (`waterSalinityPpt`) | **30–40 ‰** | **33–37 ‰** |
+| Temperatura media anual del agua (`meanAnnualTemperatureC`) | **−2 a 32 °C** | — |
+| Latitud absoluta (`absoluteLatitudeDegrees`) | — | **0–90°** |
+| Precipitación atmosférica | Sin requisito directo | — |
+
+Los únicos campos marinos añadidos respecto a los terrestres siguen siendo `waterDepthMeters` y `waterSalinityPpt`; se reutilizan `terrain`, `meanAnnualTemperatureC` y `absoluteLatitudeDegrees`. Los límites son valores de diseño aproximados. La temperatura media se interpreta como **temperatura superficial del mar**, no como temperatura de toda la columna.
+
+**Profundidad:** `waterDepthMeters` corresponde a la profundidad del fondo del hexágono oceánico, no a la profundidad de un animal o un hábitat en la columna. Se permite 0 m como rango amplio para no introducir exclusiones artificiales en el contrato; sin embargo, la selección geográfica entre océano abierto y otros subbiomas marinos **no puede realizarse solo por profundidad**.
+
+### 3. Distribución y conectividad
+
+Océano abierto ocupa las regiones alejadas de las franjas litorales, manglares y arrecifes donde estas clasificaciones sean más adecuadas. La posición respecto a la costa y la continuidad del océano se deducirán de la geografía del mapa, sin añadir indicadores nuevos en `spawn`.
+
+En un mundo tipo Tierra, **una gran masa oceánica conectada** es preferible a fragmentarla artificialmente en Pacífico, Atlántico o Índico. En otros tipos de mundo, continentes o barreras pueden separar masas oceánicas reales.
+
+```json
+"distribution": {
+  "targetLandPercent": null,
+  "percentBasis": "unavailable",
+  "minRegions": 1,
+  "maxRegions": 3
+}
+```
+
+**Aprobado: 1–3 masas de Océano abierto**, preferentemente una cuando la conectividad lo permite. Estos números son objetivos de diseño para mundos apropiados y **no autorizan romper ni unir regiones geográficas** para cumplir un conteo. El porcentaje oceánico sigue pendiente. El nombre heredado `targetLandPercent` permanece `null` por compatibilidad; no asigna cobertura terrestre ni oceánica.
+
+### 4. Comparación marina
+
+| Subbioma | Profundidad requerida | Salinidad requerida | Masas conectadas |
+|---|---|---|---|
+| Arrecife | 0–50 m | 32–42 ‰ | 4–8 |
+| Estuario o litoral | 0–50 m | 0–40 ‰ | 1–8, provisional |
+| Manglar | 0–5 m | 0–40 ‰ | 2–6 |
+| **Océano abierto** | **0–11.000 m** | **30–40 ‰** | **1–3** |
+
+Los rangos pueden superponerse, pues la **ubicación costera u oceánica** y otros factores geográficos distinguen a los subbiomas. El orden de prioridad del futuro clasificador queda pendiente; la Wiki no resuelve automáticamente estos solapamientos.
+
+### 5. Gráfica marina sin perder hábitats superficiales
+
+La gráfica reutilizable dibuja los **cuatro subbiomas**. Cuando hay rangos abisales, el eje vertical de profundidad se presenta **por tramos no lineales**, siempre en metros reales: el primer tramo, **0–50 m**, ocupa el **40 % de la altura** para que Manglar (0–5 m), Arrecife (0–50 m) y Estuario o litoral (0–50 m) permanezcan visibles. El tramo **50–11.000 m** ocupa el 60 % restante. Se señala la discontinuidad de escala y los valores reales en el eje; no se modifican los datos, ni las preferencias, ni la altura terrestre Evolve 0–100.
+
+### 6. Pendiente técnico
+
+La definición Marino queda **aprobada como catálogo teórico**, sin ejecución en el motor. Aún quedan por implementar batimetría, salinidad, temperatura superficial del mar, mareas, clasificación costera y la conectividad de regiones. No se introduce geografía funcional en la Wiki ni cambios en `fgabo404/Evolve`.
