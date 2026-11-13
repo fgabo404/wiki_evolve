@@ -1038,6 +1038,43 @@
           "name": {
             "es": "Polo Sur",
             "en": "South Pole"
+          },
+          "description": {
+            "es": "Una sola gran masa continental congelada en el extremo sur (parte inferior) del mapa, inspirada en la Antártida real. El continente está cubierto por hielo permanente, con una extensa meseta polar elevada, nieve barrida por el viento, glaciares, montañas rocosas que sobresalen del hielo y costas de acantilados y plataformas glaciales. A diferencia del Polo Norte, este hielo descansa sobre tierra firme, no sobre océano flotante. La región debe ocupar el hemisferio sur y formar una sola masa terrestre conectada; la posición al sur se deriva de la latitud firmada y orientación del mapa, no de la latitud absoluta preferida. Las elevaciones usan exclusivamente la escala normalizada de Evolve 0–100 y no representan metros físicos. La persistencia del hielo continental es una condición ecológica y geográfica que deberá resolver el futuro generador sin introducir ahora parámetros nuevos de aparición.",
+            "en": "A single vast frozen continental landmass at the southern (bottom) edge of the map, modeled after real Antarctica. The continent has persistent land-based ice, a high polar plateau, wind-swept snow, glaciers, rocky mountain peaks rising above the ice, and coastal ice cliffs and shelves. Unlike the North Pole, the ice rests on land rather than floating ocean water. It must lie in the Southern Hemisphere as one connected terrestrial region; southern placement derives from signed latitude and map orientation rather than preferred absolute latitude alone. Elevations use only Evolve's normalized 0–100 altitude scale, not physical meters. Persistent continental ice is an ecological/geographic condition for the future world generator; no new spawn parameters are introduced yet."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 100
+              },
+              "meanAnnualTemperatureC": {
+                "min": -60,
+                "max": 0
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 65,
+                "max": 90
+              },
+              "elevationLevel": {
+                "min": 25,
+                "max": 75
+              },
+              "meanAnnualTemperatureC": {
+                "min": -55,
+                "max": -15
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": 1
           }
         }
       ]
