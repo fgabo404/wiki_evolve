@@ -842,6 +842,51 @@
           "name": {
             "es": "Manglar",
             "en": "Mangrove"
+          },
+          "description": {
+            "es": "Bosque costero intermareal tropical y subtropical inspirado principalmente en los Sundarbans, entre Bangladesh e India: enormes masas de árboles verdes atravesadas por ríos de marea, canales sinuosos, bancos de lodo e islas forestadas. Como variante visual incluye manglares tropicales con raíces aéreas visibles en aguas someras, como los de Florida, así como franjas de manglar junto a islas y bahías protegidas. Se favorecen deltas fluviales, estuarios, costas abrigadas y ensenadas tropicales, donde el suelo se inunda periódicamente con las mareas. El manglar se desarrolla sobre sustrato intermareal y no debe interpretarse como un bosque sumergido permanentemente a cinco metros. Puede presentar agua parda o turquesa según el ambiente. Las mareas y las formas costeras se interpretarán desde la geografía del mundo en el futuro generador, sin añadir nuevos campos de aparición.",
+            "en": "A tropical and subtropical intertidal coastal forest primarily inspired by the Sundarbans of Bangladesh and India: immense green tree stands crossed by tidal rivers, winding channels, mudflats and forested islands. Visual variants include tropical mangroves with exposed aerial roots in shallow water, such as those in Florida, and mangrove fringes along protected island shores and bays. River deltas, estuaries, sheltered coastlines and tropical coves are favored, where the ground is periodically flooded by tides. Mangroves grow on intertidal ground and should not be treated as forests permanently submerged under five meters of water. Water may appear brown or turquoise depending on local conditions. Tides and coastal landforms will be derived from world geography by the future generator without adding new spawn fields."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "water",
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 5
+              },
+              "waterSalinityPpt": {
+                "min": 0,
+                "max": 40
+              },
+              "meanAnnualTemperatureC": {
+                "min": 20,
+                "max": 30
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 30
+              },
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 2
+              },
+              "waterSalinityPpt": {
+                "min": 5,
+                "max": 30
+              },
+              "meanAnnualTemperatureC": {
+                "min": 24,
+                "max": 28
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 2,
+            "maxRegions": 6
           }
         },
         {
