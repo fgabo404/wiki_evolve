@@ -43,6 +43,11 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       && range.min >= min && range.max <= max && range.min <= range.max;
   }
   function getData(biome) {
+    if(biome?.id==="polar"){
+      const north=getData({id:"marine",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_north_ice")});
+      const south=getData({id:"polar_land",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_south_ice")});
+      return {defined:[...north.defined,...south.defined],pending:[...north.pending,...south.pending]};
+    }
     const defined = [], pending = [];
     const marine = biome?.id === "marine";
     for (const sub of biome.subbiomes || []) {
