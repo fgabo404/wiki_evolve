@@ -43,7 +43,7 @@ Las reglas de Polo Norte ya han sido aprobadas. Para Polo Sur se definirán, con
 - Mínimo y máximo de masas conectadas y porcentaje de superficie, si hay referencia comparable.
 - Interacción futura con Marino, Tundra y Montaña, sin implementar Engine.
 
-La gráfica reutilizable permanece al pie de las fichas. La visualización polar debe distinguir la profundidad oceánica en metros del Polo Norte y la altura de tierra 0–100 que corresponderá al Polo Sur; no proyectar ambos en un mismo eje vertical incompatible. Esta adaptación visual queda pendiente de diseño y no altera el catálogo aprobado.
+La gráfica reutilizable permanece al pie de las fichas. La visualización polar **ya distingue dos paneles**: profundidad oceánica en metros para Polo Norte y altura terrestre 0–100 para Polo Sur, sin mezclar ambos ejes incompatibles. Polo Norte aparece con latitud 75–90° y profundidad requerida 0–6.000 m; Polo Sur continúa como pendiente hasta aprobar su rango de altura. No se alteran los parámetros del catálogo.
 
 ## Invariantes del catálogo
 
