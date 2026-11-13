@@ -979,33 +979,24 @@
       ]
     },
     {
-      "id": "polar_north",
+      "id": "polar",
       "name": {
-        "es": "Polo Norte",
-        "en": "North Pole"
+        "es": "Polo",
+        "en": "Pole"
       },
       "subbiomes": [
         {
           "id": "polar_north_ice",
           "name": {
-            "es": "Hielo polar",
-            "en": "Polar ice"
+            "es": "Polo Norte",
+            "en": "North Pole"
           }
-        }
-      ]
-    },
-    {
-      "id": "polar_south",
-      "name": {
-        "es": "Polo Sur",
-        "en": "South Pole"
-      },
-      "subbiomes": [
+        },
         {
           "id": "polar_south_ice",
           "name": {
-            "es": "Hielo polar",
-            "en": "Polar ice"
+            "es": "Polo Sur",
+            "en": "South Pole"
           }
         }
       ]
