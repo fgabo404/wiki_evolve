@@ -990,6 +990,47 @@
           "name": {
             "es": "Polo Norte",
             "en": "North Pole"
+          },
+          "description": {
+            "es": "Océano Ártico cubierto por una gran masa de hielo marino flotante en el extremo norte (parte superior) del mapa. Presenta placas de hielo, crestas de presión, grietas, canales oscuros de agua y zonas de deshielo estacional. El Polo Norte no es un continente: el hielo se apoya sobre el océano, con profundidad de fondo independiente de la altura normalizada 0–100 de Evolve. Se conserva una sola región polar conectada centrada en la zona más septentrional del mundo; no se cuentan como masas separadas las placas de hielo individuales. La ubicación en el hemisferio norte debe derivarse de la posición real del hexágono, porque la latitud absoluta sirve solo como preferencia y no distingue hemisferios. La variación estacional del hielo queda para una etapa futura del motor.",
+            "en": "Arctic Ocean covered by a single large connected mass of floating sea ice at the northern (top) edge of the map. It features ice floes, pressure ridges, cracks, dark open-water leads and areas of seasonal melt. The North Pole is not a continent: the ice floats on the ocean, with seafloor depth independent of Evolve's normalized 0–100 world elevation. One connected polar region is centered on the northernmost world area; individual ice floes do not count as separate masses. Northern-hemisphere placement must be derived from each hex cell's geographical position, because absolute latitude is only a preference and does not identify hemispheres. Seasonal ice changes remain future engine behavior."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "water",
+              "waterDepthMeters": {
+                "min": 0,
+                "max": 6000
+              },
+              "waterSalinityPpt": {
+                "min": 25,
+                "max": 35
+              },
+              "meanAnnualTemperatureC": {
+                "min": -2,
+                "max": 1
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 75,
+                "max": 90
+              },
+              "meanAnnualTemperatureC": {
+                "min": -2,
+                "max": 0
+              },
+              "waterSalinityPpt": {
+                "min": 30,
+                "max": 34
+              }
+            }
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 1,
+            "maxRegions": 1
           }
         },
         {
