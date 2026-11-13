@@ -32,7 +32,7 @@ Para comprobar la estructura y la sintaxis: `node tests/biomes.test.js`.
 
 **Nota:** los próximos cambios del catálogo de Bosque se realizarán en `wiki_evolve/develop`. Evolve conserva una copia separada por compatibilidad y **no hay sincronización automática**. Esta Wiki no modifica el motor.
 
-**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos**, los **4 subbiomas de Llanuras** y **Arrecife** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **8 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
+**Estado actual (2026-11-09):** 8 biomas y 23 subbiomas. Los **7 bosques**, los **3 desiertos**, los **4 subbiomas de Llanuras**, **Arrecife** y **Estuario o litoral** cuentan con `name` y `description` bilingües (`es`/`en`) además de `spawn.required` y `spawn.preferred`; la Wiki muestra la descripción según el idioma seleccionado. Los **7 subbiomas restantes** siguen pendientes de definición. Bosque subtropical permanece retirado.
 
 **Criterio visual de Bosque templado (2026-11-09):** se representa como bosque europeo caducifolio o mixto, con hayas, robles y cambios estacionales; esto no restringe la aparición del subbioma a Europa. Su `spawn` no cambió. Ver [docs/BOSQUES.md](docs/BOSQUES.md).
 
@@ -58,7 +58,7 @@ La gráfica es una referencia ambiental, no una predicción exacta de aparición
 
 Los tres subbiomas existentes de Desierto (`desert_sandy`, `desert_rocky`, `desert_salt_flat`) ya tienen `description.es/en`, `spawn.required` y `spawn.preferred`. Altura obligatoria `elevationLevel` (0–100), latitud absoluta preferida, aridez obligatoria por precipitación máxima anual de 250 mm y material superficial distintivo. Se conservan variantes frías mediante temperatura preferida, no obligatoria. La misma gráfica SVG reutilizable ahora dibuja automáticamente los tres desiertos.
 
-**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos, los 4 subbiomas de Llanuras y Arrecife con definición; 8 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
+**Estado del catálogo:** 8 biomas y 23 subbiomas; 7 bosques, 3 desiertos, los 4 subbiomas de Llanuras, Arrecife y Estuario o litoral con definición; 7 subbiomas pendientes. **Desierto: definición teórica cerrada**, con Sahara/Rub al-Jali para Arenoso, Atacama/Canyonlands para Rocoso y Salar de Uyuni como referencia principal del Salar. La integración en el nuevo motor sigue pendiente. Ver [docs/DESIERTOS.md](docs/DESIERTOS.md) para valores y variables geológicas conceptuales que no implementa todavía Engine.
 
 ## Llanuras — revisión gradual (2026-11-09)
 
@@ -94,4 +94,10 @@ Las nuevas condiciones geográficas e hidrológicas son declarativas; la impleme
 
 **Arrecife** (`marine_reef`) utiliza la **Gran Barrera de Coral de Australia** como referencia principal e incluye arrecifes costeros, de barrera y atolones dentro del mismo subbioma. **Solamente añade dos parámetros nuevos**, `waterDepthMeters` (profundidad real **0–50 m**, preferida **0–30 m**) y `waterSalinityPpt` (**32–42 ‰**). Reutiliza las condiciones comunes de terreno (`water`), temperatura media anual (**20–30 °C**, preferida **23–29 °C**) y latitud absoluta preferida (**0–30°**). Tiene **4–8 masas regionales** y porcentaje de superficie oceánica pendiente. El campo heredado `targetLandPercent:null` no representa cuota terrestre marina ni fija una cuota oceánica.
 
-La gráfica SVG de Marino usa **latitud absoluta y profundidad en metros**, con profundidad creciente hacia abajo; los biomas terrestres conservan sus ejes anteriores de latitud y altura Evolve 0–100. La ficha muestra unidades de profundidad y salinidad en ambos idiomas. **Estuario, Manglar y Océano abierto** siguen pendientes. Nada de esto se ejecuta en el generador todavía. Ver [docs/MARINO.md](docs/MARINO.md).
+La gráfica SVG de Marino usa **latitud absoluta y profundidad en metros**, con profundidad creciente hacia abajo; los biomas terrestres conservan sus ejes anteriores de latitud y altura Evolve 0–100. La ficha muestra unidades de profundidad y salinidad en ambos idiomas. **Estuario o litoral** ya está aprobado; **Manglar y Océano abierto** siguen pendientes. Nada de esto se ejecuta en el generador todavía. Ver [docs/MARINO.md](docs/MARINO.md).
+
+## Marino — Estuario o litoral aprobado (2026-11-12)
+
+**Estuario o litoral** (`marine_estuary_littoral`) combina ambos ambientes debido a la resolución actual de la cuadrícula. Su **referencia visual principal es la costa rocosa**; incluye playas arenosas y bahías como variantes, y conserva la bahía de Chesapeake como referencia estuarina. Reutiliza los mismos parámetros ya existentes de Arrecife: `waterDepthMeters` (0–50 m, preferida 0–20 m), `waterSalinityPpt` (0–40 ‰), `meanAnnualTemperatureC` (−2 a 35 °C), `terrain: water` y latitud preferida 0–90°.
+
+Se generan **franjas costeras continuas**, incluso alrededor de continentes completos, en zonas marinas junto a tierra o desembocaduras; la geografía se deriva de la cuadrícula y los ríos sin un campo nuevo de `spawn`. El conteo **1–8 masas conectadas es provisional** y nunca obliga a cortar artificialmente una franja de costa. El porcentaje oceánico permanece pendiente (`targetLandPercent: null` por compatibilidad). La gráfica marina existente incorpora automáticamente su rango de profundidad. Las reglas son declarativas y aún no se implementan en Engine. Ver [docs/MARINO.md](docs/MARINO.md).
