@@ -25,9 +25,9 @@ Se conserva la escala oficial de **altura Evolve 0–100**. Ninguna equivalencia
 - **Bosque boreal/subalpino:** la tundra ártica puede aparecer más allá del bosque boreal; la alpina, por encima del límite local de árboles.
 - **Montaña:** proporciona el relieve que hace posible la variante alpina, pero no se sustituye el subbioma Tundra por un nuevo subbioma de Montaña. El orden de clasificación de hexágonos se decidirá al implementar el generador.
 
-### Rangos de diseño aún no aprobados
+### Masas aprobadas y rangos climáticos pendientes
 
-En la exploración anterior se propusieron, **a título preliminar**:
+La **cantidad de masas ya está aprobada**. Los demás parámetros de la tabla continúan como propuestas preliminares:
 
 | Parámetro | Propuesta pendiente de aprobación |
 |---|---|
@@ -38,11 +38,27 @@ En la exploración anterior se propusieron, **a título preliminar**:
 | Temperatura media anual | −25 a 5 °C |
 | Precipitación anual | 100–800 mm |
 | Cobertura de árboles | Máximo 10 % |
-| Número de masas | 2–6, **por revisar** |
+| **Número de masas** | **2–4, aprobado** |
 | Porcentaje terrestre | Pendiente, sin inventar cifra |
 
-Estos valores **todavía no se deben considerar definitivos**, porque las dos vías requieren una lógica de emplazamiento mutuamente alternativa. En particular, una única preferencia de altura 1–55 puede entrar en conflicto con la variante alpina. Es necesario acordar cómo aplicar condiciones comunes y condiciones específicas de variante antes de registrar un `spawn` definitivo.
+Salvo el número de masas **2–4**, los valores anteriores **todavía no se deben considerar definitivos**, porque las dos vías requieren una lógica de emplazamiento mutuamente alternativa. En particular, una única preferencia de altura 1–55 puede entrar en conflicto con la variante alpina. Es necesario acordar cómo aplicar condiciones comunes y condiciones específicas de variante antes de registrar un `spawn` definitivo.
+
+
+### Distribución aprobada
+
+```json
+"distribution": {
+  "targetLandPercent": null,
+  "percentBasis": "unavailable",
+  "minRegions": 2,
+  "maxRegions": 4
+}
+```
+
+**Mínimo 2, máximo 4 masas regionales** de tundra, sumando las variantes ártica y alpina dentro del **mismo subbioma**. Una gran región puede ocupar territorios árticos y otra una cadena montañosa, siempre según clima, altura y conectividad de los hexágonos. No se exigen dos masas de cada variante, ni se fragmenta una cordillera o una llanura tundrosa solo para cumplir cifras. El porcentaje de cobertura terrestre seguirá pendiente hasta contar con una referencia consistente.
+
+**Estado parcial intencional del catálogo:** `distribution` está aprobado y ya registrado aunque `spawn` siga pendiente. Esta situación no convierte a Tundra en un subbioma completamente definido ni debe hacer aparecer un rectángulo artificial en la gráfica de latitud/altura. Los rangos y el método de aparición alternativo se diseñarán después.
 
 ### Estado del repositorio
 
-La aprobación de este turno afecta **solo al alcance del subbioma y a sus dos variantes**. `tundra_tundra` permanece sin `spawn` ni `distribution` aprobados en el catálogo hasta revisar los rangos y masas. Por ello el contador se mantiene en **7 biomas, 23 subbiomas, 20 definidos y 3 pendientes**. No se modifica `fgabo404/Evolve` ni se generan nuevos subbiomas.
+La aprobación incluye **un único subbioma con variantes ártica y alpina** y una distribución regional de **2–4 masas conectadas**, ya registrada en `distribution`. `tundra_tundra` **aún no tiene `spawn` ni condiciones climáticas aprobadas**, así que continúa como definición pendiente para la interfaz. Por ello el contador se mantiene en **7 biomas, 23 subbiomas, 20 definidos y 3 pendientes**. No se modifica `fgabo404/Evolve` ni se generan nuevos subbiomas.
