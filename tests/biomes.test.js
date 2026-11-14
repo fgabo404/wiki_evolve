@@ -118,7 +118,13 @@ function getMountainPlacement(id){return forest.subbiomes.find(s=>s.id===id).reg
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_temperate").distribution.maxRegions},{min:2,max:4},"templado debe tener 2–4 masas");
 assert.deepEqual({min:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.minRegions,max:forest.subbiomes.find(s=>s.id==="forest_wooded_swamp").distribution.maxRegions},{min:1,max:2},"pantano arbolado debe tener 1–2 masas");
 assert.equal(forest.subbiomes.find(s=>s.id==="forest_subalpine").distribution.targetLandPercent,null,"sin porcentaje científico mundial, no inventar cifras");
-assert(allSubbiomes.filter(s=>!s.spawn).every(s=>!s.distribution),"no asignar distribución a subbiomas pendientes");
+const tundra=catalog.biomes.find(b=>b.id==="tundra");
+assert(tundra&&tundra.subbiomes.length===1,"Tundra debe mantenerse como un único subbioma");
+const tundraBiome=tundra.subbiomes[0];
+assert.equal(tundraBiome.id,"tundra_tundra","La tundra ártica y alpina deben compartir subbioma");
+assert(!tundraBiome.spawn&&!tundraBiome.description,"Tundra no tiene aún las condiciones de aparición aprobadas");
+assert.deepEqual(tundraBiome.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:4},"Tundra debe tener de 2 a 4 masas conectadas aprobadas");
+assert(allSubbiomes.filter(s=>!s.spawn).every(s=>s.id==="tundra_tundra"||!s.distribution),"solo Tundra puede tener distribución parcial sin spawn aprobado");
 const desertDistributionById={
  desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
  desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
@@ -499,6 +505,9 @@ assert(!Object.hasOwn(plottedOcean,"elevation"),"Océano no usa altura terrestre
 assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiquetar profundidad del océano");
 assert(chartSource.includes("deepMarine?y0+"),"la profundidad marina debe crecer hacia abajo y ampliar los 0–50 m");
 assert(chartSource.includes("paintOrder"),"regiones profundas detrás de los hábitats someros");
+const tundraChart=chartAPI.getData(tundra);
+assert.equal(tundraChart.defined.length,0,"No graficar Tundra antes de aprobar rangos de aparición");
+assert.equal(tundraChart.pending.length,1,"Tundra debe figurar como pendiente en la gráfica");
 const polarChart=chartAPI.getData(polar);
 assert.equal(polarChart.defined.length,2,"ambos polos deben verse en la gráfica polar");
 assert.equal(polarChart.pending.length,0,"Polo queda completamente definido en gráfica");
