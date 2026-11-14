@@ -951,6 +951,12 @@
           "name": {
             "es": "Tundra",
             "en": "Tundra"
+          },
+          "distribution": {
+            "targetLandPercent": null,
+            "percentBasis": "unavailable",
+            "minRegions": 2,
+            "maxRegions": 4
           }
         }
       ]
