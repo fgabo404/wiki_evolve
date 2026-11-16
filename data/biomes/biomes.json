@@ -957,6 +957,79 @@
             "percentBasis": "unavailable",
             "minRegions": 2,
             "maxRegions": 4
+          },
+          "description": {
+            "es": "Ecosistema terrestre frío de vegetación baja, sin bosques extensos, con musgos, líquenes, gramíneas y arbustos enanos. Reúne en un único subbioma dos formas de aparición distintas: tundra ártica inspirada principalmente en Alaska, Canadá y Siberia, con grandes llanuras, suelos fríos y frecuentes lagunas de deshielo; y tundra alpina, formada en montañas por encima del límite local de árboles, incluso a latitudes menores, con praderas bajas, rocas y nieve estacional. El permafrost puede darse especialmente en la variante ártica, pero no es requisito universal para la alpina. Ambas rutas son alternativas y las masas regionales se cuentan juntas. La altura es la escala normalizada Evolve de 0–100, no metros físicos.",
+            "en": "Cold terrestrial ecosystem of low vegetation without extensive forests, with mosses, lichens, grasses and dwarf shrubs. It combines two distinct alternative placement pathways under one subbiome: Arctic tundra modeled primarily on Alaska, Canada and Siberia, with broad plains, cold soils and common thaw ponds; and alpine tundra above the local treeline in mountains, including lower latitudes, with low meadows, rocky terrain and seasonal snow. Permafrost may occur particularly in Arctic tundra but is not universally required for alpine tundra. These pathways are alternatives and their connected regions are counted together. Elevation uses Evolve's normalized 0–100 world scale rather than real meters."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 94
+              },
+              "meanAnnualTemperatureC": {
+                "min": -25,
+                "max": 5
+              },
+              "annualPrecipitationMm": {
+                "min": 100,
+                "max": 1200
+              },
+              "treeCanopyCoverPercent": {
+                "max": 10
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 90
+              }
+            }
+          },
+          "regionPlacement": {
+            "mode": "anyOf",
+            "alternatives": [
+              {
+                "id": "arctic",
+                "name": {
+                  "es": "Tundra ártica",
+                  "en": "Arctic tundra"
+                },
+                "mode": "highLatitude",
+                "hemisphere": "north",
+                "preferred": {
+                  "absoluteLatitudeDegrees": {
+                    "min": 60,
+                    "max": 80
+                  },
+                  "elevationLevel": {
+                    "min": 1,
+                    "max": 55
+                  }
+                }
+              },
+              {
+                "id": "alpine",
+                "name": {
+                  "es": "Tundra alpina",
+                  "en": "Alpine tundra"
+                },
+                "mode": "mountainDependent",
+                "belt": "aboveLocalTreeline",
+                "preferred": {
+                  "absoluteLatitudeDegrees": {
+                    "min": 0,
+                    "max": 90
+                  },
+                  "elevationLevel": {
+                    "min": 60,
+                    "max": 94
+                  }
+                }
+              }
+            ]
           }
         }
       ]
