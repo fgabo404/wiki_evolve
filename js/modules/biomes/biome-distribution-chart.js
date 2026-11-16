@@ -15,6 +15,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       lat: "Latitud preferida",
       height: "Altura requerida",
       depthRange: "Profundidad requerida",
+      preferredHeight: "Altura orientativa",
+      tundraNote: "Tundra incluye dos vías alternativas: ártica (norte, altas latitudes) o alpina (montaña sobre el límite local de árboles). Los rectángulos son preferencias ambientales, no requisitos simultáneos. La altura mantiene la escala Evolve 0–100.",
       pending: "Distribución pendiente de definición.",
       missing: "Subbiomas pendientes de definición",
       note: "Las áreas representan la altura requerida y la latitud preferida de cada subbioma. Las zonas superpuestas pueden corresponder a varios subbiomas; el clima y las demás condiciones de generación determinan cuál aparece.",
@@ -32,6 +34,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       lat: "Preferred latitude",
       height: "Required elevation",
       depthRange: "Required depth",
+      preferredHeight: "Indicative elevation",
+      tundraNote: "Tundra has alternative Arctic (northern high-latitude) or alpine (mountain above the local treeline) placement. Rectangles are environmental preferences, not simultaneous requirements. Elevation remains on Evolve\u2019s 0\u2013100 scale.",
       pending: "Distribution pending definition.",
       missing: "Subbiomes pending definition",
       note: "Areas represent the required elevation and preferred latitude of each subbiome. Overlapping zones may correspond to multiple subbiomes; climate and other generation conditions determine which one appears.",
@@ -51,6 +55,22 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const defined = [], pending = [];
     const marine = biome?.id === "marine";
     for (const sub of biome.subbiomes || []) {
+      const choices=sub.regionPlacement?.mode==="anyOf"?sub.regionPlacement.alternatives:null;
+      if(Array.isArray(choices)&&choices.length){
+        const required=sub.spawn?.required?.elevationLevel;
+        const valid=validRange(required,0,100)&&choices.every(choice=>
+          validRange(choice.preferred?.elevationLevel,required.min,required.max)
+          &&validRange(choice.preferred?.absoluteLatitudeDegrees,0,90));
+        if(valid){
+          for(const choice of choices)defined.push({
+            id:sub.id,plotId:sub.id+":"+choice.id,name:sub.name,variantName:choice.name,
+            preferenceRange:true,
+            latitude:{...choice.preferred.absoluteLatitudeDegrees},
+            elevation:{...choice.preferred.elevationLevel}
+          });
+        }else pending.push({id:sub.id,name:sub.name});
+        continue;
+      }
       const vertical = marine ? sub.spawn?.required?.waterDepthMeters : sub.spawn?.required?.elevationLevel;
       const latitude = sub.spawn?.preferred?.absoluteLatitudeDegrees;
       if (validRange(vertical, 0, marine ? 11000 : 100) && validRange(latitude, 0, 90)) {
@@ -120,7 +140,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const select=label.appendChild(node("select","distribution-select"));
     select.setAttribute("aria-label",t.select);
     const all=select.appendChild(node("option","",t.all));all.value="";
-    for(const sub of data.defined){
+    const uniqueDefined=[...new Map(data.defined.map(sub=>[sub.id,sub])).values()];
+    for(const sub of uniqueDefined){
       const option=select.appendChild(node("option","",name(sub.name)));option.value=sub.id;
     }
     const chart=section.appendChild(node("div","distribution-chart"));
@@ -149,27 +170,33 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     const legend=section.appendChild(node("div","distribution-legend"));
     const rects=new Map(),buttons=new Map();
     for(let i=0;i<data.defined.length;i++){
-      const sub=data.defined[i],color=colors[i%colors.length],range=vertical(sub);
+      const sub=data.defined[i],color=colors[uniqueDefined.findIndex(s=>s.id===sub.id)%colors.length],range=vertical(sub);
+      const plotId=sub.plotId||sub.id;
       const rect=svgNode("rect",{
         x:px(sub.latitude.min),y:py(marine?range.min:range.max),
         width:Math.max(1,px(sub.latitude.max)-px(sub.latitude.min)),
         height:Math.max(1,Math.abs(py(range.min)-py(range.max))),
         fill:color,stroke:color,"stroke-width":1.5,rx:2,tabindex:0,role:"button",
-        "aria-label":name(sub.name)
+        "aria-label":name(sub.variantName||sub.name)
       });
-      rect.appendChild(svgNode("title",{},name(sub.name)));
+      rect.appendChild(svgNode("title",{},name(sub.variantName||sub.name)));
       rect.addEventListener("click",()=>highlight(sub.id));
       rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();highlight(sub.id);}});
-      rects.set(sub.id,rect);
-      const entry=legend.appendChild(node("button","distribution-legend-item"));
-      entry.type="button";
-      const swatch=entry.appendChild(node("span","distribution-swatch"));
-      swatch.style.backgroundColor=color;
-      const text=entry.appendChild(node("span","distribution-legend-copy"));
-      text.appendChild(node("strong","",name(sub.name)));
-      text.appendChild(node("small","",t.lat+": "+format(sub.latitude.min,lang)+"–"+format(sub.latitude.max,lang)+"° · "+(marine?t.depthRange:t.height)+": "+format(range.min,lang)+"–"+format(range.max,lang)+(marine?" m":"")));
-      entry.addEventListener("click",()=>highlight(sub.id));
-      buttons.set(sub.id,entry);
+      rects.set(plotId,rect);
+      let entry=buttons.get(sub.id);
+      if(!entry){
+        entry=legend.appendChild(node("button","distribution-legend-item"));
+        entry.type="button";
+        const swatch=entry.appendChild(node("span","distribution-swatch"));
+        swatch.style.backgroundColor=color;
+        const label=entry.appendChild(node("span","distribution-legend-copy"));
+        label.appendChild(node("strong","",name(sub.name)));
+        entry.addEventListener("click",()=>highlight(sub.id));
+        buttons.set(sub.id,entry);
+      }
+      const copy=entry.querySelector(".distribution-legend-copy");
+      const variant=sub.variantName?name(sub.variantName)+": ":"";
+      copy.appendChild(node("small","",variant+t.lat+": "+format(sub.latitude.min,lang)+"–"+format(sub.latitude.max,lang)+"° · "+(marine?t.depthRange:sub.preferenceRange?t.preferredHeight:t.height)+": "+format(range.min,lang)+"–"+format(range.max,lang)+(marine?" m":"")));
     }
     // Paint the largest ranges first so shallow coastal habitats remain visible.
     const paintOrder=[...data.defined].sort((a,b)=>{
@@ -179,7 +206,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     function highlight(id){
       select.value=id;
       for(const sub of data.defined){
-        const rect=rects.get(sub.id),active=!id||id===sub.id;
+        const rect=rects.get(sub.plotId||sub.id),active=!id||id===sub.id;
         rect.setAttribute("fill-opacity",!id?.31:active?.65:.07);
         rect.setAttribute("stroke-opacity",!id?.85:active?1:.18);
         rect.setAttribute("stroke-width",id===sub.id?3:1.5);
@@ -189,13 +216,13 @@ globalThis.EvolveBiomeDistributionChart = (() => {
         buttons.get(sub.id).setAttribute("aria-pressed",String(id===sub.id));
       }
       // Draw the highlighted area last so it remains visible wherever ranges overlap.
-      for(const sub of paintOrder)if(sub.id!==id)layer.appendChild(rects.get(sub.id));
-      if(id)layer.appendChild(rects.get(id));
+      for(const sub of paintOrder)if(sub.id!==id)layer.appendChild(rects.get(sub.plotId||sub.id));
+      if(id)for(const sub of paintOrder)if(sub.id===id)layer.appendChild(rects.get(sub.plotId||sub.id));
     }
     select.addEventListener("change",()=>highlight(select.value));
     highlight("");
     if(data.pending.length)section.appendChild(node("p","distribution-missing",t.missing+": "+data.pending.map(x=>name(x.name)).join(", ")));
-    section.appendChild(node("p","distribution-note",marine?t.marineNote:t.note));
+    section.appendChild(node("p","distribution-note",marine?t.marineNote:biome?.id==="tundra"?t.tundraNote:t.note));
     return data;
   }
   return {getData,render};
