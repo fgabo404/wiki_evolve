@@ -17,6 +17,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       depthRange: "Profundidad requerida",
       preferredHeight: "Altura orientativa",
       tundraNote: "Tundra incluye dos vías alternativas: ártica (norte, altas latitudes) o alpina (montaña sobre el límite local de árboles). Los rectángulos son preferencias ambientales, no requisitos simultáneos. La altura mantiene la escala Evolve 0–100.",
+      mountainNote: "Montaña rocosa se representa por su altura admitida y latitud global, pero requiere laderas con roca y pendiente suficientes. Cumbres se sitúa en máximos locales de la cordillera, sin una altura fija. No hay cuotas de masas: dependen de la geografía montañosa.",
+      summitRelative: "Cumbres: ubicación derivada de los máximos locales de las montañas; no existe una franja fija de altura/latitud que deba dibujarse.",
       pending: "Distribución pendiente de definición.",
       missing: "Subbiomas pendientes de definición",
       note: "Las áreas representan la altura requerida y la latitud preferida de cada subbioma. Las zonas superpuestas pueden corresponder a varios subbiomas; el clima y las demás condiciones de generación determinan cuál aparece.",
@@ -36,6 +38,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
       depthRange: "Required depth",
       preferredHeight: "Indicative elevation",
       tundraNote: "Tundra has alternative Arctic (northern high-latitude) or alpine (mountain above the local treeline) placement. Rectangles are environmental preferences, not simultaneous requirements. Elevation remains on Evolve\u2019s 0\u2013100 scale.",
+      mountainNote: "Rocky mountain areas are shown using allowed elevation and global latitude, but require steep exposed rocky slopes. Summits are determined by local mountain peaks, with no fixed elevation band. There are no region quotas; mountain geography determines their number.",
+      summitRelative: "Summits: location follows the local topographic maxima of each mountain; no fixed elevation/latitude band should be drawn.",
       pending: "Distribution pending definition.",
       missing: "Subbiomes pending definition",
       note: "Areas represent the required elevation and preferred latitude of each subbiome. Overlapping zones may correspond to multiple subbiomes; climate and other generation conditions determine which one appears.",
@@ -50,11 +54,17 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     if(biome?.id==="polar"){
       const north=getData({id:"marine",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_north_ice")});
       const south=getData({id:"polar_land",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_south_ice")});
-      return {defined:[...north.defined,...south.defined],pending:[...north.pending,...south.pending]};
+      return {defined:[...north.defined,...south.defined],pending:[...north.pending,...south.pending],terrainDerived:[...(north.terrainDerived||[]),...(south.terrainDerived||[])]};
     }
-    const defined = [], pending = [];
+    const defined = [], pending = [], terrainDerived=[];
     const marine = biome?.id === "marine";
     for (const sub of biome.subbiomes || []) {
+      if(sub.regionPlacement?.mode==="mountainDependent"&&sub.regionPlacement.belt==="localSummit"){
+        if(sub.spawn?.required?.terrain==="land"&&validRange(sub.spawn.required.elevationLevel,0,100)){
+          terrainDerived.push({id:sub.id,name:sub.name,placement:"localSummit"});
+        }else pending.push({id:sub.id,name:sub.name});
+        continue;
+      }
       const choices=sub.regionPlacement?.mode==="anyOf"?sub.regionPlacement.alternatives:null;
       if(Array.isArray(choices)&&choices.length){
         const required=sub.spawn?.required?.elevationLevel;
@@ -79,7 +89,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
         defined.push(item);
       } else pending.push({id:sub.id,name:sub.name});
     }
-    return {defined,pending};
+    return {defined,pending,terrainDerived};
   }
   function node(tag,cls,text) {
     const item=document.createElement(tag);
@@ -108,7 +118,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
         {id:"marine",name:lang==="en"?"North Pole":"Polo Norte",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_north_ice")},
         {id:"polar_land",name:lang==="en"?"South Pole":"Polo Sur",subbiomes:(biome.subbiomes||[]).filter(s=>s.id==="polar_south_ice")}
       ];
-      const combined={defined:[],pending:[]};
+      const combined={defined:[],pending:[],terrainDerived:[]};
       for(const part of sections){
         const wrapper=host.appendChild(node("section","polar-distribution-section"));
         wrapper.appendChild(node("h3","",part.name));
@@ -116,6 +126,7 @@ globalThis.EvolveBiomeDistributionChart = (() => {
         const result=render(drawing,part,lang);
         combined.defined.push(...result.defined);
         combined.pending.push(...result.pending);
+        combined.terrainDerived.push(...(result.terrainDerived||[]));
       }
       return combined;
     }
@@ -131,6 +142,10 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     section.appendChild(node("h2","distribution-title",marine?t.marineTitle:t.title));
     section.appendChild(node("p","distribution-subtitle",t.subtitle));
     if(!data.defined.length){
+      if(data.terrainDerived.length){
+        section.appendChild(node("p","distribution-note",t.summitRelative));
+        return data;
+      }
       section.appendChild(node("p","distribution-pending",t.pending));
       if(data.pending.length)section.appendChild(node("p","distribution-missing",t.missing+": "+data.pending.map(x=>name(x.name)).join(", ")));
       return data;
@@ -222,7 +237,8 @@ globalThis.EvolveBiomeDistributionChart = (() => {
     select.addEventListener("change",()=>highlight(select.value));
     highlight("");
     if(data.pending.length)section.appendChild(node("p","distribution-missing",t.missing+": "+data.pending.map(x=>name(x.name)).join(", ")));
-    section.appendChild(node("p","distribution-note",marine?t.marineNote:biome?.id==="tundra"?t.tundraNote:t.note));
+    if(data.terrainDerived.length)section.appendChild(node("p","distribution-note",t.summitRelative));
+    section.appendChild(node("p","distribution-note",marine?t.marineNote:biome?.id==="tundra"?t.tundraNote:biome?.id==="mountain"?t.mountainNote:t.note));
     return data;
   }
   return {getData,render};
