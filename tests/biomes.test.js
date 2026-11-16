@@ -68,7 +68,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,20,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y ambos Polos tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,21,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos, ambos Polos y Tundra tienen descripción");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -122,9 +122,21 @@ const tundra=catalog.biomes.find(b=>b.id==="tundra");
 assert(tundra&&tundra.subbiomes.length===1,"Tundra debe mantenerse como un único subbioma");
 const tundraBiome=tundra.subbiomes[0];
 assert.equal(tundraBiome.id,"tundra_tundra","La tundra ártica y alpina deben compartir subbioma");
-assert(!tundraBiome.spawn&&!tundraBiome.description,"Tundra no tiene aún las condiciones de aparición aprobadas");
+assert(tundraBiome.description.es.includes("Alaska, Canadá y Siberia")&&tundraBiome.description.en.includes("Alaska, Canada and Siberia"),"Tundra ártica debe mantener referencia geográfica");
+assert(tundraBiome.description.es.includes("tundra alpina")&&tundraBiome.description.en.includes("alpine tundra"),"Tundra incorpora variante alpina sin nuevo subbioma");
+assert.deepEqual(tundraBiome.spawn.required,{
+ terrain:"land",elevationLevel:{min:1,max:94},meanAnnualTemperatureC:{min:-25,max:5},
+ annualPrecipitationMm:{min:100,max:1200},treeCanopyCoverPercent:{max:10}
+},"Tundra conserva las cinco condiciones comunes aprobadas");
+assert.deepEqual(tundraBiome.spawn.preferred,{absoluteLatitudeDegrees:{min:0,max:90}},"la latitud general no excluye la tundra alpina");
+assert.equal(tundraBiome.regionPlacement.mode,"anyOf","variantes de Tundra son rutas alternativas, no acumulativas");
+assert.deepEqual(tundraBiome.regionPlacement.alternatives,[
+ {id:"arctic",name:{es:"Tundra ártica",en:"Arctic tundra"},mode:"highLatitude",hemisphere:"north",preferred:{absoluteLatitudeDegrees:{min:60,max:80},elevationLevel:{min:1,max:55}}},
+ {id:"alpine",name:{es:"Tundra alpina",en:"Alpine tundra"},mode:"mountainDependent",belt:"aboveLocalTreeline",preferred:{absoluteLatitudeDegrees:{min:0,max:90},elevationLevel:{min:60,max:94}}}
+],"Tundra ártica y alpina deben tener emplazamientos diferentes, sin duplicar el subbioma");
+assert(!Object.hasOwn(tundraBiome.spawn.required,"permafrostRequired"),"el permafrost no es requisito universal");
 assert.deepEqual(tundraBiome.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:4},"Tundra debe tener de 2 a 4 masas conectadas aprobadas");
-assert(allSubbiomes.filter(s=>!s.spawn).every(s=>s.id==="tundra_tundra"||!s.distribution),"solo Tundra puede tener distribución parcial sin spawn aprobado");
+assert(allSubbiomes.filter(s=>!s.spawn).every(s=>!s.distribution),"Montaña sigue pendiente y sin distribución inventada");
 const desertDistributionById={
  desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
  desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
@@ -212,9 +224,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,20,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos y ambos Polos tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,20);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,3);
+assert.equal(allSubbiomes.filter(x=>x.description).length,21,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos, ambos Polos y Tundra tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,21);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,2);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -506,8 +518,16 @@ assert(chartSource.includes('marine?t.depth:t.elevation'),"la gráfica debe etiq
 assert(chartSource.includes("deepMarine?y0+"),"la profundidad marina debe crecer hacia abajo y ampliar los 0–50 m");
 assert(chartSource.includes("paintOrder"),"regiones profundas detrás de los hábitats someros");
 const tundraChart=chartAPI.getData(tundra);
-assert.equal(tundraChart.defined.length,0,"No graficar Tundra antes de aprobar rangos de aparición");
-assert.equal(tundraChart.pending.length,1,"Tundra debe figurar como pendiente en la gráfica");
+assert.equal(tundraChart.defined.length,2,"Tundra debe presentar áreas ártica y alpina separadas");
+assert.equal(tundraChart.pending.length,0,"Tundra completa ya no debe figurar pendiente");
+assert.deepEqual(tundraChart.defined.map(x=>x.id),["tundra_tundra","tundra_tundra"],"las dos áreas deben pertenecer al mismo subbioma");
+assert.deepEqual(tundraChart.defined.map(x=>x.plotId),["tundra_tundra:arctic","tundra_tundra:alpine"],"las áreas deben identificarse de forma independiente");
+assert.deepEqual(tundraChart.defined.map(x=>({lat:{min:x.latitude.min,max:x.latitude.max},elev:{min:x.elevation.min,max:x.elevation.max}})),[
+ {lat:{min:60,max:80},elev:{min:1,max:55}},
+ {lat:{min:0,max:90},elev:{min:60,max:94}}
+],"la gráfica debe reflejar dos rutas alternativas, no un rectángulo general falso");
+assert(tundraChart.defined.every(x=>x.preferenceRange),"las franjas de Tundra son preferencias, no límites universales");
+assert(chartSource.includes("const uniqueDefined=")&&chartSource.includes("sub.plotId||sub.id"),"la selección de un solo subbioma debe mostrar ambas áreas");
 const polarChart=chartAPI.getData(polar);
 assert.equal(polarChart.defined.length,2,"ambos polos deben verse en la gráfica polar");
 assert.equal(polarChart.pending.length,0,"Polo queda completamente definido en gráfica");
@@ -522,7 +542,7 @@ assert.deepEqual({min:plottedSouth.elevation.min,max:plottedSouth.elevation.max}
 assert(!Object.hasOwn(plottedSouth,"depth"),"Polo Sur no tiene profundidad marina");
 assert(chartSource.includes('biome?.id==="polar"'),"Polo debe tener vistas separadas");
 assert(chartSource.includes('id:"polar_land"'),"Polo Sur debe utilizar eje de altura Evolve");
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine"&&b.id!=="polar")){
+for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine"&&b.id!=="polar"&&b.id!=="tundra")){
   const result=chartAPI.getData(biome);
   assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
   assert.equal(result.pending.length,biome.subbiomes.length);
@@ -534,4 +554,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 7 biomas, 23 subbiomas; ambos Polos aprobados (una masa cada uno), 20 definidos y 3 pendientes");
+console.log("PASS: 7 biomas, 23 subbiomas; Tundra ártica y alpina aprobadas, 21 definidos y 2 pendientes (Montaña)");
