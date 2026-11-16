@@ -68,7 +68,7 @@ for(const sub of forest.subbiomes){
   assert(sub.spawn?.required&&Object.keys(sub.spawn.required).length,"spawn.required incompleto: "+sub.id);
   assert(sub.spawn?.preferred&&Object.keys(sub.spawn.preferred).length,"spawn.preferred incompleto: "+sub.id);
 }
-assert.equal(allSubbiomes.filter(x=>x.description).length,21,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos, ambos Polos y Tundra tienen descripción");
+assert.equal(allSubbiomes.filter(x=>x.description).length,23,"los 23 subbiomas deben tener descripción bilingüe");
 const temperate=forest.subbiomes.find(x=>x.id==="forest_temperate");
 assert(temperate.description.es.includes("Europa central y occidental"),"bosque templado requiere referencia europea");
 assert(temperate.description.en.includes("Central and Western Europe"),"falta descripción inglesa de la referencia europea");
@@ -136,7 +136,27 @@ assert.deepEqual(tundraBiome.regionPlacement.alternatives,[
 ],"Tundra ártica y alpina deben tener emplazamientos diferentes, sin duplicar el subbioma");
 assert(!Object.hasOwn(tundraBiome.spawn.required,"permafrostRequired"),"el permafrost no es requisito universal");
 assert.deepEqual(tundraBiome.distribution,{targetLandPercent:null,percentBasis:"unavailable",minRegions:2,maxRegions:4},"Tundra debe tener de 2 a 4 masas conectadas aprobadas");
-assert(allSubbiomes.filter(s=>!s.spawn).every(s=>!s.distribution),"Montaña sigue pendiente y sin distribución inventada");
+const mountain=catalog.biomes.find(b=>b.id==="mountain");
+assert(mountain&&mountain.subbiomes.length===2,"Montaña tiene dos subbiomas");
+assert.deepEqual(mountain.subbiomes.map(s=>s.id),["mountain_rocky","mountain_summits"]);
+const mountainRocky=mountain.subbiomes[0],mountainSummits=mountain.subbiomes[1];
+assert(mountainRocky.description.es.includes("amarillo")&&mountainRocky.description.en.includes("yellow"),"Montaña rocosa corresponde a la zona amarilla");
+assert(mountainSummits.description.es.includes("rojo")&&mountainSummits.description.en.includes("red"),"Cumbres corresponde a la zona roja");
+assert.deepEqual(mountainRocky.spawn.required,{
+ terrain:"land",elevationLevel:{min:25,max:89},slopeDegrees:{min:15,max:90},dominantSurfaceMaterial:"rock_gravel"
+},"Montaña rocosa conserva altura, pendiente y roca aprobadas");
+assert.deepEqual(mountainRocky.spawn.preferred,{
+ elevationLevel:{min:45,max:80},slopeDegrees:{min:20,max:55},absoluteLatitudeDegrees:{min:0,max:90}
+},"Preferencias de Montaña rocosa");
+assert.deepEqual(mountainRocky.regionPlacement,{mode:"mountainDependent",belt:"exposedRockySlope"},"Montaña rocosa requiere ladera expuesta");
+assert.deepEqual(mountainSummits.spawn.required,{terrain:"land",elevationLevel:{min:1,max:100}},"Cumbres usa la escala Evolve completa sin mínimo local inventado");
+assert.deepEqual(mountainSummits.spawn.preferred,{absoluteLatitudeDegrees:{min:0,max:90}},"Cumbres sin latitud exclusiva");
+assert.deepEqual(mountainSummits.regionPlacement,{mode:"mountainDependent",belt:"localSummit"},"Cumbres deben ser máximos locales del relieve");
+for(const sub of mountain.subbiomes){
+ assert(!Object.hasOwn(sub,"distribution"),"el número de masas de Montaña depende del terreno y no tiene cuotas: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"meanAnnualTemperatureC"),"no forzar clima frío en todas las montañas: "+sub.id);
+ assert(!Object.hasOwn(sub.spawn.required,"annualPrecipitationMm"),"no forzar precipitación en montañas: "+sub.id);
+}
 const desertDistributionById={
  desert_sandy:{targetLandPercent:3.9,percentBasis:"earthProxy",minRegions:2,maxRegions:4},
  desert_rocky:{targetLandPercent:9.8,percentBasis:"earthLowerBoundProxy",minRegions:2,maxRegions:4},
@@ -224,9 +244,9 @@ assert.deepEqual(saltFlat.spawn.preferred,{annualPrecipitationMm:{min:0,max:150}
 assert.equal(desert.subbiomes[0].spawn.required.aeolianDuneField,true,"faltan campos de dunas");
 assert.equal(desert.subbiomes[2].spawn.required.endorheicBasin,true,"el salar requiere cuenca cerrada");
 assert.equal(desert.subbiomes[2].spawn.required.slopeDegrees.max,5,"el salar requiere relieve plano");
-assert.equal(allSubbiomes.filter(x=>x.description).length,21,"7 bosques, 3 desiertos, 4 Llanuras, 4 Marinos, ambos Polos y Tundra tienen descripción");
-assert.equal(allSubbiomes.filter(x=>x.spawn).length,21);
-assert.equal(allSubbiomes.filter(x=>!x.spawn).length,2);
+assert.equal(allSubbiomes.filter(x=>x.description).length,23,"los 23 subbiomas deben tener descripción bilingüe");
+assert.equal(allSubbiomes.filter(x=>x.spawn).length,23);
+assert.equal(allSubbiomes.filter(x=>!x.spawn).length,0);
 const plains=catalog.biomes.find(x=>x.id==="plains");
 assert(plains,"debe existir Llanuras");
 assert.deepEqual(plains.subbiomes.map(s=>s.id),["plains_savanna","plains_prairie","plains_steppe","plains_open_wetland"],"Llanuras conserva cuatro subbiomas, sin matorral");
@@ -542,11 +562,18 @@ assert.deepEqual({min:plottedSouth.elevation.min,max:plottedSouth.elevation.max}
 assert(!Object.hasOwn(plottedSouth,"depth"),"Polo Sur no tiene profundidad marina");
 assert(chartSource.includes('biome?.id==="polar"'),"Polo debe tener vistas separadas");
 assert(chartSource.includes('id:"polar_land"'),"Polo Sur debe utilizar eje de altura Evolve");
-for(const biome of catalog.biomes.filter(b=>b.id!=="forest"&&b.id!=="desert"&&b.id!=="plains"&&b.id!=="marine"&&b.id!=="polar"&&b.id!=="tundra")){
-  const result=chartAPI.getData(biome);
-  assert.equal(result.defined.length,0,"bioma sin rangos no debe dibujar valores inventados");
-  assert.equal(result.pending.length,biome.subbiomes.length);
-}
+const mountainChart=chartAPI.getData(mountain);
+assert.equal(mountainChart.defined.length,1,"la gráfica solo dibuja la zona medible de Montaña rocosa");
+assert.equal(mountainChart.pending.length,0,"los dos subbiomas de Montaña están definidos");
+assert.equal(mountainChart.terrainDerived.length,1,"Cumbres debe clasificarse por relieve relativo, no por banda");
+assert.equal(mountainChart.defined[0].id,"mountain_rocky");
+assert.deepEqual({min:mountainChart.defined[0].elevation.min,max:mountainChart.defined[0].elevation.max},{min:25,max:89},"Montaña rocosa visible 25–89");
+assert.deepEqual({min:mountainChart.defined[0].latitude.min,max:mountainChart.defined[0].latitude.max},{min:0,max:90},"Montaña rocosa en cualquier latitud");
+assert.equal(mountainChart.terrainDerived[0].id,"mountain_summits");
+assert.equal(mountainChart.terrainDerived[0].placement,"localSummit");
+assert(!mountainChart.defined.some(s=>s.id==="mountain_summits"),"no dibujar falsa franja 1–100 para Cumbres");
+assert(chartSource.includes("t.summitRelative"),"la gráfica debe explicar cumbres derivadas de máximos locales");
+assert(chartSource.includes("t.mountainNote"),"la gráfica debe explicar masas derivadas del relieve");
 const testPartial={subbiomes:[forest.subbiomes[0],{id:"without_ranges",name:{es:"Sin rangos"}}]};
 assert.equal(chartAPI.getData(testPartial).defined.length,1);
 assert.equal(chartAPI.getData(testPartial).pending.length,1);
@@ -554,4 +581,4 @@ const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
 
-console.log("PASS: 7 biomas, 23 subbiomas; Tundra ártica y alpina aprobadas, 21 definidos y 2 pendientes (Montaña)");
+console.log("PASS: 7 biomas, 23 subbiomas completos; Montaña rocosa y Cumbres sin cuotas de masas");
