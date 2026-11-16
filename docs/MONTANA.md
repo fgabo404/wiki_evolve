@@ -1,37 +1,77 @@
-# M02 — Montaña de Evolve: referencia visual de Montaña rocosa y Cumbres
+# Montaña — definición de Montaña rocosa y Cumbres
 
-**Fecha:** 2026-11-16  
-**Rama:** `develop`  
+**Fecha de aprobación:** 2026-11-16  
+**Repositorio:** `fgabo404/wiki_evolve`, rama `develop`  
 **Catálogo:** [`data/biomes/biomes.json`](../data/biomes/biomes.json)
 
-## Decisión visual aprobada
+## Estado: dos subbiomas aprobados
 
-El bioma principal **Montaña** (`mountain`) tiene **exactamente dos subbiomas** ya existentes: **Montaña rocosa** (`mountain_rocky`) y **Cumbres** (`mountain_summits`). El usuario proporcionó una fotografía anotada de una cordillera con dos círculos. Esta decisión establece cómo diferenciarlos visual y geomorfológicamente; **no aprueba aún rangos numéricos de aparición ni cantidades de masas**.
+El bioma **Montaña** (`mountain`) contiene **exactamente dos subbiomas**:
 
-| Marca en la imagen de referencia | Subbioma | Significado |
+| Subbioma | ID | Referencia de la fotografía del usuario |
 |---|---|---|
-| **Círculo amarillo «ROCOSO»** | **Montaña rocosa** | **Laderas, paredes y flancos de roca expuesta** situados bajo las crestas, con escarpes, estratos, barrancos y pedreras |
-| **Círculo rojo «CUMBRE»** | **Cumbres** | **Parte culminante y más elevada localmente** de una montaña: pico, ápice y zona inmediata de la cresta superior |
+| **Montaña rocosa** | `mountain_rocky` | **Círculo amarillo «ROCOSO»**: flancos, paredes y laderas rocosas |
+| **Cumbres** | `mountain_summits` | **Círculo rojo «CUMBRE»**: ápices, picos y partes culminantes de las crestas |
 
-La fotografía también incluye glaciares, nieve y vegetación arbórea en primer plano. **Ni la nieve ni la presencia/ausencia de árboles son por sí solas la distinción entre «Montaña rocosa» y «Cumbres».** Una cumbre puede ser rocosa o nevada; una ladera rocosa puede coexistir con nieves, glaciares, bosque subalpino o tundra alpina en la misma cordillera.
+Se distinguen por la **posición geomorfológica relativa**, no por nieve, vegetación ni una altitud global que por sí sola determine las cumbres. Una cumbre puede ser rocosa o estar nevada; una ladera rocosa puede tener hielo y plantas dispersas, y ambas pueden formar parte de **una misma cordillera**.
 
-### Regla de clasificación propuesta para el futuro generador
+La **altura Evolve** es siempre relativa y normalizada en la escala **0–100**. No convertir estas alturas a metros.
 
-- **Montaña rocosa:** importa el **relieve montañoso en pendiente** y el predominio local de roca expuesta, no exclusivamente un umbral fijo de altura.
-- **Cumbres:** importa estar en la **posición culminante de una elevación**, de acuerdo con la forma de la montaña y la comparación con sus alrededores. No se debe etiquetar toda la franja de altitud alta como Cumbres, ni confundir una meseta elevada con una sucesión de picos.
-- Un sistema montañoso puede contener **ambos subbiomas adyacentes y conectados**, pasando de ladera rocosa a cumbre cerca del punto más alto. No hay que generar una cordillera distinta para cada uno.
-- La altura del mundo sigue siendo **la escala normalizada de Evolve 0–100**; la elevación real expresada en metros no cambia esa escala.
-- Los biomas vegetales, como Bosque subalpino y Tundra alpina, requieren reglas de transición y clasificación pendientes; la referencia visual no resuelve aún su precedencia a nivel de hexágono.
+## 1. Montaña rocosa — `mountain_rocky`
 
-## Decisiones pendientes para aprobar una por una
+**Descripción:** laderas, paredes, flancos y escarpes de roca expuesta; incluye barrancos, estratos, grava y pedreras. Inspiración visual: cordilleras abruptas de las Montañas Rocosas y los Andes. No exige temperaturas frías, nieve ni precipitaciones predeterminadas: son rasgos de otras capas ambientales.
 
-1. Rangos de altura normalizada `elevationLevel` para Montaña rocosa y Cumbres, sin perder la condición **relativa** de cumbre.
-2. Pendientes, relieve local y material superficial que permitirán clasificar laderas rocosas y máximos locales de cordillera.
-3. Distribución: mínimo/máximo de masas y porcentaje terrestre para cada subbioma, sin fragmentaciones artificiales.
-4. Condiciones complementarias si se consideran necesarias, procurando reutilizar campos existentes del catálogo.
+| Condición | `spawn.required` | `spawn.preferred` |
+|---|---|---|
+| Terreno (`terrain`) | `land` | — |
+| Altura Evolve (`elevationLevel`) | **25–89** | **45–80** |
+| Pendiente (`slopeDegrees`) | **15°–90°** | **20°–55°** |
+| Material dominante (`dominantSurfaceMaterial`) | `rock_gravel` | — |
+| Latitud absoluta (`absoluteLatitudeDegrees`) | Sin restricción | **0°–90°** |
+| Temperatura, precipitación | Sin límite específico | Según clima local |
 
-**No registrar aún `spawn`, `description` ni `distribution` numéricos en las fichas de los dos subbiomas hasta aprobarlos.** El ejemplo anterior de Montaña rocosa (altura 25–89 y 3–6 masas) se mantiene como propuesta pendiente, no como decisión confirmada por esta fotografía.
+**Emplazamiento:** `regionPlacement: {mode:"mountainDependent",belt:"exposedRockySlope"}`.
 
-## Estado
+La pendiente y el material rocoso deben coincidir con un **relieve montañoso real**, no con cualquier desierto rocoso o una meseta sin relieve local significativo. Este campo es una política declarativa pendiente de implementación en Engine, no un requisito ejecutado por la Wiki.
 
-Permanecen **7 biomas**, **23 subbiomas**, **21 completamente definidos** y **2 pendientes**: Montaña rocosa y Cumbres. Esta actualización solo documenta la referencia visual acordada en la Wiki; **no modifica Engine** y no altera las reglas ya aprobadas de Tundra.
+## 2. Cumbres — `mountain_summits`
+
+**Descripción:** picos, cimas y crestas altas que culminan una montaña. Se reconocen como **máximos locales del relieve** dentro de cada cordillera. La posición culminante es más importante que un valor absoluto de altura.
+
+| Condición | `spawn.required` | `spawn.preferred` |
+|---|---|---|
+| Terreno (`terrain`) | `land` | — |
+| Altura Evolve (`elevationLevel`) | **1–100** (intervalo de validez global) | **Sin umbral fijo** |
+| Latitud absoluta (`absoluteLatitudeDegrees`) | Sin restricción | **0°–90°** |
+| Pendiente, temperatura, nieve | Dependientes de la montaña | Sin valor arbitrario |
+
+**Emplazamiento:** `regionPlacement: {mode:"mountainDependent",belt:"localSummit"}`.
+
+La banda 1–100 no significa que cualquier hexágono entre esos niveles sea Cumbres: solo evita inventar un umbral que excluya picos locales de cordilleras bajas. Un hexágono se clasificaría como cumbre únicamente si es un **pico o cresta culminante en comparación con sus vecinos y su unidad montañosa**. Las mesetas altas, por sí solas, no crean automáticamente cumbres; tampoco la nieve las define.
+
+## 3. Regla aprobada: sin masas mínimas ni máximas
+
+**Aprobación explícita:** a diferencia de Bosque, Llanuras y otros biomas, **Montaña rocosa y Cumbres no llevan número mínimo ni número máximo de masas**.
+
+El campo `distribution` se **omite por completo en ambos subbiomas**. No se guardan `minRegions`, `maxRegions`, ni porcentajes de cobertura artificiales. Las masas y la extensión dependen del **sistema de cordilleras, placas, erosión, estructura de elevaciones y máximos topográficos** del mundo que se genere. La cantidad de cumbres depende de cuántas montañas y picos reales produzca ese relieve, no de una cuota de apariciones.
+
+Esto significa **conteo derivado de geografía**, no masas ilimitadas creadas al azar. Si el generador modifica la cantidad de cordilleras o sus formas, cambiará naturalmente el número de laderas rocosas y cumbres.
+
+## 4. Interacción con otros biomas
+
+- **Bosque subalpino** puede ocupar algunas laderas frías por debajo del límite local de árboles; no todas las laderas de una cordillera se clasifican automáticamente como Montaña rocosa.
+- **Tundra alpina** puede aparecer por encima del límite local de árboles, si corresponde climáticamente, entre afloramientos y laderas rocosas.
+- **Cumbres** y **Montaña rocosa** pueden coexistir en una misma cadena montañosa y encontrarse en hexágonos vecinos.
+- **Roca expuesta, pendiente, clima y vegetación** determinan transiciones. La prioridad definitiva de clasificación por hexágono se establecerá cuando se diseñe Engine.
+
+## 5. Representación en la Wiki
+
+La gráfica de latitud y altura continúa **visible abajo**. **Montaña rocosa** muestra su rango de altura Evolve **25–89** y latitud posible **0–90°**; la pendiente, roca y posición en ladera continúan siendo condiciones necesarias y no caben en el gráfico 2D.
+
+**Cumbres no se dibuja como un falso rectángulo de altura 1–100**: se muestra por separado como **categoría derivada de los máximos locales** de las montañas. Así ambos subbiomas se consideran definidos sin dar a entender que todas las alturas son cumbres.
+
+## 6. Alcance
+
+Esta es una definición **declarativa de la Wiki**. `regionPlacement` expresa la relación con el relieve, pero **no implementa aún la geología, la clasificación local de picos ni el generador** de `fgabo404/Evolve`.
+
+**Catálogo resultante:** **7 biomas principales**, **23 subbiomas**, **23 definidos y 0 pendientes**. Se conserva la referencia fotográfica conceptual acordada por el usuario sin introducir cuotas de masas para Montaña.
