@@ -1046,6 +1046,42 @@
           "name": {
             "es": "Montaña rocosa",
             "en": "Rocky mountain"
+          },
+          "description": {
+            "es": "Laderas, paredes, flancos y escarpes de roca expuesta en montañas y cordilleras, como la zona marcada en amarillo «ROCOSO» en la fotografía de referencia del usuario. Predominan pendientes fuertes, roca y grava, barrancos, estratos y pedreras; no son necesariamente los puntos más altos de la montaña. Puede aparecer a diferentes latitudes y temperaturas, junto a bosques subalpinos o tundra alpina según el entorno. Se determina por posición en ladera, pendiente y material rocoso, no solo por altura. Las cordilleras determinan naturalmente cuántas regiones existen: no se fija un mínimo o máximo de masas.",
+            "en": "Exposed rocky slopes, walls, flanks and escarpments within mountain ranges, like the area circled yellow and labeled 'ROCOSO' in the user's reference photograph. Steep gradients, rock, gravel, ravines, strata and talus dominate, but these are not necessarily the highest points of a mountain. They can occur at different latitudes and temperatures, alongside subalpine forest or alpine tundra according to local conditions. Classification depends on slope position, gradient and exposed rock, not elevation alone. Mountain geometry naturally determines the number of regions; no fixed minimum or maximum mass count is set."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 25,
+                "max": 89
+              },
+              "slopeDegrees": {
+                "min": 15,
+                "max": 90
+              },
+              "dominantSurfaceMaterial": "rock_gravel"
+            },
+            "preferred": {
+              "elevationLevel": {
+                "min": 45,
+                "max": 80
+              },
+              "slopeDegrees": {
+                "min": 20,
+                "max": 55
+              },
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 90
+              }
+            }
+          },
+          "regionPlacement": {
+            "mode": "mountainDependent",
+            "belt": "exposedRockySlope"
           }
         },
         {
@@ -1053,6 +1089,29 @@
           "name": {
             "es": "Cumbres",
             "en": "Summits"
+          },
+          "description": {
+            "es": "Parte culminante de una montaña: pico, cima, vértice y cresta superior, como la zona marcada en rojo «CUMBRE» en la fotografía de referencia del usuario. Se reconoce por ser un máximo local del relieve dentro de un sistema montañoso, no por superar una altura global fija. Una cumbre puede ser rocosa o nevada; la nieve no es condición obligatoria y una meseta elevada sin máximos locales no debe etiquetarse como sucesión de cumbres. Su ubicación, forma y cantidad dependen del relieve y de las montañas generadas, sin mínimos ni máximos de masas. La altura sigue la escala normalizada Evolve 0–100.",
+            "en": "The culminating part of a mountain: summit, peak, apex and upper ridgeline, like the area circled red and labeled 'CUMBRE' in the user's reference photograph. It is identified as a local topographic high point within a mountain system, not by crossing one fixed global elevation threshold. A summit may be rocky or snowy; snow is not mandatory, and a high plateau without local maxima should not be labeled a sequence of summits. Its position, shape and count depend on generated mountain relief, without minimum or maximum regional counts. Elevation stays on Evolve's normalized 0–100 scale."
+          },
+          "spawn": {
+            "required": {
+              "terrain": "land",
+              "elevationLevel": {
+                "min": 1,
+                "max": 100
+              }
+            },
+            "preferred": {
+              "absoluteLatitudeDegrees": {
+                "min": 0,
+                "max": 90
+              }
+            }
+          },
+          "regionPlacement": {
+            "mode": "mountainDependent",
+            "belt": "localSummit"
           }
         }
       ]
