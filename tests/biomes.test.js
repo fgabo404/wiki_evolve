@@ -520,9 +520,9 @@ assert(chartSource.includes("paintOrder"),"regiones profundas detrás de los há
 const tundraChart=chartAPI.getData(tundra);
 assert.equal(tundraChart.defined.length,2,"Tundra debe presentar áreas ártica y alpina separadas");
 assert.equal(tundraChart.pending.length,0,"Tundra completa ya no debe figurar pendiente");
-assert.deepEqual(tundraChart.defined.map(x=>x.id),["tundra_tundra","tundra_tundra"],"las dos áreas deben pertenecer al mismo subbioma");
-assert.deepEqual(tundraChart.defined.map(x=>x.plotId),["tundra_tundra:arctic","tundra_tundra:alpine"],"las áreas deben identificarse de forma independiente");
-assert.deepEqual(tundraChart.defined.map(x=>({lat:{min:x.latitude.min,max:x.latitude.max},elev:{min:x.elevation.min,max:x.elevation.max}})),[
+assert.deepEqual(Array.from(tundraChart.defined,x=>x.id),["tundra_tundra","tundra_tundra"],"las dos áreas deben pertenecer al mismo subbioma");
+assert.deepEqual(Array.from(tundraChart.defined,x=>x.plotId),["tundra_tundra:arctic","tundra_tundra:alpine"],"las áreas deben identificarse de forma independiente");
+assert.deepEqual(Array.from(tundraChart.defined,x=>({lat:{min:x.latitude.min,max:x.latitude.max},elev:{min:x.elevation.min,max:x.elevation.max}})),[
  {lat:{min:60,max:80},elev:{min:1,max:55}},
  {lat:{min:0,max:90},elev:{min:60,max:94}}
 ],"la gráfica debe reflejar dos rutas alternativas, no un rectángulo general falso");
