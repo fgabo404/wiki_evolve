@@ -36,3 +36,13 @@
 .distribution-pending{color:#526d8b;background:#f5f8fc;border:1px dashed #c8d7e6;border-radius:9px;padding:17px;font-size:13px}
 .distribution-missing{color:#7b6b55;font-size:12px;line-height:1.6;margin:14px 0 0}
 @media(max-width:650px){.biome-distribution{padding:17px 12px}.distribution-toolbar{justify-content:stretch}.distribution-label{width:100%}.distribution-chart svg{min-width:420px}.distribution-legend{grid-template-columns:1fr}}
+
+.wiki-resources-nav{margin-top:13px;cursor:pointer}
+.wiki-resources-nav.active{background:#e9f1ff;color:#143a6b;border-color:#e9f1ff}
+.extra-heading{margin:26px 0 10px;padding-top:18px;border-top:1px solid #e1e9f3;color:#173758;font-size:16px}
+.extra-section{margin:20px 0}.extra-section h4{margin:0 0 12px;color:#315b8c;font-size:13px}
+.extra-list{display:grid;gap:10px}.extra-record{border:1px solid #e1eaf4;background:#f9fbff;border-radius:9px;padding:12px 14px;min-width:0}
+.extra-record-title,.extra-link{display:block;font-size:13px;font-weight:700;color:#173b65;overflow-wrap:anywhere}
+.extra-link{border:0;padding:0;background:none;text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.extra-link:hover{color:#286eb2}
+.extra-description{font-size:12px;line-height:1.55;color:#526c86;margin:6px 0}
+.extra-stats{display:flex;flex-wrap:wrap;gap:6px 13px;color:#526a85;font-size:11px;line-height:1.55;margin-top:8px}

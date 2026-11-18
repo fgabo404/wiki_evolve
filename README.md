@@ -167,3 +167,9 @@ Cada entrada `minerales[]` contiene:
 Para los subbiomas de **agua** (Marino y Polo Norte), se registran minerales del sustrato oceánico, estuarino o arrecifal y se deja `surface.outcrop:false` para evitar confundir el fondo del agua con afloramientos visibles en tierra. Un futuro contrato técnico podrá distinguir **afloramiento del lecho marino** si se necesita representar ese fenómeno. Los depósitos minerales son **geológicos**, no cuotas forzadas por el clima: la ausencia de las condiciones requeridas permite **cero depósitos efectivos**, pese a `spawn.min>=1` como rango condicional. La distribución concreta por tipo de roca, formación, cuenca, profundidad y tectónica sigue pendiente del generador.
 
 **No se alteraron las 42 entradas de fauna aprobadas en Selva**, el número de biomas/subbiomas ni las condiciones climáticas y de terreno. Los datos de flora y las fichas detalladas de recursos adicionales se decidirán en otra etapa.
+
+## Visualización de recursos y fauna (2026-11-18)
+
+Al final de la ficha de cada subbioma se enumeran las referencias de `minerales` y `fauna`, siempre desde el JSON. Los yacimientos muestran cantidad, afloramientos y profundidad; la fauna muestra apariciones, comportamiento social y tamaño de grupo si existe. Los nombres y descripciones minerales proceden exclusivamente de `data/resources/resouce.json` (nombre real del archivo). Sin catálogo global de fauna, se muestran sus IDs, sin inventar nombres.
+
+El menú lateral incluye **Recursos**: un catálogo navegable y filtrable de los 55 minerales globales. Los enlaces desde las fichas de subbiomas llevan al mineral correspondiente. `#resources=minerals` y `#mineral=<id>` funcionan con Live Server y GitHub Pages. Ambos JSON se cargan al iniciar mediante `fetch`.

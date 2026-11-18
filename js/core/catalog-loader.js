@@ -6,5 +6,12 @@ globalThis.EvolveCatalogLoader={
     const result=await response.json();
     if(!result||!Array.isArray(result.biomes))throw Error("biomes.json debe contener un arreglo biomes");
     return result;
+  },
+  async loadResources(){
+    const response=await fetch("./data/resources/resouce.json",{cache:"no-store"});
+    if(!response.ok)throw Error("No se pudo leer resouce.json (HTTP "+response.status+")");
+    const result=await response.json();
+    if(!result||!Array.isArray(result.minerals))throw Error("resouce.json debe contener minerals[]");
+    return result;
   }
 };

@@ -408,7 +408,7 @@ for(const biome of catalog.biomes){
     ids.add(sub.id);
   }
 }
-const scripts=["js/app.js","js/router.js","js/core/catalog-loader.js","js/core/catalog-index.js","js/modules/biomes/biomes.js","js/modules/biomes/biome-detail.js","js/modules/biomes/biome-distribution-chart.js"];
+const scripts=["js/modules/biomes/biome-extras.js","js/modules/resources/resources.js","js/app.js","js/router.js","js/core/catalog-loader.js","js/core/catalog-index.js","js/modules/biomes/biomes.js","js/modules/biomes/biome-detail.js","js/modules/biomes/biome-distribution-chart.js"];
 for(const p of scripts)new vm.Script(read(p),{filename:p});
 const html=read("index.html");
 assert(!html.includes("offline/catalogs.js"),"HTML no debe cargar snapshot offline");
@@ -632,5 +632,21 @@ assert.equal(chartAPI.getData(testPartial).pending.length,1);
 const changed=JSON.parse(JSON.stringify(forest));
 changed.subbiomes[0].spawn.preferred.absoluteLatitudeDegrees.max=12;
 assert.equal(chartAPI.getData(changed).defined[0].latitude.max,12,"la gráfica debe leer el JSON actualizado");
+
+
+const resourceViewCode=read("js/modules/resources/resources.js");
+const extraCode=read("js/modules/biomes/biome-extras.js");
+const loaderNew=read("js/core/catalog-loader.js");
+const viewNew=read("js/modules/biomes/biomes.js");
+const routerNew=read("js/router.js");
+assert(html.includes("js/modules/biomes/biome-extras.js")&&html.includes("js/modules/resources/resources.js"));
+assert(loaderNew.includes('fetch("./data/resources/resouce.json"'));
+assert(read("js/app.js").includes("await globalThis.EvolveCatalogLoader.loadResources()"));
+assert(routerNew.includes("goResources")&&routerNew.includes('args.has("mineral")'));
+assert(viewNew.includes('tr("Recursos","Resources")')&&viewNew.includes("EvolveResourcesView.render"));
+assert(viewNew.includes("EvolveBiomeExtras.render"));
+assert(extraCode.includes("sub.minerales")&&extraCode.includes("sub.fauna"));
+assert(extraCode.includes("item.spawn")&&extraCode.includes("a.spawn"));
+assert(resourceViewCode.includes("resources?.minerals"));
 
 console.log("PASS: 7 biomas, 23 subbiomas completos; Montaña rocosa y Cumbres sin cuotas de masas");
