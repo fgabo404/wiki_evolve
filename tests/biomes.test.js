@@ -54,6 +54,30 @@ for(const sub of allSubbiomes){
 
 const forest=catalog.biomes.find(b=>b.id==="forest");
 
+const cloudFaunaExpected=[
+ ["jaguar",1,3,"solitary"],["puma",1,4,"solitary"],["ocelote",1,5,"solitary"],["leopardo",1,3,"solitary"],["tigre",1,2,"solitary"],["osoNegro",1,4,"solitary"],
+ ["venado",2,8,"herd",3,12],["jabali",2,6,"herd",4,15],["armadillo",2,9,"solitary"],["pangolin",1,4,"solitary"],["tejon",1,6,"group",2,6],["raton",5,20,"group",3,12],["monoCapuchino",1,6,"group",8,20],["lemur",1,6,"group",4,15],["ardilla",3,12,"solitary"],["zarigueya",2,8,"solitary"],
+ ["quetzal",1,5,"pair"],["tucan",1,6,"flock",3,8],["loro",2,9,"flock",5,20],["guacamaya",1,5,"flock",4,12],["colibri",4,15,"solitary"],["pajaroCarpintero",2,9,"pair"],["buho",1,5,"solitary"],["lechuza",1,5,"solitary"],["aguila",1,3,"pair"],["murcielago",2,10,"colony",10,150],
+ ["rana",5,22,"group",3,12],["sapo",3,15,"solitary"],["vibora",2,8,"solitary"],["iguana",1,6,"solitary"],["nutria",1,4,"group",2,6],["trucha",2,10,"school",3,12],["bagre",2,9,"group",3,10],["cangrejoRio",3,12,"solitary"],["camaronRio",3,12,"group",4,20],["hormigas",3,12,"colony",1000,60000],["termitas",2,8,"colony",1000,50000],["lombrices",12,45,"solitary"],["abejas",2,8,"colony",1000,25000],["aranas",6,25,"solitary"],["luciernagas",3,12,"swarm",5,35]
+];
+const cloudFauna=forest.subbiomes.find(sub=>sub.id==="forest_cloud").fauna;
+const cloudExpectedEntries=cloudFaunaExpected.map(([id,min,max,socialMode,gmin,gmax])=>({
+ id,spawn:{min,max,socialMode,...(gmin===undefined?{}:{groupSize:{min:gmin,max:gmax}})}
+}));
+assert.equal(cloudFaunaExpected.length,41,"exactamente 41 especies/grupos aprobados para Bosque nuboso");
+assert.deepEqual(cloudFauna,cloudExpectedEntries,"la configuración completa de los 41 animales debe permanecer idéntica a la aprobada");
+assert.equal(new Set(cloudFauna.map(e=>e.id)).size,41,"sin IDs duplicados en Bosque nuboso");
+for(const {id,spawn} of cloudFauna){
+ assert(/^[a-z][A-Za-z0-9]*$/.test(id),"ID camelCase inválido en Bosque nuboso: "+id);
+ assert(Number.isInteger(spawn.min)&&spawn.min>=1&&Number.isInteger(spawn.max)&&spawn.max>=spawn.min,"spawn mínimo y máximo inválidos: "+id);
+ assert(["solitary","pair","group","herd","flock","school","colony","swarm"].includes(spawn.socialMode),"modo social inválido: "+id);
+ if(["solitary","pair"].includes(spawn.socialMode))assert(!Object.hasOwn(spawn,"groupSize"),"individual o pareja no deben tener groupSize: "+id);
+ else assert(Number.isInteger(spawn.groupSize?.min)&&Number.isInteger(spawn.groupSize?.max)&&spawn.groupSize.min>=2&&spawn.groupSize.max>=spawn.groupSize.min,"groupSize inválido: "+id);
+}
+assert.equal(forest.subbiomes.find(sub=>sub.id==="forest_tropical").fauna.length,42,"fauna previa de Selva intacta");
+assert.equal(allSubbiomes.flatMap(sub=>sub.minerales).length,521,"521 referencias minerales conservadas");
+assert.deepEqual(allSubbiomes.filter(sub=>sub.fauna).map(sub=>sub.id),["forest_tropical","forest_cloud"],"solo dos subbiomas cuentan con fauna aprobada");
+
 const tropicalFaunaIds=["jaguar","ocelote","puma","tigre","leopardo","elefante","gorila","jabali","bufaloBosque","gaur","armadillo","pangolin","civeta","raton","lombrices","termitas","hormigas","tarantula","monoCapuchino","ardilla","iguana","guacamaya","loro","tucan","aguilaHarpia","buho","quetzal","caiman","cocodrilo","anaconda","nutria","capibara","bagre","pirana","anguilaElectrica","cangrejoRio","vibora","lagarto","abejas","moscas","aranas","murcielago"];
 const tropicalSubbiome=catalog.biomes.find(b=>b.id==="forest").subbiomes.find(s=>s.id==="forest_tropical");
 assert.deepEqual(tropicalSubbiome.fauna.map(x=>x.id),tropicalFaunaIds,"42 IDs de Selva deben coincidir con la selección aprobada, sin prefijos");
