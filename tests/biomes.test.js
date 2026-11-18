@@ -96,7 +96,7 @@ assert.deepEqual(tropicalFaunaMap.get("jaguar"),{min:2,max:5,socialMode:"solitar
 assert.deepEqual(tropicalFaunaMap.get("gorila"),{min:1,max:2,socialMode:"group",groupSize:{min:3,max:6}},"conservar tamaño original de grupo de gorilas");
 assert.deepEqual(tropicalFaunaMap.get("gaur"),{min:1,max:2,socialMode:"herd",groupSize:{min:2,max:4}},"conservar manada original de gaur");
 assert.deepEqual(tropicalFaunaMap.get("hormigas"),{min:3,max:15,socialMode:"colony",groupSize:{min:1000,max:100000}},"conservar colonia de hormigas");
-assert(catalog.biomes.flatMap(b=>b.subbiomes).filter(x=>x.fauna).length===1,"solo Selva debe tener fauna aprobada actualmente");
+assert.deepEqual(catalog.biomes.flatMap(b=>b.subbiomes).filter(x=>x.fauna).map(x=>x.id),["forest_tropical","forest_cloud"],"solo Selva y Bosque nuboso tienen fauna aprobada actualmente");
 
 assert.equal(catalog.biomes.length,7,"Polo agrupa Norte y Sur: deben existir siete biomas");
 assert.equal(allSubbiomes.length,23,"deben existir 23 subbiomas");
