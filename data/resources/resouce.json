@@ -1,0 +1,499 @@
+{
+  "minerals": [
+    {
+      "id": "malaquita",
+      "name": {
+        "es": "Malaquita"
+      },
+      "description": {
+        "es": "Carbonato verde de cobre; mena secundaria de cobre."
+      }
+    },
+    {
+      "id": "azurita",
+      "name": {
+        "es": "Azurita"
+      },
+      "description": {
+        "es": "Carbonato azul de cobre de zonas oxidadas."
+      }
+    },
+    {
+      "id": "calcopirita",
+      "name": {
+        "es": "Calcopirita"
+      },
+      "description": {
+        "es": "Sulfuro de cobre y hierro; mena primaria de cobre."
+      }
+    },
+    {
+      "id": "bornita",
+      "name": {
+        "es": "Bornita"
+      },
+      "description": {
+        "es": "Sulfuro de cobre y hierro; mena de cobre."
+      }
+    },
+    {
+      "id": "cuprita",
+      "name": {
+        "es": "Cuprita"
+      },
+      "description": {
+        "es": "Óxido de cobre de tonalidad roja."
+      }
+    },
+    {
+      "id": "calcosina",
+      "name": {
+        "es": "Calcosina"
+      },
+      "description": {
+        "es": "Sulfuro de cobre; mena de enriquecimiento o mineralización primaria."
+      }
+    },
+    {
+      "id": "crisocola",
+      "name": {
+        "es": "Crisocola"
+      },
+      "description": {
+        "es": "Material secundario rico en cobre, verde o azul."
+      }
+    },
+    {
+      "id": "cobreNativo",
+      "name": {
+        "es": "Cobre nativo"
+      },
+      "description": {
+        "es": "Cobre metálico natural."
+      }
+    },
+    {
+      "id": "hematita",
+      "name": {
+        "es": "Hematita"
+      },
+      "description": {
+        "es": "Óxido de hierro, importante mena de hierro."
+      }
+    },
+    {
+      "id": "magnetita",
+      "name": {
+        "es": "Magnetita"
+      },
+      "description": {
+        "es": "Óxido de hierro magnético; mena de hierro."
+      }
+    },
+    {
+      "id": "goethita",
+      "name": {
+        "es": "Goethita"
+      },
+      "description": {
+        "es": "Oxihidróxido de hierro de suelos y rocas alteradas."
+      }
+    },
+    {
+      "id": "pirita",
+      "name": {
+        "es": "Pirita"
+      },
+      "description": {
+        "es": "Sulfuro de hierro con brillo metálico."
+      }
+    },
+    {
+      "id": "pirrotita",
+      "name": {
+        "es": "Pirrotita"
+      },
+      "description": {
+        "es": "Sulfuro de hierro, a menudo magnético."
+      }
+    },
+    {
+      "id": "siderita",
+      "name": {
+        "es": "Siderita"
+      },
+      "description": {
+        "es": "Carbonato de hierro; posible mena de hierro."
+      }
+    },
+    {
+      "id": "casiterita",
+      "name": {
+        "es": "Casiterita"
+      },
+      "description": {
+        "es": "Óxido de estaño; principal mena de estaño."
+      }
+    },
+    {
+      "id": "wolframita",
+      "name": {
+        "es": "Wolframita"
+      },
+      "description": {
+        "es": "Serie de tungstatos de hierro y manganeso; mena de tungsteno."
+      }
+    },
+    {
+      "id": "scheelita",
+      "name": {
+        "es": "Scheelita"
+      },
+      "description": {
+        "es": "Tungstato de calcio; mena de tungsteno."
+      }
+    },
+    {
+      "id": "esfalerita",
+      "name": {
+        "es": "Esfalerita"
+      },
+      "description": {
+        "es": "Sulfuro de zinc; principal mena de zinc."
+      }
+    },
+    {
+      "id": "galena",
+      "name": {
+        "es": "Galena"
+      },
+      "description": {
+        "es": "Sulfuro de plomo; puede contener plata."
+      }
+    },
+    {
+      "id": "cinabrio",
+      "name": {
+        "es": "Cinabrio"
+      },
+      "description": {
+        "es": "Sulfuro de mercurio de color rojo."
+      }
+    },
+    {
+      "id": "oroNativo",
+      "name": {
+        "es": "Oro nativo"
+      },
+      "description": {
+        "es": "Oro metálico natural, en vetas o placeres."
+      }
+    },
+    {
+      "id": "plataNativa",
+      "name": {
+        "es": "Plata nativa"
+      },
+      "description": {
+        "es": "Plata metálica natural."
+      }
+    },
+    {
+      "id": "platinoNativo",
+      "name": {
+        "es": "Platino nativo"
+      },
+      "description": {
+        "es": "Platino metálico natural, a veces en placeres."
+      }
+    },
+    {
+      "id": "cromita",
+      "name": {
+        "es": "Cromita"
+      },
+      "description": {
+        "es": "Óxido de cromo y hierro; mena de cromo."
+      }
+    },
+    {
+      "id": "ilmenita",
+      "name": {
+        "es": "Ilmenita"
+      },
+      "description": {
+        "es": "Óxido de hierro y titanio; mena de titanio."
+      }
+    },
+    {
+      "id": "rutilo",
+      "name": {
+        "es": "Rutilo"
+      },
+      "description": {
+        "es": "Óxido de titanio; mena de titanio."
+      }
+    },
+    {
+      "id": "pirolusita",
+      "name": {
+        "es": "Pirolusita"
+      },
+      "description": {
+        "es": "Óxido de manganeso; mena de manganeso."
+      }
+    },
+    {
+      "id": "psilomelana",
+      "name": {
+        "es": "Psilomelana"
+      },
+      "description": {
+        "es": "Nombre histórico de agregados de óxidos de manganeso."
+      }
+    },
+    {
+      "id": "gibbsita",
+      "name": {
+        "es": "Gibbsita"
+      },
+      "description": {
+        "es": "Hidróxido de aluminio, común en bauxitas."
+      }
+    },
+    {
+      "id": "boehmita",
+      "name": {
+        "es": "Boehmita"
+      },
+      "description": {
+        "es": "Oxihidróxido de aluminio en ciertos depósitos de bauxita."
+      }
+    },
+    {
+      "id": "diaspora",
+      "name": {
+        "es": "Diáspora"
+      },
+      "description": {
+        "es": "Oxihidróxido de aluminio asociado a algunas bauxitas."
+      }
+    },
+    {
+      "id": "caolinita",
+      "name": {
+        "es": "Caolinita"
+      },
+      "description": {
+        "es": "Mineral arcilloso producto de la alteración de silicatos."
+      }
+    },
+    {
+      "id": "halloysita",
+      "name": {
+        "es": "Halloysita"
+      },
+      "description": {
+        "es": "Mineral arcilloso asociado a meteorización y alteración."
+      }
+    },
+    {
+      "id": "cuarzo",
+      "name": {
+        "es": "Cuarzo"
+      },
+      "description": {
+        "es": "Dióxido de silicio frecuente en rocas y vetas."
+      }
+    },
+    {
+      "id": "amatista",
+      "name": {
+        "es": "Amatista"
+      },
+      "description": {
+        "es": "Variedad violeta de cuarzo."
+      }
+    },
+    {
+      "id": "citrino",
+      "name": {
+        "es": "Citrino"
+      },
+      "description": {
+        "es": "Variedad amarilla de cuarzo."
+      }
+    },
+    {
+      "id": "feldespatoPotasico",
+      "name": {
+        "es": "Feldespato potásico"
+      },
+      "description": {
+        "es": "Feldespato rico en potasio; mineral formador de rocas."
+      }
+    },
+    {
+      "id": "plagioclasa",
+      "name": {
+        "es": "Plagioclasa"
+      },
+      "description": {
+        "es": "Serie de feldespatos sodio-cálcicos formadores de rocas."
+      }
+    },
+    {
+      "id": "moscovita",
+      "name": {
+        "es": "Moscovita"
+      },
+      "description": {
+        "es": "Mica clara de estructura laminar."
+      }
+    },
+    {
+      "id": "biotita",
+      "name": {
+        "es": "Biotita"
+      },
+      "description": {
+        "es": "Mica oscura formadora de rocas."
+      }
+    },
+    {
+      "id": "calcita",
+      "name": {
+        "es": "Calcita"
+      },
+      "description": {
+        "es": "Carbonato de calcio de calizas, vetas y sedimentos."
+      }
+    },
+    {
+      "id": "dolomita",
+      "name": {
+        "es": "Dolomita"
+      },
+      "description": {
+        "es": "Carbonato de calcio y magnesio."
+      }
+    },
+    {
+      "id": "yeso",
+      "name": {
+        "es": "Yeso"
+      },
+      "description": {
+        "es": "Sulfato de calcio hidratado, común en evaporitas."
+      }
+    },
+    {
+      "id": "apatita",
+      "name": {
+        "es": "Apatita"
+      },
+      "description": {
+        "es": "Grupo mineral de fosfatos de calcio."
+      }
+    },
+    {
+      "id": "fluorita",
+      "name": {
+        "es": "Fluorita"
+      },
+      "description": {
+        "es": "Fluoruro de calcio, frecuente en vetas."
+      }
+    },
+    {
+      "id": "berilo",
+      "name": {
+        "es": "Berilo"
+      },
+      "description": {
+        "es": "Silicato de berilio y aluminio; incluye variedades gemológicas."
+      }
+    },
+    {
+      "id": "esmeralda",
+      "name": {
+        "es": "Esmeralda"
+      },
+      "description": {
+        "es": "Variedad verde de berilo."
+      }
+    },
+    {
+      "id": "turmalina",
+      "name": {
+        "es": "Turmalina"
+      },
+      "description": {
+        "es": "Grupo de silicatos de boro en rocas ígneas y metamórficas."
+      }
+    },
+    {
+      "id": "granate",
+      "name": {
+        "es": "Granate"
+      },
+      "description": {
+        "es": "Familia de silicatos presentes en rocas metamórficas y otras."
+      }
+    },
+    {
+      "id": "zircon",
+      "name": {
+        "es": "Zircón"
+      },
+      "description": {
+        "es": "Silicato de zirconio, resistente a la meteorización."
+      }
+    },
+    {
+      "id": "corindon",
+      "name": {
+        "es": "Corindón"
+      },
+      "description": {
+        "es": "Óxido de aluminio; mineral del rubí y zafiro."
+      }
+    },
+    {
+      "id": "rubi",
+      "name": {
+        "es": "Rubí"
+      },
+      "description": {
+        "es": "Variedad roja de corindón."
+      }
+    },
+    {
+      "id": "zafiro",
+      "name": {
+        "es": "Zafiro"
+      },
+      "description": {
+        "es": "Variedad gemológica de corindón."
+      }
+    },
+    {
+      "id": "diamante",
+      "name": {
+        "es": "Diamante"
+      },
+      "description": {
+        "es": "Carbono cristalino natural."
+      }
+    },
+    {
+      "id": "jadeita",
+      "name": {
+        "es": "Jadeíta"
+      },
+      "description": {
+        "es": "Mineral del grupo de los piroxenos, asociado a alta presión."
+      }
+    }
+  ]
+}
