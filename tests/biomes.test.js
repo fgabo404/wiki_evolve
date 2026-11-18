@@ -5,6 +5,37 @@ const read=p=>fs.readFileSync(path.join(__dirname,"..",p),"utf8");
 const catalog=JSON.parse(read("data/biomes/biomes.json"));
 assert(Array.isArray(catalog.biomes),"biomes.json debe contener biomes[]");
 const allSubbiomes=catalog.biomes.flatMap(biome=>biome.subbiomes);
+
+const mineralCatalog=JSON.parse(read("data/resources/resouce.json"));
+assert(Array.isArray(mineralCatalog.minerals),"resouce.json debe tener grupo minerals");
+assert.equal(mineralCatalog.minerals.length,55,"55 minerales en el catálogo global");
+const mineralIds=mineralCatalog.minerals.map(m=>m.id);
+assert.equal(new Set(mineralIds).size,55,"IDs de minerales sin duplicados");
+assert(mineralCatalog.minerals.every(m=>/^[a-z][A-Za-z0-9]*$/.test(m.id)&&m.name?.es&&m.description?.es),"mineral global con id camelCase, nombre y descripción");
+assert.equal(allSubbiomes.filter(s=>Array.isArray(s.minerales)).length,23,"los 23 subbiomas deben definir minerales");
+const mineralReferences=allSubbiomes.flatMap(s=>s.minerales.map(m=>m.id));
+assert.equal(mineralReferences.length,521,"total de referencias minerales por subbioma");
+assert.deepEqual([...new Set(mineralReferences)].sort(),[...mineralIds].sort(),"cada mineral global debe aparecer en al menos un subbioma y ninguna referencia quedar huérfana");
+for(const sub of allSubbiomes){
+ assert(sub.minerales.length>0,"todos los subbiomas tienen alguna posibilidad mineral: "+sub.id);
+ assert.equal(new Set(sub.minerales.map(m=>m.id)).size,sub.minerales.length,"mineral repetido en subbioma: "+sub.id);
+ for(const entry of sub.minerales){
+  assert(mineralIds.includes(entry.id),"referencia de mineral desconocido: "+entry.id);
+  const spawn=entry.spawn;
+  assert(Number.isInteger(spawn.min)&&spawn.min>=1&&Number.isInteger(spawn.max)&&spawn.max>=spawn.min,"yacimientos min/max inválidos: "+entry.id);
+  assert(typeof spawn.surface?.outcrop==="boolean","afloramiento debe ser booleano: "+entry.id);
+  assert(Number.isInteger(spawn.surface.min)&&Number.isInteger(spawn.surface.max)&&spawn.surface.min===0&&spawn.surface.max>=0&&spawn.surface.max<=spawn.max,"cantidad superficial inválida: "+entry.id);
+  if(!spawn.surface.outcrop)assert.equal(spawn.surface.max,0,"sin afloramiento no puede asignarse cuota superficial");
+  const d=spawn.underground;
+  assert(Number.isInteger(d?.min)&&Number.isInteger(d?.max)&&d.min>=-20&&d.max<=0&&d.min<=d.max,"profundidad fuera de 0 a -20: "+entry.id);
+ }
+}
+assert.deepEqual(allSubbiomes.find(s=>s.id==="forest_tropical").minerales.find(m=>m.id==="malaquita"),{
+ id:"malaquita",spawn:{min:1,max:4,surface:{outcrop:true,min:0,max:2},underground:{min:-4,max:0}}
+},"malaquita en Selva debe conservar el contrato aprobado y profundidad de diseño");
+assert(allSubbiomes.filter(s=>s.spawn.required.terrain==="water").every(s=>s.minerales.every(m=>!m.spawn.surface.outcrop)),"la superficie subacuática no debe fingir afloramiento visible en tierra");
+assert.equal(allSubbiomes.find(s=>s.id==="forest_tropical").fauna.length,42,"preservar la fauna de Selva");
+
 // Contrato global: altura normalizada 0–100; profundidad en metros es un campo distinto.
 for(const sub of allSubbiomes){
   if(!sub.spawn)continue;
