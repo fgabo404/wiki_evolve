@@ -153,3 +153,17 @@ Se han aprobado **42 registros de fauna** para **Selva** (`forest_tropical`), di
 **Regla aprobada:** `spawn.min >= 1` para todos los animales incluidos; los únicos mínimos originales que eran 0 se ajustaron a 1 (**puma, gorila, águila arpía, quetzal, cocodrilo, anaconda y anguila eléctrica**). Todos los máximos, demás mínimos, modos sociales y tamaños de grupo se conservaron tal como los aprobó el usuario. Las cifras cuentan **apariciones por masa conectada de Selva**, no necesariamente individuos: `groupSize` indica cuántos individuos conforman cada aparición agrupada. Los requisitos locales de agua y otros microhábitats se definirán en una fase posterior; esta declaración no implementa movilidad, simulación de colonias ni el generador.
 
 **Alcance:** fauna de Selva exclusivamente. Los demás subbiomas no heredan la lista. Los detalles globales de recursos se reservarán para un futuro `resources.json`; por ahora no se han creado definiciones de recursos ni IDs con prefijo `fauna_`.
+
+## Minerales — 23 subbiomas y catálogo global (2026-11-18)
+
+La Wiki registra la **posibilidad geológica de generar minerales en los 23 subbiomas** mediante el atributo directo `minerales` en [`data/biomes/biomes.json`](data/biomes/biomes.json). Se han distribuido **521 referencias** pertenecientes a **55 minerales distintos**, con IDs `camelCase` reutilizados y sin prefijo de categoría. **Estas son propuestas iniciales de generación para el juego, no tablas científicas universales de abundancia o profundidad.** El catálogo de detalles generales, sin distinción de subbioma, está en [`data/resources/resouce.json`](data/resources/resouce.json), bajo la clave raíz `minerals`. Se mantiene la grafía **`resouce.json` solicitada**, no `resources.json`.
+
+Cada entrada `minerales[]` contiene:
+- `id`: referencia al mineral del catálogo global.
+- `spawn.min` / `spawn.max`: número de **yacimientos posibles por masa conectada del subbioma**, sujeto a geología compatible; **mínimo 1 solo si existen condiciones geológicas aptas**.
+- `spawn.surface.outcrop`: si puede haber afloramiento superficial; `surface.min` / `surface.max`: número de afloramientos **del total de yacimientos**, no depósitos extra.
+- `spawn.underground.min` / `spawn.underground.max`: intervalo de profundidad normalizado **de −20 a 0**, donde cada nivel equivale a **100 metros**, y **−20 = 2 km**. El valor numéricamente menor indica mayor profundidad. Son intervalos de diseño, no la profundidad obligatoria o universal de formación mineral. Se miden **bajo la superficie local** (o bajo el fondo marino donde corresponda), independientemente de la altura Evolve 0–100.
+
+Para los subbiomas de **agua** (Marino y Polo Norte), se registran minerales del sustrato oceánico, estuarino o arrecifal y se deja `surface.outcrop:false` para evitar confundir el fondo del agua con afloramientos visibles en tierra. Un futuro contrato técnico podrá distinguir **afloramiento del lecho marino** si se necesita representar ese fenómeno. Los depósitos minerales son **geológicos**, no cuotas forzadas por el clima: la ausencia de las condiciones requeridas permite **cero depósitos efectivos**, pese a `spawn.min>=1` como rango condicional. La distribución concreta por tipo de roca, formación, cuenca, profundidad y tectónica sigue pendiente del generador.
+
+**No se alteraron las 42 entradas de fauna aprobadas en Selva**, el número de biomas/subbiomas ni las condiciones climáticas y de terreno. Los datos de flora y las fichas detalladas de recursos adicionales se decidirán en otra etapa.
