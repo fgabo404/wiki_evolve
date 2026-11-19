@@ -6515,6 +6515,268 @@
                 }
               }
             }
+          ],
+          "fauna": [
+            {
+              "id": "puma",
+              "spawn": {
+                "min": 1,
+                "max": 3,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "lobo",
+              "spawn": {
+                "min": 1,
+                "max": 4,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 3,
+                  "max": 8
+                }
+              }
+            },
+            {
+              "id": "zorro",
+              "spawn": {
+                "min": 1,
+                "max": 6,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "coyote",
+              "spawn": {
+                "min": 1,
+                "max": 5,
+                "socialMode": "pair"
+              }
+            },
+            {
+              "id": "osoPardo",
+              "spawn": {
+                "min": 1,
+                "max": 4,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "venado",
+              "spawn": {
+                "min": 2,
+                "max": 8,
+                "socialMode": "herd",
+                "groupSize": {
+                  "min": 4,
+                  "max": 15
+                }
+              }
+            },
+            {
+              "id": "alce",
+              "spawn": {
+                "min": 1,
+                "max": 4,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "mapache",
+              "spawn": {
+                "min": 2,
+                "max": 9,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "castor",
+              "spawn": {
+                "min": 1,
+                "max": 4,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 3,
+                  "max": 8
+                }
+              }
+            },
+            {
+              "id": "ardilla",
+              "spawn": {
+                "min": 4,
+                "max": 16,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "raton",
+              "spawn": {
+                "min": 5,
+                "max": 20,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 3,
+                  "max": 12
+                }
+              }
+            },
+            {
+              "id": "conejo",
+              "spawn": {
+                "min": 3,
+                "max": 12,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 2,
+                  "max": 8
+                }
+              }
+            },
+            {
+              "id": "liebre",
+              "spawn": {
+                "min": 2,
+                "max": 9,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "murcielago",
+              "spawn": {
+                "min": 2,
+                "max": 9,
+                "socialMode": "colony",
+                "groupSize": {
+                  "min": 10,
+                  "max": 120
+                }
+              }
+            },
+            {
+              "id": "aguila",
+              "spawn": {
+                "min": 1,
+                "max": 3,
+                "socialMode": "pair"
+              }
+            },
+            {
+              "id": "buho",
+              "spawn": {
+                "min": 1,
+                "max": 6,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "paloma",
+              "spawn": {
+                "min": 3,
+                "max": 10,
+                "socialMode": "flock",
+                "groupSize": {
+                  "min": 5,
+                  "max": 20
+                }
+              }
+            },
+            {
+              "id": "rana",
+              "spawn": {
+                "min": 4,
+                "max": 16,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 3,
+                  "max": 12
+                }
+              }
+            },
+            {
+              "id": "salmon",
+              "spawn": {
+                "min": 1,
+                "max": 6,
+                "socialMode": "school",
+                "groupSize": {
+                  "min": 5,
+                  "max": 25
+                }
+              }
+            },
+            {
+              "id": "trucha",
+              "spawn": {
+                "min": 2,
+                "max": 10,
+                "socialMode": "school",
+                "groupSize": {
+                  "min": 3,
+                  "max": 12
+                }
+              }
+            },
+            {
+              "id": "bagre",
+              "spawn": {
+                "min": 2,
+                "max": 8,
+                "socialMode": "group",
+                "groupSize": {
+                  "min": 3,
+                  "max": 10
+                }
+              }
+            },
+            {
+              "id": "cangrejoRio",
+              "spawn": {
+                "min": 3,
+                "max": 12,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "hormigas",
+              "spawn": {
+                "min": 3,
+                "max": 12,
+                "socialMode": "colony",
+                "groupSize": {
+                  "min": 1000,
+                  "max": 50000
+                }
+              }
+            },
+            {
+              "id": "abejas",
+              "spawn": {
+                "min": 2,
+                "max": 8,
+                "socialMode": "colony",
+                "groupSize": {
+                  "min": 1000,
+                  "max": 25000
+                }
+              }
+            },
+            {
+              "id": "aranas",
+              "spawn": {
+                "min": 7,
+                "max": 28,
+                "socialMode": "solitary"
+              }
+            },
+            {
+              "id": "lombrices",
+              "spawn": {
+                "min": 12,
+                "max": 45,
+                "socialMode": "solitary"
+              }
+            }
           ]
         },
         {
