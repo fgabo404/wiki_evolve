@@ -54,6 +54,30 @@ for(const sub of allSubbiomes){
 
 const forest=catalog.biomes.find(b=>b.id==="forest");
 
+const prairieFaunaExpected=[
+ ["uro",2,6,"herd",5,18],["bisonte",2,7,"herd",8,30],["caballoSalvaje",2,7,"herd",5,20],["asnoSalvaje",1,5,"herd",4,15],["ciervo",2,7,"herd",4,15],["venado",2,8,"herd",4,15],["alce",1,4,"solitary"],["jabali",1,5,"herd",4,12],["muflon",1,5,"herd",5,15],["cabraSalvaje",1,5,"herd",4,12],["lobo",1,5,"group",3,8],["puma",1,3,"solitary"],["coyote",1,5,"pair"],["zorro",1,6,"solitary"],["lince",1,4,"solitary"],["osoPardo",1,3,"solitary"],["tejon",1,5,"group",2,6],["zorrillo",2,8,"solitary"],["mapache",1,6,"solitary"],["liebre",4,16,"solitary"],["conejo",3,12,"group",2,8],["puercoespin",1,5,"solitary"],["murcielago",1,7,"colony",10,100],["aguila",1,4,"pair"],["buho",1,5,"solitary"],["buitre",1,6,"flock",4,15],["codornizSalvaje",3,10,"flock",5,20],["ganso",2,8,"flock",5,25],["vibora",1,7,"solitary"],["hormigas",3,12,"colony",1000,40000],["abejas",2,8,"colony",1000,20000]
+];
+const prairieExpectedEntries=prairieFaunaExpected.map(([id,min,max,socialMode,gmin,gmax])=>({
+ id,spawn:{min,max,socialMode,...(gmin===undefined?{}:{groupSize:{min:gmin,max:gmax}})}
+}));
+const prairieSubbiome=catalog.biomes.find(b=>b.id==="plains").subbiomes.find(s=>s.id==="plains_prairie");
+assert.equal(prairieFaunaExpected.length,31,"exactamente 31 animales salvajes aprobados para Pradera");
+assert.deepEqual(prairieSubbiome.fauna,prairieExpectedEntries,"preservar exactamente los 31 registros completos de Pradera y su orden");
+assert.equal(new Set(prairieSubbiome.fauna.map(x=>x.id)).size,31,"IDs únicos de fauna de Pradera");
+for(const {id,spawn} of prairieSubbiome.fauna){
+ assert(/^[a-z][A-Za-z0-9]*$/.test(id),"ID camelCase inválido en Pradera: "+id);
+ assert(Number.isInteger(spawn.min)&&spawn.min>=1&&Number.isInteger(spawn.max)&&spawn.max>=spawn.min,"spawn inválido de Pradera: "+id);
+ assert(["solitary","pair","group","herd","flock","school","colony","swarm"].includes(spawn.socialMode),"socialMode inválido de Pradera: "+id);
+ if(["solitary","pair"].includes(spawn.socialMode)) assert(!Object.hasOwn(spawn,"groupSize"),"solitario o pareja no incluye groupSize: "+id);
+ else assert(Number.isInteger(spawn.groupSize?.min)&&Number.isInteger(spawn.groupSize?.max)&&spawn.groupSize.min>=2&&spawn.groupSize.max>=spawn.groupSize.min,"groupSize inválido de Pradera: "+id);
+}
+for(const [id,count] of [["forest_tropical",42],["forest_cloud",41],["forest_temperate",39],["forest_boreal",42],["forest_subalpine",37],["forest_redwood",26],["forest_wooded_swamp",43],["plains_savanna",31]]){
+ const s=allSubbiomes.find(s=>s.id===id);
+ assert.equal(s.fauna.length,count,"conservar fauna anterior de "+id);
+}
+assert.equal(allSubbiomes.flatMap(s=>s.minerales).length,521,"conservar 521 referencias minerales");
+assert.equal(mineralCatalog.minerals.length,55,"conservar 55 minerales globales");
+
 const savannaFaunaExpected=[
  ["leon",1,4,"group",4,12],["leopardo",1,4,"solitary"],["guepardo",1,4,"solitary"],["hienaManchada",1,5,"group",8,30],["serval",1,5,"solitary"],["zorro",1,5,"solitary"],["elefanteAfricano",1,4,"herd",6,20],["rinoceronteNegro",1,3,"solitary"],["hipopotamo",1,4,"herd",5,25],["jirafa",2,6,"herd",3,12],["bufaloAfricano",2,7,"herd",8,30],["nu",3,10,"herd",10,40],["cebra",3,9,"herd",5,20],["impala",3,10,"herd",8,30],["gacela",3,10,"herd",5,25],["jabali",1,5,"herd",3,10],["armadillo",2,7,"solitary"],["liebre",3,12,"solitary"],["raton",5,20,"group",3,12],["suricata",2,7,"group",5,20],["puercoespin",1,6,"pair"],["avestruz",2,7,"group",3,12],["aguila",1,5,"pair"],["buitre",2,8,"flock",4,15],["pintadaSalvaje",3,10,"flock",8,25],["cocodrilo",1,5,"solitary"],["vibora",2,8,"solitary"],["tortugaTerrestre",2,8,"solitary"],["termitas",3,12,"colony",1000,50000],["hormigas",4,14,"colony",1000,50000],["abejas",2,8,"colony",1000,25000]
 ];
@@ -216,7 +240,7 @@ for(const {id,spawn} of cloudFauna){
 }
 assert.equal(forest.subbiomes.find(sub=>sub.id==="forest_tropical").fauna.length,42,"fauna previa de Selva intacta");
 assert.equal(allSubbiomes.flatMap(sub=>sub.minerales).length,521,"521 referencias minerales conservadas");
-assert.deepEqual(allSubbiomes.filter(sub=>sub.fauna).map(sub=>sub.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp","plains_savanna"],"los siete bosques y Sabana cuentan con fauna aprobada");
+assert.deepEqual(allSubbiomes.filter(sub=>sub.fauna).map(sub=>sub.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp","plains_savanna","plains_prairie"],"los siete bosques, Sabana y Pradera cuentan con fauna aprobada");
 
 const tropicalFaunaIds=["jaguar","ocelote","puma","tigre","leopardo","elefante","gorila","jabali","bufaloBosque","gaur","armadillo","pangolin","civeta","raton","lombrices","termitas","hormigas","tarantula","monoCapuchino","ardilla","iguana","guacamaya","loro","tucan","aguilaHarpia","buho","quetzal","caiman","cocodrilo","anaconda","nutria","capibara","bagre","pirana","anguilaElectrica","cangrejoRio","vibora","lagarto","abejas","moscas","aranas","murcielago"];
 const tropicalSubbiome=catalog.biomes.find(b=>b.id==="forest").subbiomes.find(s=>s.id==="forest_tropical");
@@ -236,7 +260,7 @@ assert.deepEqual(tropicalFaunaMap.get("jaguar"),{min:2,max:5,socialMode:"solitar
 assert.deepEqual(tropicalFaunaMap.get("gorila"),{min:1,max:2,socialMode:"group",groupSize:{min:3,max:6}},"conservar tamaño original de grupo de gorilas");
 assert.deepEqual(tropicalFaunaMap.get("gaur"),{min:1,max:2,socialMode:"herd",groupSize:{min:2,max:4}},"conservar manada original de gaur");
 assert.deepEqual(tropicalFaunaMap.get("hormigas"),{min:3,max:15,socialMode:"colony",groupSize:{min:1000,max:100000}},"conservar colonia de hormigas");
-assert.deepEqual(catalog.biomes.flatMap(b=>b.subbiomes).filter(x=>x.fauna).map(x=>x.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp","plains_savanna"],"los siete bosques y Sabana tienen fauna aprobada actualmente");
+assert.deepEqual(catalog.biomes.flatMap(b=>b.subbiomes).filter(x=>x.fauna).map(x=>x.id),["forest_tropical","forest_cloud","forest_temperate","forest_boreal","forest_subalpine","forest_redwood","forest_wooded_swamp","plains_savanna","plains_prairie"],"los siete bosques, Sabana y Pradera tienen fauna aprobada actualmente");
 
 assert.equal(catalog.biomes.length,7,"Polo agrupa Norte y Sur: deben existir siete biomas");
 assert.equal(allSubbiomes.length,23,"deben existir 23 subbiomas");
